@@ -224,9 +224,9 @@ class App extends Component {
     })
   }
 
-  setSelectedProgramPlan = (selectedProgram, selectedPlan) => {
-    this.setState({selectedProgram: selectedProgram, selectedPlan: selectedPlan})
-    // Call xiangpeng's function with selectedProgram and selectedPlan to get structure
+  setSelectedProgramPlan = (oselectedProgram, selectedPlan) => {
+    //     this.setState({selectedProgram: selectedProgram, selectedPlan: selectedPlan})
+    //     // Call xiangpeng's function with selectedPrgram and selectedPlan to get structure
 
     const data = {
       programName : "Mechanical Engineering",

@@ -74,6 +74,8 @@ class RESTController extends Component {
                                 extendedName: courseTitle,
                                 description: description,
                                 accreditionUnits: accreditionUnits,
+                                prerequisites : preReqs,
+                                corequisites : coReqs,
                             }
                         });
 

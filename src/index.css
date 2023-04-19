@@ -17,8 +17,7 @@ code {
 
 .term{
   /* Border of Term palette*/
-  border: 3px solid;
-  border-color: rgb(173, 89, 89);
+  border: 3px solid rgb(173, 89, 89);
   text-align: center;
   /* Spacing on all sides of outside of Term palette*/
   margin:10px;
@@ -27,13 +26,13 @@ code {
   display: inline-block;
   padding: 10px;
   width: 200px;
-  height: 400px;
+  min-height: 400px;
+  height: auto;
 }
 
 .courseWrapper{
   /* Border of Term palette*/
-  border: 3px solid;
-  border-color: white;
+  border: 3px solid white;
   /* Spacing on all sides of outside of Term palette*/
   margin:10px;
   /* Spacing on all sides of inside of term palette*/
@@ -41,34 +40,32 @@ code {
   display: inline-block;
   padding: 10px;
   width: 150px;
-  height: 335px;
+  min-height: 200px;
+  height: auto;
 }
-.indvcourses{
-  border: 2px solid;
-  border-color: black;
+.indivCourses{
+  border: 2px solid black;
   /* Background color of each term div*/
-  background-color: white(140, 101, 101);
+  background-color: rgb(140, 101, 101);
   /* Text color of each term div*/
   color: black;
   /* Width of eachterm div*/
   width: 130px;
-  height: 30px;
+  height: 25px;
   /* Font of text inside term div*/
   font-size: 15px;
   /*Spacing on all sides of text inside a term div*/
   padding: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
   /* Make the term divs rounded corners*/
   border-radius: 5px;
   /*Spacing between terms in term palette*/
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin-top: 25px;
+  margin-bottom: 25px;
   /* Looks good when cursor points to a term div*/
   cursor: pointer;
   text-align: center;
 }
-.indvcourses:hover {
+.indivCourses:hover {
   background-color:  rgb(140, 101, 101)
 }
 
@@ -85,8 +82,6 @@ code {
   font-size: 15px;
   /*Spacing on all sides of text inside a term div*/
   padding: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
   /* Make the term divs rounded corners*/
   border-radius: 5px;
   /*Spacing between terms in term palette*/
