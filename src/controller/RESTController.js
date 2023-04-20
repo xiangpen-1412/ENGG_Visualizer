@@ -41,6 +41,7 @@ class RESTController extends Component {
                     let description;
                     let courseTitle;
                     let attributes;
+                    let courseGroup;
                     let accreditionUnits;
                     let courseName;
                     let preReqs = [];
@@ -53,7 +54,11 @@ class RESTController extends Component {
 
                             attributes = course.attribute.map(Number);
 
-                            console.log(attributes);
+                            if (attributes == null) {
+                                console.log(course.courseName)
+                            }
+
+                            courseGroup = course.group.map(Number);
 
                             courseTitle = course.title;
                             courseName = course.courseName;
@@ -76,6 +81,7 @@ class RESTController extends Component {
                                 accreditionUnits: accreditionUnits,
                                 prerequisites : preReqs,
                                 corequisites : coReqs,
+                                catagory : courseGroup,
                             }
                         });
 

@@ -1,179 +1,249 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
+
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-  monospace;
-}
-.termWrapper{
-  display: flex;
-  flex-direction: row;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }
 
-.term{
-  /* Border of Term palette*/
-  border: 3px solid rgb(173, 89, 89);
-  text-align: center;
-  /* Spacing on all sides of outside of Term palette*/
-  margin:10px;
-  /* Spacing on all sides of inside of term palette*/
-  padding: 10px;
-  display: inline-block;
-  padding: 10px;
-  width: 200px;
-  min-height: 400px;
-  height: auto;
+.termWrapper {
+    display: flex;
+    flex-direction: row;
 }
 
-.courseWrapper{
-  /* Border of Term palette*/
-  border: 3px solid white;
-  /* Spacing on all sides of outside of Term palette*/
-  margin:10px;
-  /* Spacing on all sides of inside of term palette*/
-  padding: 10px;
-  display: inline-block;
-  padding: 10px;
-  width: 150px;
-  min-height: 200px;
-  height: auto;
+.term {
+    /* Border of Term palette*/
+    border: 3px solid rgb(173, 89, 89);
+    text-align: center;
+    /* Spacing on all sides of outside of Term palette*/
+    margin: 10px;
+    /* Spacing on all sides of inside of term palette*/
+    padding: 10px;
+    display: inline-block;
+    padding: 10px;
+    width: 200px;
+    min-height: 400px;
+    height: auto;
+
 }
-.indivCourses{
-  border: 2px solid black;
-  /* Background color of each term div*/
-  background-color: rgb(140, 101, 101);
-  /* Text color of each term div*/
-  color: black;
-  /* Width of eachterm div*/
-  width: 130px;
-  height: 25px;
-  /* Font of text inside term div*/
-  font-size: 15px;
-  /*Spacing on all sides of text inside a term div*/
-  padding: 10px;
-  /* Make the term divs rounded corners*/
-  border-radius: 5px;
-  /*Spacing between terms in term palette*/
-  margin-top: 25px;
-  margin-bottom: 25px;
-  /* Looks good when cursor points to a term div*/
-  cursor: pointer;
-  text-align: center;
+
+.structureWrapper {
+    margin-left: 20px;
+    margin-right: 20px;
 }
+
+.courseWrapper {
+    /* Border of Term palette*/
+    border: 3px solid white;
+    /* Spacing on all sides of outside of Term palette*/
+    margin: 10px;
+    /* Spacing on all sides of inside of term palette*/
+    padding: 10px;
+    display: inline-block;
+    padding: 10px;
+    width: 150px;
+    min-height: 200px;
+    height: auto;
+}
+
+.indivCourses {
+    border: 2px solid black;
+    /* Background color of each term div*/
+    background-color: rgb(140, 101, 101);
+    /* Text color of each term div*/
+    color: black;
+    /* Width of eachterm div*/
+    width: 130px;
+    height: 25px;
+    /* Font of text inside term div*/
+    font-size: 15px;
+    /*Spacing on all sides of text inside a term div*/
+    padding: 10px;
+    /* Make the term divs rounded corners*/
+    border-radius: 5px;
+    /*Spacing between terms in term palette*/
+    margin-top: 25px;
+    margin-bottom: 25px;
+    /* Looks good when cursor points to a term div*/
+    cursor: pointer;
+    text-align: center;
+}
+
 .indivCourses:hover {
-  background-color:  rgb(140, 101, 101)
+    background-color: rgb(140, 101, 101)
 }
 
-.indvPlan{
-  /* Background color of each term div*/
-  background-color: rgb(140, 101, 101);
-  /* Text color of each term div*/
-  color: white;
-  /* Width of eachterm div*/
-  width: 130px;
-  height: 60px;
+.indvPlan {
+    /* Background color of each term div*/
+    background-color: rgb(140, 101, 101);
+    /* Text color of each term div*/
+    color: white;
+    /* Width of eachterm div*/
+    width: 130px;
+    height: 60px;
 
-  /* Font of text inside term div*/
-  font-size: 15px;
-  /*Spacing on all sides of text inside a term div*/
-  padding: 10px;
-  /* Make the term divs rounded corners*/
-  border-radius: 5px;
-  /*Spacing between terms in term palette*/
-  margin-left: 5px;
+    /* Font of text inside term div*/
+    font-size: 16px;
+    /*Spacing on all sides of text inside a term div*/
+    padding: 10px;
+    /* Make the term divs rounded corners*/
+    border-radius: 5px;
+    /*Spacing between terms in term palette*/
+    margin-left: 5px;
 
-  /* Looks good when cursor points to a term div*/
-  cursor: pointer;
-  text-align: center;
-  float: left;
+    /* Looks good when cursor points to a term div*/
+    cursor: pointer;
+    text-align: center;
+    float: left;
+
+    /* Center text both horizontally and vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.planPalette{
-  /* Border of Plan palette*/
-  border: 3px solid;
-  border-color: white;
-  /* Spacing on all sides of outside of Term palette*/
-  margin:10px;
-  /* Spacing on all sides of inside of term palette*/
-  padding: 10px;
-  /*display: inline-block;*/
-  padding: 10px;
-  min-width: 300px;
-  height: 110px;
-  display: flex;
-  justify-content: center;
+.planPalette {
+    /* Border of Plan palette*/
+    border: 3px solid white;
+    /* Spacing on all sides of outside of Term palette*/
+    margin: 10px;
+
+    /* Spacing on all sides of inside of term palette*/
+    padding: 10px;
+    /*display: inline-block;*/
+    padding: 10px;
+    min-width: 300px;
+    height: 110px;
+    display: flex;
+    justify-content: center;
 }
 
-.indvGradAttribute{
-  /* Background color of each GA div*/
-  background-color: rgb(140, 101, 101);
+.indvGradAttribute {
+    /* Background color of each GA div*/
+    background-color: rgb(140, 101, 101);
 
-  /* Text color of each GA div*/
-  color: white;
+    /* Text color of each GA div*/
+    color: white;
 
-  /* Width of each GA div*/
-  width: 100px;
-  height: 30px;
+    /* Width of each GA div*/
+    width: 140px;
+    height: 35px;
 
-  /* Font of text inside GA div*/
-  font-size: 13px;
+    /* Font of text inside GA div*/
+    font-size: 16px;
 
-  /*Spacing on all sides of text inside a GA div*/
-  padding: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+    /*Spacing on all sides of text inside a GA div*/
+    padding: 10px;
 
-  /* Make the GA divs rounded corners*/
-  border-radius: 5px;
+    /* Make the GA divs rounded corners*/
+    border-radius: 5px;
 
-  /*Spacing between GA in term palette*/
-  margin-left: 5px;
-  margin-bottom: 5px;
+    /*Spacing between GA in term palette*/
+    margin-left: 5px;
+    margin-bottom: 5px;
 
-  /* Looks good when cursor points to a GA div*/
-  cursor: pointer;
-  text-align: center;
-  float: left;
+    /* Looks good when cursor points to a GA div*/
+    cursor: pointer;
+    text-align: center;
+    float: left;
+
+    /* Center text both horizontally and vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 
-.GAWrapper{
+.GAWrapper {
 
-  /* Border of Term palette*/
-  border: 3px solid;
-  border-color: black;
+    /* Border of Term palette*/
+    border: 3px solid black;
 
-  /* Spacing on all sides of outside of Term palette*/
-  margin: 10px;
+    /* Spacing on all sides of outside of Term palette*/
+    margin-right: 40px;
+    margin-left: 30px;
 
-  /* Spacing on all sides of inside of term palette*/
-  padding: 20px;
+    /* Spacing on all sides of inside of term palette*/
+    padding: 20px;
 
-  /*Width and height of term palette*/
-  /* min-width: 600px; */
-  width: 500px;
-  height: 220px;
+    /*Width and height of term palette*/
+    /* min-width: 600px; */
+    width: 670px;
+    height: 240px;
 
-  display: flex;
-  /* flex-direction: column; */
+    display: flex;
+    /* flex-direction: column; */
+}
+
+.indvCatagory {
+    /* Background color of each category div*/
+    background-color: rgb(140, 101, 101);
+    /* Text color of each category div*/
+    color: white;
+    /* Width of each category div*/
+    width: 140px;
+    height: 36px;
+
+    /* Font of text inside category div*/
+    font-size: 17px;
+    /*Spacing on all sides of text inside a category div*/
+    padding: 10px;
+    /* Make the category divs rounded corners*/
+    border-radius: 10px;
+    /*Spacing between terms in category palette*/
+    margin-left: 5px;
+    margin-bottom: 5px;
+
+    /* Looks good when cursor points to a category div*/
+    cursor: pointer;
+    text-align: center;
+    float: left;
+
+    /* Center text both horizontally and vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.catagoryWrapper {
+    border: 3px solid black;
+
+    margin-left: 40px;
+
+    /* Spacing on all sides of inside of term palette*/
+    padding: 20px;
+
+    width: 670px;
+    height: 240px;
+
+    display: flex;
+
+}
+
+.lowerStuff {
+    display: flex;
+    flex-direction: row;
+    margin: 10px;
 }
 
 .TOOLTIPPPP {
-  white-space: pre-line;
-  width: 450px;
+    white-space: pre-line;
+    width: 450px;
 }
 
-.gradAttributeLegend{
-  display:inline-block;
+.gradAttributeLegend {
+    display: inline-block;
 }
 
-.idk{
-  margin: 15px;
-  border: 2px;
-  border-color: black;
+.idk {
+    margin-left: 40px;
+    margin-bottom: 30px;
+    border: 2px black;
 }
