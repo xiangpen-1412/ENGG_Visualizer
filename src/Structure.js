@@ -2,6 +2,7 @@ import {Component} from 'react';
 import './index.css';
 import 'react-tooltip/dist/react-tooltip.css'
 import LeaderLine from "leader-line-new";
+import {cloneDeep} from "lodash";
 
 
 class Structure extends Component {
@@ -13,51 +14,46 @@ class Structure extends Component {
         };
 
         this.divRefs = [];
-        this.startIndex = [];
     }
 
-    handleOnClick = (courses, index) => {
+    /**
+     * show the prerequisite and corequisite of a course by lines when click detected
+     *
+     * */
+    handleOnClick = (courses, index, update, lineMap) => {
 
-        this.startIndex.map((line) => {
-            line.remove();
-        });
+        const selectedCourseName = courses[index].name;
 
-        this.startIndex = [];
-
-        if (this.state.selectedCourse == courses[index].name.replace(/\s*\(.*?\)\s*/g, '')) {
-            this.setState({
-                selectedCourse: '',
+        // removes all the lines when click a course again
+        if (lineMap.has(selectedCourseName)) {
+            lineMap.get(selectedCourseName).map((line) => {
+                line.remove();
             });
+            lineMap.delete(selectedCourseName);
+            update(lineMap);
+
         } else {
             this.setState({
-                selectedCourse : courses[index].name.replace(/\s*\(.*?\)\s*/g, ''),
+                selectedCourse: courses[index].name,
             });
 
-            let selectedCourse = courses[index].name.replace(/\s*\(.*?\)\s*/g, '');
+            let selectedCourse = courses[index].name;
 
             const selectedRef = this.divRefs[index];
 
             if (courses[index].prerequisites != null) {
+
                 courses[index].prerequisites.map((prerequisite) => {
 
+                    // use dash line to show there is a or case
                     if (prerequisite.toLowerCase().includes("or")) {
 
-                        let preReqList = prerequisite.split("or");
+                        let catalogs = this.handleOrCase(prerequisite);
 
-                        const department = preReqList[0].match(/[a-zA-Z\s]+/)[0];
-
-                        let catalogs = preReqList.map((splitPrerequisite) => {
-                            if (/^\d+$/.test(splitPrerequisite)) {
-                                return (department + splitPrerequisite).trimStart.trimEnd;
-                            } else {
-                                return splitPrerequisite.trimStart().trimEnd();
-                            }
-                        });
                         catalogs.map((prerequisite) => {
-                            prerequisite = prerequisite.trimEnd().trimStart();
+
                             const courseWitPrerequisite = courses.find((course) => {
-                                const courseNameWithoutParentheses = course.name.replace(/\s*\(.*?\)\s*/g, '');
-                                return prerequisite === courseNameWithoutParentheses && course.name !== selectedCourse;
+                                return prerequisite === course.name;
                             });
 
                             const prerequisiteIndex = courseWitPrerequisite ? courses.indexOf(courseWitPrerequisite) : null;
@@ -68,16 +64,22 @@ class Structure extends Component {
                                     color: 'gold',
                                     dash: {},
                                 });
-                                this.startIndex.push(line);
+
+                                if (!lineMap.has(selectedCourse)) {
+                                    lineMap.set(selectedCourse, []);
+                                }
+                                lineMap.get(selectedCourse).push(line);
+                                update(lineMap);
+
                             } else {
                                 console.log(`Prerequisites for ${selectedRef.textContent} not found.`);
                             }
-                            ;
                         })
 
                     } else {
+                        // use solid line to show general case
                         const courseWitPrerequisite = courses.find((course, index) => {
-                            return prerequisite === course.name.replace(/\s*\(.*?\)\s*/g, '') && course.name !== selectedCourse;
+                            return prerequisite === course.name;
                         })
 
                         const prerequisiteIndex = courseWitPrerequisite ? courses.indexOf(courseWitPrerequisite) : null;
@@ -87,97 +89,143 @@ class Structure extends Component {
                             const line = new LeaderLine(startRef, selectedRef, {
                                 color: 'gold',
                             });
-                            this.startIndex.push(line);
+
+                            if (!lineMap.has(selectedCourse)) {
+                                lineMap.set(selectedCourse, []);
+                            }
+                            lineMap.get(selectedCourse).push(line);
+                            update(lineMap);
+
                         } else {
                             console.log(`Prerequisites for ${selectedRef.textContent} not found.`);
                         }
-                        ;
                     }
                 })
-            };
+            }
+            ;
 
             if (courses[index].corequisites != null) {
                 courses[index].corequisites.map((corequisite) => {
 
                     if (corequisite.toLowerCase().includes("or")) {
 
-                        let coReqList = corequisite.split("or");
-
-                        const department = coReqList[0].match(/[a-zA-Z\s]+/)[0];
-
-                        console.log(department);
-
-                        let catalogs = coReqList.map((splitCorequisite) => {
-                            if (/^\d+$/.test(splitCorequisite)) {
-                                return (department + splitCorequisite).trimStart.trimEnd;
-                            } else {
-                                return splitCorequisite.trimStart().trimEnd();
-                            }
-                        });
+                        let catalogs = this.handleOrCase(corequisite);
 
                         catalogs.map((corequisite) => {
                             corequisite = corequisite.trimEnd().trimStart();
                             const courseWithCorequisite = courses.find((course) => {
-                                const courseNameWithoutParentheses = course.name.replace(/\s*\(.*?\)\s*/g, '');
-                                return corequisite === courseNameWithoutParentheses && course.name !== selectedCourse;
+                                return corequisite === course.name;
                             });
 
                             const corequisiteIndex = courseWithCorequisite ? courses.indexOf(courseWithCorequisite) : null;
 
                             if (corequisiteIndex !== null) {
                                 const endRef = this.divRefs[corequisiteIndex];
-                                const line = new LeaderLine(selectedRef, endRef,{
-                                    color: 'violet',
+                                const line = new LeaderLine(selectedRef, endRef, {
+                                    color: 'red',
                                     dash: {},
                                 });
-                                this.startIndex.push(line);
+
+                                if (!lineMap.has(selectedCourse)) {
+                                    lineMap.set(selectedCourse, []);
+                                }
+                                lineMap.get(selectedCourse).push(line);
+                                update(lineMap);
                             } else {
                                 console.log(`Corequisites for ${selectedRef.textContent} not found.`);
                             }
-                            ;
                         })
                     } else {
 
                         const courseWithCorequisite = courses.find((course) => {
-                            return corequisite === course.name.replace(/\s*\(.*?\)\s*/g, '') && course.name.replace(/\s*\(.*?\)\s*/g, '') !== selectedCourse;
+                            return corequisite === course.name;
                         });
 
-                        console.log(courseWithCorequisite);
                         const corequisiteIndex = courseWithCorequisite ? courses.indexOf(courseWithCorequisite) : null;
 
                         if (corequisiteIndex != null) {
                             const endRef = this.divRefs[corequisiteIndex];
                             const line = new LeaderLine(selectedRef, endRef, {
-                                color: 'violet',
+                                color: 'red',
                             });
-                            this.startIndex.push(line);
+
+                            if (!lineMap.has(selectedCourse)) {
+                                lineMap.set(selectedCourse, []);
+                            }
+                            lineMap.get(selectedCourse).push(line);
+                            update(lineMap);
+
                         } else {
                             console.log(`Corequisites for ${selectedRef.textContent} not found.`);
                         }
-                        ;
                     }
                 });
             }
         }
     }
 
+
+    /**
+     *
+     *  Split the requisite (if there is one or more than one "or" in the requisites to several courses)
+     *
+     * */
+    handleOrCase = (requisite) => {
+
+        let reqList = requisite.split("or");
+
+        reqList = reqList.map((requisite) => {
+            return requisite.trimEnd().trimStart();
+        })
+        const department = reqList[0].match(/[a-zA-Z\s]+/)[0].trimEnd();
+
+        let catalogs = reqList.map((splitRequisite) => {
+            if (/^\d+$/.test(splitRequisite)) {
+                return (department + " " + splitRequisite);
+            } else {
+                return splitRequisite;
+            }
+        });
+
+        return catalogs;
+
+    }
+
     render() {
 
-        const coursesList = [].concat(...this.props.structure.map(term => term.courses));
+        const {structure, updateLineMap, lineMap} = this.props;
+
+        let cloneStructure = cloneDeep(structure);
+
+        const coursesList = [].concat(...cloneStructure.map(term => term.courses
+            .map(course => {
+                course.name = course.name.replace(/\s*\([^)]*\)/g, '');
+                return course;
+            })
+        ));
 
         let globalIndex = 0;
 
-        const term = this.props.structure.map((termColumn) => {
+        const term = structure.map((termColumn) => {
             const courseDivs = termColumn.courses.map((courseItem) => {
 
                 const index = globalIndex;
                 globalIndex++;
+                let name = courseItem.name;
+
+                if (name.includes("COMP")) {
+                    name = name.replace("COMP", "Complementary Studies")
+                } else if (courseItem.name.includes("ITS")) {
+                    name = name.replace("ITS", "ITS Electives");
+                } else if (courseItem.name.includes("PROG")) {
+                    name = name.replace("PROG", "Program Electives");
+                }
 
                 return (
                     <div className='indivCourses'
                          key={index}
                          ref={(el) => this.divRefs[index] = el}
-                         onClick={() => this.handleOnClick(coursesList, index)}
+                         onClick={() => this.handleOnClick(coursesList, index, updateLineMap, lineMap)}
                          style={{backgroundColor: courseItem.color}}
                          onMouseEnter={(event) => this.props.showToolTip(event)}
                          onMouseDown={(event) => this.props.hideToolTip(event)}
@@ -186,7 +234,7 @@ class Structure extends Component {
                          extendedName={courseItem.extendedName}
                          accreditionUnits={courseItem.accreditionUnits}
                     >
-                        {courseItem.name}
+                        {name}
                     </div>
                 )
 

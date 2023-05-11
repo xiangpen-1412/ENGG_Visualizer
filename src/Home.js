@@ -16,7 +16,7 @@ const Program = (props) => {
                     navigate("/App",
                         {
                             state: {
-                                selectedProgram: props.selectedProgram,
+                                selectedProgram: program,
                                 replace: false
                             }
                         }
@@ -37,7 +37,7 @@ const Program = (props) => {
                     navigate("/App",
                         {
                             state: {
-                                selectedProgram: props.selectedProgram,
+                                selectedProgram: program,
                                 replace: false
                             }
                         }
@@ -58,7 +58,7 @@ const Program = (props) => {
                     navigate("/App",
                         {
                             state: {
-                                selectedProgram: props.selectedProgram,
+                                selectedProgram: program,
                                 replace: false
                             }
                         }
@@ -79,7 +79,7 @@ const Program = (props) => {
                     navigate("/App",
                         {
                             state: {
-                                selectedProgram: props.selectedProgram,
+                                selectedProgram: program,
                                 replace: false
                             }
                         }
@@ -156,7 +156,6 @@ class Home extends Component {
 
                 <div className='wrapperTermProgram'>
                     <Program programList1={programList1} programList0={programList0} programList2={programList2} programList3={programList3} onClickProgram={this.onClickProgram}/>
-
                 </div>
             </div>
         )

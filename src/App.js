@@ -1,10 +1,9 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useEffect, useRef, useState} from 'react';
 import './App.css';
 import './index.css';
 import Structure from './Structure.js';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import RESTController from "./controller/RESTController";
-
 
 const GradAttributes = (props) => {
     const cells = props.gradAttributeList.map((gradAttribute, index) => {
@@ -52,6 +51,32 @@ const CourseCatagory = (props) => {
     )
 }
 
+const Header = () => {
+    const navigate = useNavigate();
+    const handleButtonClick = () => {
+        navigate("/");
+    };
+
+    return (
+        <header className="header">
+            <div className="header-content">
+                <button className="backButton" onClick={handleButtonClick}>
+                    <a>← Back</a>
+                </button>
+                <div>
+                    <a>
+                        <img alt="University of Alberta logo" src="uofalogo.png" className="image"/>
+                    </a>
+                </div>
+                <div>
+                    <a className="site-title">Mechanical Engineering Program Plan Visualizer</a>
+                </div>
+            </div>
+        </header>
+    );
+};
+
+
 const GALegend = (props) => {
     const cells = props.GALegendList.map((gradLegendItem, index) => {
         return (
@@ -75,34 +100,46 @@ const GALegend = (props) => {
 
 //Plans has to be a simple component as it contains navigation
 const Plans = (props) => {
-    // Retrieve selectedProgram
-    const location = useLocation()
-    const {selectedProgram} = location.state
 
-    // const planList = // Call Ji's function to get plan data using selectedprogram
-    const data = {
-        programName: "Mechanical Engineering"
-    };
+    const location = useLocation();
+    const {selectedProgram} = location.state;
 
-    //TODO: call the function to pass the data
-    let controller = new RESTController();
+    const [planList, setPlanList] = useState([]);
+    const [selectedPlan, setSelectedPlan] = useState(null);
 
-    const [planList, setplanList] = useState([]);
+    useEffect(() => {
+        const controller = new RESTController();
+        controller.getPlans({programName: selectedProgram}).then((plans) => {
+            setPlanList(plans);
+        });
+    }, [selectedProgram]);
 
-    controller.getPlans(data).then((plans) => {
-        setplanList(plans);
-    })
-
+    let planSet = new Set();
     const cells = planList.map((plan, index) => {
+
+        if (selectedProgram === "Mechanical Engineering") {
+            plan = plan.replace(/\{[^)]*\}/g, "").trimEnd().trimStart();
+
+            if (planSet.has(plan)) {
+                return null;
+            }
+
+            planSet.add(plan);
+        }
+
+        const isSelected = plan === selectedPlan;
+
         return (
             <div
                 key={index}
                 programInfo={plan}
                 className="indvPlan"
                 onClick={(event) => {
-                    props.setSelectedProgramPlan(selectedProgram, plan)
-                    console.log(selectedProgram, plan,)
+                    setSelectedPlan(plan);
+                    props.setSelectedProgramPlan(selectedProgram, plan);
+                    props.deleteLineMap();
                 }}
+                style={{backgroundColor: isSelected ? "gold" : "rgb(140, 101, 101)"}}
             >
                 {plan}
             </div>
@@ -111,11 +148,69 @@ const Plans = (props) => {
 
     return (
         <div className="planPalette">
-            <h3>Plans</h3>
+            <h3>Plan</h3>
             {cells}
         </div>
     )
 }
+
+const CourseGroup = (props) => {
+    const courseGroupKeys = [...props.courseGroup.keys()];
+
+    const [selectedButtons, setSelectedButtons] = useState(
+        new Map(
+            courseGroupKeys
+                .filter((key) => ["group2", "group3", "group4"].includes(key))
+                .map((key) => [key, null])
+        )
+    );
+
+    useEffect(() => {
+        if (props.planChanged) {
+            const newSelectedButtons = new Map(selectedButtons);
+            courseGroupKeys.forEach((key) => {
+                newSelectedButtons.set(key, null);
+            });
+            setSelectedButtons(newSelectedButtons);
+        }
+    }, [props.planChanged]);
+
+    const keyComponent = courseGroupKeys.map((key) => {
+        const groupComponent = props.courseGroup.get(key).map((group) => {
+            const isSelected = selectedButtons.get(key) === group;
+            const color = isSelected ? "gold" : "rgb(140, 101, 101)";
+            return (
+                <div
+                    className="indivCourseGroup"
+                    key={group}
+                    onClick={() => {
+                        const newSelectedButtons = new Map(selectedButtons);
+                        newSelectedButtons.set(key, group);
+                        setSelectedButtons(newSelectedButtons);
+                        props.setSelectedCourseGroup(group, props.deleteLineMap);
+                    }}
+                    style={{
+                        backgroundColor: color
+                    }}
+                >
+                    {group}
+                </div>
+            );
+        });
+        return (
+            <div key={key}>
+                <h3>{key}</h3>
+                <div className="courseGroupPalatte">{groupComponent}</div>
+            </div>
+        );
+    });
+
+    if (props.planChanged) {
+        props.setPlanChanged();
+    }
+
+    return <div className="allGroups">{keyComponent}</div>;
+};
 
 class App extends Component {
     constructor(props) {
@@ -207,8 +302,17 @@ class App extends Component {
             ],
 
             structure: [],
+            courseGroup: new Map(),
             selectedAtt: "",
             selectedGroup: "",
+            selectedProgram: "",
+            selectedPlan: "",
+            containCourseGroup: false,
+            planChanged: false,
+            group2: "",
+            group3: "",
+            group4: "",
+            lineMap: new Map(),
         };
 
         this.controller = new RESTController();
@@ -227,7 +331,7 @@ class App extends Component {
         let attributeIndex = 0;
         const {structure} = this.state
 
-        if (gradAttribute == this.state.selectedAtt) {
+        if (gradAttribute === this.state.selectedAtt) {
             this.setState({selectedAtt: ""});
             structure.map((term, termIndex) => {
                 term.courses.map((courseMap, courseIndex) => {
@@ -280,13 +384,13 @@ class App extends Component {
                 term.courses.map((courseMap, courseIndex) => {
                     let attributeLevel = courseMap.attribute[attributeIndex]
 
-                    if (attributeLevel == 0) {
+                    if (attributeLevel === 0) {
                         structure[termIndex].courses[courseIndex].color = 'white';
-                    } else if (attributeLevel == 1) {
+                    } else if (attributeLevel === 1) {
                         structure[termIndex].courses[courseIndex].color = '#eca5a0';
-                    } else if (attributeLevel == 2) {
+                    } else if (attributeLevel === 2) {
                         structure[termIndex].courses[courseIndex].color = '#e7574d';
-                    } else if (attributeLevel == 3) {
+                    } else if (attributeLevel === 3) {
                         structure[termIndex].courses[courseIndex].color = '#e93427';
                     }
                 })
@@ -305,7 +409,7 @@ class App extends Component {
         let catagoryIndex = 0;
         const {structure} = this.state
 
-        if (this.state.selectedGroup == catagory) {
+        if (this.state.selectedGroup === catagory) {
             this.setState({selectedGroup: ""});
             structure.map((term, termIndex) => {
                 term.courses.map((courseMap, courseIndex) => {
@@ -354,7 +458,6 @@ class App extends Component {
                     } else if (catagoryLevel === 1) {
                         structure[termIndex].courses[courseIndex].color = catagory.color;
                     }
-
                 })
             })
 
@@ -365,12 +468,120 @@ class App extends Component {
         }
     }
 
-    setSelectedProgramPlan = (oselectedProgram, selectedPlan) => {
-        //     this.setState({selectedProgram: selectedProgram, selectedPlan: selectedPlan})
-        //     // Call xiangpeng's function with selectedPrgram and selectedPlan to get structure
+    setSelectedProgramPlan = (selectedProgram, selectedPlan) => {
 
+        this.setState({selectedProgram: selectedProgram, selectedPlan: selectedPlan, structure: [], planChanged: true});
+
+        this.setState({group2: "", group3: "", group4: ""});
+
+        const haveCourseGroupOption = selectedProgram === "Mechanical Engineering" && !selectedPlan.includes("Co-op Plan 3");
+
+        this.setState({containCourseGroup: haveCourseGroupOption}, () => {
+
+            if (this.state.containCourseGroup) {
+                this.setCourseGroup(selectedPlan);
+            } else {
+                this.setStructure(selectedProgram, selectedPlan);
+            }
+        });
+    }
+
+    setCourseGroup = (selectedPlan) => {
+
+        switch (selectedPlan) {
+            case "Traditional Plan":
+                this.setState({
+                    courseGroup: new Map([
+                        ['Group 2', ["2A", "2B"]],
+                        ['Group 3', ["3A", "3B"]],
+                        ['Group 4', ["4A", "4B"]]
+                    ])
+                });
+                break;
+            case "Alternate Plan":
+                this.setState({
+                    courseGroup: new Map([
+                        ['Group 3', ["3A", "3B"]],
+                        ['Group 4', ["4A", "4B"]]
+                    ])
+                });
+                break;
+            case "Co-op Plan 1":
+            case "Co-op Plan 2":
+            case "Co-op Plan 4":
+                this.setState({
+                    courseGroup: new Map([
+                        ['Group 3', ["3A", "3B"]]
+                    ])
+                });
+                break;
+            default:
+                this.setState({courseGroup: []});
+                break;
+        }
+
+    }
+
+    setSelectedCourseGroup = (group, deleteLineMap) => {
+        const groupNumber = group.toString().charAt(0);
+
+        let group2, group3, group4 = "";
+
+        switch (groupNumber) {
+            case "2":
+                this.setState({group2: group});
+                group2 = group;
+                group3 = this.state.group3;
+                group4 = this.state.group4;
+                break;
+            case "3":
+                this.setState({group3: group});
+                group3 = group;
+                group2 = this.state.group2;
+                group4 = this.state.group4;
+                break;
+            case "4":
+                this.setState({group4: group});
+                group4 = group;
+                group2 = this.state.group2;
+                group3 = this.state.group3;
+                break;
+        }
+
+        const plan = this.state.selectedPlan;
+
+        switch (plan) {
+            case "Traditional Plan":
+                if (group2 && group3 && group4) {
+                    const completePlan = plan + " {" + group2 + " " + group3 + " " + group4 + "}";
+                    this.setStructure(this.state.selectedProgram, completePlan);
+                    deleteLineMap();
+                }
+                break;
+            case "Alternate Plan":
+                if (group3 && group4) {
+                    const completePlan = plan + " {" + group3 + " " + group4 + "}";
+                    this.setStructure(this.state.selectedProgram, completePlan);
+                    deleteLineMap();
+                }
+                break;
+            case "Co-op Plan 1":
+            case "Co-op Plan 2":
+            case "Co-op Plan 4":
+                if (group3) {
+                    const completePlan = plan + " {" + group3 + "}";
+                    this.setStructure(this.state.selectedProgram, completePlan);
+                    deleteLineMap();
+                }
+                break;
+        }
+
+        this.setState({previousSelectedPlan: this.state.selectedPlan});
+    }
+
+    setStructure = (selectedProgram, selectedPlan) => {
         const data = {
-            programName: "Mechanical Engineering",
+            programName: selectedProgram,
             planName: selectedPlan
         };
 
@@ -379,13 +590,49 @@ class App extends Component {
         });
     }
 
+    updateLineMap = (update) => {
+        this.setState({lineMap: update})
+    }
+
+    deleteLineMap = () => {
+        for (let [key] of this.state.lineMap) {
+            this.state.lineMap.get(key).map((line) => {
+                line.remove();
+            });
+        }
+
+        this.setState({lineMap: new Map()});
+    }
+
+    setPlanChanged = () => {
+        this.setState({planChanged: false});
+    }
+
     render() {
-        const {structure} = this.state;
+        const {structure, courseGroup, selectedProgram, selectedPlan, lineMap, planChanged} = this.state;
         return (
             <div className='all'>
-                <div className='planWrapper'>
-                    <Plans setSelectedProgramPlan={this.setSelectedProgramPlan}/>
+
+                <div className='header'>
+                    <Header/>
                 </div>
+
+                <div className='planWrapper'>
+                    <Plans setSelectedProgramPlan={this.setSelectedProgramPlan}
+                           deleteLineMap={this.deleteLineMap}
+                    />
+                </div>
+
+                {this.state.containCourseGroup && (
+                    <div>
+                        <CourseGroup courseGroup={courseGroup}
+                                     setSelectedCourseGroup={this.setSelectedCourseGroup}
+                                     selectedProgram={selectedProgram}
+                                     deleteLineMap={this.deleteLineMap}
+                                     planChanged={planChanged}
+                                     setPlanChanged={this.setPlanChanged}
+                        />
+                    </div>)}
 
                 <div className='idk'>
                     <GALegend GALegendList={this.state.GALegendList}/>
@@ -410,12 +657,14 @@ class App extends Component {
                                isToolTipOpen={this.state.isToolTipOpen}
                                showToolTip={this.showToolTip}
                                hideToolTip={this.hideToolTip}
+                               selectedPlan={selectedPlan}
+                               updateLineMap={this.updateLineMap}
+                               lineMap={lineMap}
                     />
                 </div>
             </div>
         )
     }
-
 }
 
 

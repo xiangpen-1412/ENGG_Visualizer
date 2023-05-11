@@ -54,10 +54,6 @@ class RESTController extends Component {
 
                             attributes = course.attribute.map(Number);
 
-                            if (attributes == null) {
-                                console.log(course.courseName)
-                            }
-
                             courseGroup = course.group.map(Number);
 
                             courseTitle = course.title;

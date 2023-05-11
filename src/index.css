@@ -60,7 +60,7 @@ code {
     color: black;
     /* Width of eachterm div*/
     width: 130px;
-    height: 25px;
+    height: 30px;
     /* Font of text inside term div*/
     font-size: 15px;
     /*Spacing on all sides of text inside a term div*/
@@ -73,6 +73,11 @@ code {
     /* Looks good when cursor points to a term div*/
     cursor: pointer;
     text-align: center;
+
+    /* Center text both horizontally and vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .indivCourses:hover {
@@ -80,16 +85,14 @@ code {
 }
 
 .indvPlan {
-    /* Background color of each term div*/
-    background-color: rgb(140, 101, 101);
     /* Text color of each term div*/
     color: white;
     /* Width of eachterm div*/
-    width: 130px;
-    height: 60px;
+    width: 100px;
+    height: 38px;
 
     /* Font of text inside term div*/
-    font-size: 16px;
+    font-size: 14px;
     /*Spacing on all sides of text inside a term div*/
     padding: 10px;
     /* Make the term divs rounded corners*/
@@ -109,19 +112,54 @@ code {
 }
 
 .planPalette {
-    /* Border of Plan palette*/
-    border: 3px solid white;
     /* Spacing on all sides of outside of Term palette*/
-    margin: 10px;
+    margin: 10px 10px 10px 15px;
 
-    /* Spacing on all sides of inside of term palette*/
-    padding: 10px;
-    /*display: inline-block;*/
-    padding: 10px;
     min-width: 300px;
-    height: 110px;
+    height: auto;
+    display: flex;
+}
+
+.indivCourseGroup {
+
+    /* Text color of each term div*/
+    color: white;
+    /* Width of eachterm div*/
+    width: 52px;
+    height: 26px;
+
+    /* Font of text inside term div*/
+    font-size: 14px;
+    /*Spacing on all sides of text inside a term div*/
+    padding: 7px;
+    /* Make the term divs rounded corners*/
+    border-radius: 5px;
+    /*Spacing between terms in term palette*/
+    margin-left: 5px;
+
+    /* Looks good when cursor points to a term div*/
+    cursor: pointer;
+    text-align: center;
+    float: left;
+
+    /* Center text both horizontally and vertically */
     display: flex;
     justify-content: center;
+    align-items: center;
+}
+
+.courseGroupPalatte {
+    /* Spacing on all sides of outside of Term palette*/
+    margin-left: 20px;
+    margin-right: 15px;
+    width: 200px;
+    height: auto;
+    display: flex;
+}
+
+.allGroups {
+    margin: 10px 10px 10px 15px;
+    display: flex;
 }
 
 .indvGradAttribute {
@@ -167,7 +205,7 @@ code {
 
     /* Spacing on all sides of outside of Term palette*/
     margin-right: 40px;
-    margin-left: 30px;
+    margin-left: 20px;
 
     /* Spacing on all sides of inside of term palette*/
     padding: 20px;
