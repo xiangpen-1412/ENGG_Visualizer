@@ -23,7 +23,8 @@ const GradAttributes = (props) => {
     return (
         <div className="gradAttributePalette">
             <h3>Graduate Attributes</h3>
-            <p style={{ fontFamily: 'Times New Roman', fontWeight: 'bold', fontSize: '16px' }}>Click on a Graduate Attributes Below to Highlight all Courses in that Category</p>
+            <p style={{fontFamily: 'Times New Roman', fontWeight: 'bold', fontSize: '16px'}}>Click on a Graduate
+                Attributes Below to Highlight all Courses in that Category</p>
             {cells}
         </div>
     )
@@ -38,7 +39,7 @@ const CourseCatagory = (props) => {
                 onClick={(event) => {
                     props.setCatagoryColor(event, catagory)
                 }}
-                style={{backgroundColor : catagory.color}}
+                style={{backgroundColor: catagory.color}}
             >
                 {catagory.name}
             </div>
@@ -48,7 +49,8 @@ const CourseCatagory = (props) => {
     return (
         <div className="courseCategoryPalette">
             <h3>Course Category</h3>
-            <p style={{ fontFamily: 'Times New Roman', fontWeight: 'bold', fontSize: '16px' }}>Click on a Category Below to Highlight all Courses in that Category</p>
+            <p style={{fontFamily: 'Times New Roman', fontWeight: 'bold', fontSize: '16px'}}>Click on a Category Below
+                to Highlight all Courses in that Category</p>
             {cells}
         </div>
     )
@@ -655,18 +657,19 @@ class App extends Component {
                             <GALegend GALegendList={this.state.GALegendList}/>
                         </div>
                     </div>
-
-                    <div className='structureWrapper'>
-                        <Structure structure={structure}
-                                   isToolTipOpen={this.state.isToolTipOpen}
-                                   showToolTip={this.showToolTip}
-                                   hideToolTip={this.hideToolTip}
-                                   selectedPlan={selectedPlan}
-                                   updateLineMap={this.updateLineMap}
-                                   lineMap={lineMap}
-                        />
-                    </div>
                 </div>
+
+                <div className='structureWrapper'>
+                    <Structure structure={structure}
+                               isToolTipOpen={this.state.isToolTipOpen}
+                               showToolTip={this.showToolTip}
+                               hideToolTip={this.hideToolTip}
+                               selectedPlan={selectedPlan}
+                               updateLineMap={this.updateLineMap}
+                               lineMap={lineMap}
+                    />
+                </div>
+
 
             </div>
         )

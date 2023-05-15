@@ -46,6 +46,7 @@ class RESTController extends Component {
                     let courseName;
                     let preReqs = [];
                     let coReqs = [];
+                    let orCase;
 
                     if (courseMap[term] != null) {
                         let course = courseMap[term].map((course) => {
@@ -60,6 +61,7 @@ class RESTController extends Component {
                             courseName = course.courseName;
                             preReqs = course.preReqs;
                             coReqs = course.coReqs;
+                            orCase = course.orCase;
 
                             if (!course.aucount) {
                                 course.aucount = {};
@@ -78,6 +80,7 @@ class RESTController extends Component {
                                 prerequisites : preReqs,
                                 corequisites : coReqs,
                                 catagory : courseGroup,
+                                orCase : orCase,
                             }
                         });
 

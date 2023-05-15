@@ -242,7 +242,7 @@ class Structure extends Component {
 
             return (
                 <div className='term'>
-                    <b>
+                    <b style={{ fontFamily: 'Times New Roman', fontSize: '20px' }}>
                         {termColumn.term}
                     </b>
                     <div className='courseWrapper'>
