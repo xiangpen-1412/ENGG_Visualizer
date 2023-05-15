@@ -113,7 +113,7 @@ code {
 
 .planPalette {
     /* Spacing on all sides of outside of Term palette*/
-    margin: 10px 10px 10px 15px;
+    margin: 10px 10px 5px 15px;
 
     min-width: 300px;
     height: auto;
@@ -149,6 +149,7 @@ code {
 }
 
 .courseGroupPalatte {
+
     /* Spacing on all sides of outside of Term palette*/
     margin-left: 20px;
     margin-right: 15px;
@@ -158,7 +159,8 @@ code {
 }
 
 .allGroups {
-    margin: 10px 10px 10px 15px;
+
+    margin: 10px 10px 10px 25px;
     display: flex;
 }
 
@@ -170,17 +172,17 @@ code {
     color: white;
 
     /* Width of each GA div*/
-    width: 140px;
-    height: 35px;
+    width: 120px;
+    height: 30px;
 
     /* Font of text inside GA div*/
-    font-size: 16px;
+    font-size: 15px;
 
     /*Spacing on all sides of text inside a GA div*/
     padding: 10px;
 
     /* Make the GA divs rounded corners*/
-    border-radius: 5px;
+    border-radius: 7px;
 
     /*Spacing between GA in term palette*/
     margin-left: 5px;
@@ -200,9 +202,6 @@ code {
 
 .GAWrapper {
 
-    /* Border of Term palette*/
-    border: 3px solid black;
-
     /* Spacing on all sides of outside of Term palette*/
     margin-right: 40px;
     margin-left: 20px;
@@ -212,7 +211,7 @@ code {
 
     /*Width and height of term palette*/
     /* min-width: 600px; */
-    width: 670px;
+    width: 600px;
     height: 240px;
 
     display: flex;
@@ -225,11 +224,11 @@ code {
     /* Text color of each category div*/
     color: white;
     /* Width of each category div*/
-    width: 140px;
-    height: 36px;
+    width: 120px;
+    height: 30px;
 
     /* Font of text inside category div*/
-    font-size: 17px;
+    font-size: 15px;
     /*Spacing on all sides of text inside a category div*/
     padding: 10px;
     /* Make the category divs rounded corners*/
@@ -251,14 +250,14 @@ code {
 }
 
 .catagoryWrapper {
-    border: 3px solid black;
 
-    margin-left: 40px;
+    margin-left: 30px;
+    margin-right: 150px;
 
     /* Spacing on all sides of inside of term palette*/
-    padding: 20px;
+    padding: 15px;
 
-    width: 670px;
+    width: 470px;
     height: 240px;
 
     display: flex;
@@ -268,7 +267,7 @@ code {
 .lowerStuff {
     display: flex;
     flex-direction: row;
-    margin: 10px;
+    margin: 5px 5px 80px 5px;
 }
 
 .TOOLTIPPPP {
@@ -277,11 +276,14 @@ code {
 }
 
 .gradAttributeLegend {
+    margin-top: 50px;
     display: inline-block;
 }
 
 .idk {
     margin-left: 40px;
-    margin-bottom: 30px;
-    border: 2px black;
+}
+
+.part {
+    margin-left: 10px;
 }

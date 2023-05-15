@@ -23,6 +23,7 @@ const GradAttributes = (props) => {
     return (
         <div className="gradAttributePalette">
             <h3>Graduate Attributes</h3>
+            <p style={{ fontFamily: 'Times New Roman', fontWeight: 'bold', fontSize: '16px' }}>Click on a Graduate Attributes Below to Highlight all Courses in that Category</p>
             {cells}
         </div>
     )
@@ -37,6 +38,7 @@ const CourseCatagory = (props) => {
                 onClick={(event) => {
                     props.setCatagoryColor(event, catagory)
                 }}
+                style={{backgroundColor : catagory.color}}
             >
                 {catagory.name}
             </div>
@@ -46,6 +48,7 @@ const CourseCatagory = (props) => {
     return (
         <div className="courseCategoryPalette">
             <h3>Course Category</h3>
+            <p style={{ fontFamily: 'Times New Roman', fontWeight: 'bold', fontSize: '16px' }}>Click on a Category Below to Highlight all Courses in that Category</p>
             {cells}
         </div>
     )
@@ -617,51 +620,54 @@ class App extends Component {
                     <Header/>
                 </div>
 
-                <div className='planWrapper'>
-                    <Plans setSelectedProgramPlan={this.setSelectedProgramPlan}
-                           deleteLineMap={this.deleteLineMap}
-                    />
-                </div>
-
-                {this.state.containCourseGroup && (
-                    <div>
-                        <CourseGroup courseGroup={courseGroup}
-                                     setSelectedCourseGroup={this.setSelectedCourseGroup}
-                                     selectedProgram={selectedProgram}
-                                     deleteLineMap={this.deleteLineMap}
-                                     planChanged={planChanged}
-                                     setPlanChanged={this.setPlanChanged}
+                <div className='part'>
+                    <div className='planWrapper'>
+                        <Plans setSelectedProgramPlan={this.setSelectedProgramPlan}
+                               deleteLineMap={this.deleteLineMap}
                         />
-                    </div>)}
-
-                <div className='idk'>
-                    <GALegend GALegendList={this.state.GALegendList}/>
-                </div>
-
-                <div className="lowerStuff">
-                    <div className='GAWrapper'>
-                        <GradAttributes gradAttributeList={this.state.gradAttributeList}
-                                        setGradAttributeColor={this.setGradAttributeColor}/>
-                        {/* <GALegend GALegendList={this.state.GALegendList}/> */}
                     </div>
 
-                    <div className='catagoryWrapper'>
-                        <CourseCatagory CatagoryList={this.state.CatagoryList}
-                                        setCatagoryColor={this.setCatagoryColor}/>
+                    {this.state.containCourseGroup && (
+                        <div>
+                            <CourseGroup courseGroup={courseGroup}
+                                         setSelectedCourseGroup={this.setSelectedCourseGroup}
+                                         selectedProgram={selectedProgram}
+                                         deleteLineMap={this.deleteLineMap}
+                                         planChanged={planChanged}
+                                         setPlanChanged={this.setPlanChanged}
+                            />
+                        </div>)}
 
+                    <div className="lowerStuff">
+                        <div className='catagoryWrapper'>
+                            <CourseCatagory CatagoryList={this.state.CatagoryList}
+                                            setCatagoryColor={this.setCatagoryColor}/>
+
+                        </div>
+
+                        <div className='GAWrapper'>
+                            <GradAttributes gradAttributeList={this.state.gradAttributeList}
+                                            setGradAttributeColor={this.setGradAttributeColor}/>
+                            {/* <GALegend GALegendList={this.state.GALegendList}/> */}
+                        </div>
+
+                        <div className='idk'>
+                            <GALegend GALegendList={this.state.GALegendList}/>
+                        </div>
+                    </div>
+
+                    <div className='structureWrapper'>
+                        <Structure structure={structure}
+                                   isToolTipOpen={this.state.isToolTipOpen}
+                                   showToolTip={this.showToolTip}
+                                   hideToolTip={this.hideToolTip}
+                                   selectedPlan={selectedPlan}
+                                   updateLineMap={this.updateLineMap}
+                                   lineMap={lineMap}
+                        />
                     </div>
                 </div>
 
-                <div className='structureWrapper'>
-                    <Structure structure={structure}
-                               isToolTipOpen={this.state.isToolTipOpen}
-                               showToolTip={this.showToolTip}
-                               hideToolTip={this.hideToolTip}
-                               selectedPlan={selectedPlan}
-                               updateLineMap={this.updateLineMap}
-                               lineMap={lineMap}
-                    />
-                </div>
             </div>
         )
     }
