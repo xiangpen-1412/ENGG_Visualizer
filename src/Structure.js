@@ -206,8 +206,15 @@ class Structure extends Component {
 
         let globalIndex = 0;
 
+        let previousIsOrCase = false;
+
         const term = structure.map((termColumn) => {
             const courseDivs = termColumn.courses.map((courseItem) => {
+
+                if (previousIsOrCase === true) {
+                    previousIsOrCase = false;
+                    return null;
+                }
 
                 const index = globalIndex;
                 globalIndex++;
@@ -219,6 +226,57 @@ class Structure extends Component {
                     name = name.replace("ITS", "ITS Electives");
                 } else if (courseItem.name.includes("PROG")) {
                     name = name.replace("PROG", "Program Electives");
+                }
+
+                if (courseItem.orCase) {
+
+                    previousIsOrCase = true;
+
+                    const orCaseCourseName = courseItem.orCase;
+                    const orCaseCourseIndex = coursesList.findIndex(item => item.name === orCaseCourseName);
+                    if (orCaseCourseIndex != -1) {
+                        const orCaseNameOne = courseItem.name;
+                        const orCaseNameTwo = coursesList[orCaseCourseIndex].name;
+
+                        globalIndex++;
+                        let secondIndex = globalIndex;
+
+                        return (
+                            <div className='orCaseDiv'>
+                                <div className='indivOrCourseOne'
+                                     key={index}
+                                     ref={(el) => this.divRefs[index] = el}
+                                     onClick={() => this.handleOnClick(coursesList, index, updateLineMap, lineMap)}
+                                     style={{backgroundColor: courseItem.color}}
+                                     onMouseEnter={(event) => this.props.showToolTip(event)}
+                                     onMouseDown={(event) => this.props.hideToolTip(event)}
+                                     onMouseLeave={(event) => this.props.hideToolTip(event)}
+                                     data-tooltip-content={courseItem.description} data-tooltip-id='toolTip1'
+                                     extendedName={courseItem.extendedName}
+                                     accreditionUnits={courseItem.accreditionUnits}
+                                >
+                                    {orCaseNameOne}
+                                </div>
+                                <div className='orCircle'>
+                                    <div className='orText'>OR</div>
+                                </div>
+                                <div className='indivOrCourseTwo'
+                                     key={secondIndex}
+                                     ref={(el) => this.divRefs[secondIndex] = el}
+                                     onClick={() => this.handleOnClick(coursesList, secondIndex, updateLineMap, lineMap)}
+                                     style={{backgroundColor: courseItem.color}}
+                                     onMouseEnter={(event) => this.props.showToolTip(event)}
+                                     onMouseDown={(event) => this.props.hideToolTip(event)}
+                                     onMouseLeave={(event) => this.props.hideToolTip(event)}
+                                     data-tooltip-content={courseItem.description} data-tooltip-id='toolTip1'
+                                     extendedName={courseItem.extendedName}
+                                     accreditionUnits={courseItem.accreditionUnits}
+                                >
+                                    {orCaseNameTwo}
+                                </div>
+                            </div>
+                        )
+                    }
                 }
 
                 return (

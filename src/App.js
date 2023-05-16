@@ -24,7 +24,7 @@ const GradAttributes = (props) => {
         <div className="gradAttributePalette">
             <h3>Graduate Attributes</h3>
             <p style={{fontFamily: 'Times New Roman', fontWeight: 'bold', fontSize: '16px'}}>Click on a Graduate
-                Attributes Below to Highlight all Courses in that Category</p>
+                Attributes Below to Highlight all Courses with that Grad Attribute</p>
             {cells}
         </div>
     )

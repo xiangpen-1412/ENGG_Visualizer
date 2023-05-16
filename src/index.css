@@ -18,15 +18,12 @@ code {
 }
 
 .term {
-
     text-align: center;
     /* Spacing on all sides of outside of Term palette*/
-    margin: 10px 10px 10px 15px;
-    /* Spacing on all sides of inside of term palette*/
-    padding: 0px 10px 10px 10px;
+    margin-right: 10px;
     display: inline-block;
-    min-width: 200px;
-    min-height: 400px;
+    min-width: 250px;
+    min-height: 300px;
     height: auto;
 
 }
@@ -37,13 +34,12 @@ code {
 }
 
 .courseWrapper {
-    /* Spacing on all sides of outside of Term palette*/
-    margin: 10px;
+    margin-top: 15px;
+
     /* Spacing on all sides of inside of term palette*/
     padding: 10px;
     display: inline-block;
-    padding: 10px;
-    min-width: 150px;
+    width: 170px;
     min-height: 200px;
     height: auto;
 }
@@ -55,7 +51,7 @@ code {
     /* Text color of each term div*/
     color: black;
     /* Width of eachterm div*/
-    width: 150px;
+    width: 135px;
     height: 40px;
     /* Font of text inside term div*/
     font-size: 15px;
@@ -64,8 +60,8 @@ code {
     /* Make the term divs rounded corners*/
     border-radius: 5px;
     /*Spacing between terms in term palette*/
-    margin-top: 35px;
     margin-bottom: 35px;
+    margin-left: 6px;
     /* Looks good when cursor points to a term div*/
     cursor: pointer;
     text-align: center;
@@ -78,6 +74,90 @@ code {
 
 .indivCourses:hover {
     background-color: rgb(140, 101, 101)
+}
+
+.orCaseDiv {
+    border: 4px dashed darkred;
+    width: 170px;
+    min-height: 100px;
+    margin-top: -20px;
+    margin-bottom: 18px;
+    margin-left: -19px;
+    padding: 10px 10px 10px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.indivOrCourseOne {
+    border: 2px solid black;
+    /* Background color of each term div*/
+    background-color: rgb(140, 101, 101);
+    /* Text color of each term div*/
+    color: black;
+    /* Width of eachterm div*/
+    width: 135px;
+    height: 40px;
+    /* Font of text inside term div*/
+    font-size: 15px;
+    /*Spacing on all sides of text inside a term div*/
+    padding: 10px;
+    /* Make the term divs rounded corners*/
+    border-radius: 5px;
+    /* Looks good when cursor points to a term div*/
+    cursor: pointer;
+    text-align: center;
+
+    margin-top: 5px;
+
+    /* Center text both horizontally and vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.orCircle {
+    border: 2px black solid;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 15px 0px 15px 57px;
+}
+
+.orText {
+    color: black;
+    font-family: "Times New Roman", serif;
+    font-weight: bold;
+}
+
+.indivOrCourseTwo {
+    border: 2px solid black;
+    /* Background color of each term div*/
+    background-color: rgb(140, 101, 101);
+    /* Text color of each term div*/
+    color: black;
+    /* Width of eachterm div*/
+    width: 135px;
+    height: 40px;
+    /* Font of text inside term div*/
+    font-size: 15px;
+    /*Spacing on all sides of text inside a term div*/
+    padding: 10px;
+    /* Make the term divs rounded corners*/
+    border-radius: 5px;
+    /* Looks good when cursor points to a term div*/
+    cursor: pointer;
+    text-align: center;
+
+    margin-bottom: 6px;
+    /* Center text both horizontally and vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .indvPlan {
