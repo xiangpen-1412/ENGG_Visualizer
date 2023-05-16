@@ -25,7 +25,6 @@ code {
     min-width: 250px;
     min-height: 300px;
     height: auto;
-
 }
 
 .structureWrapper {
@@ -185,6 +184,7 @@ code {
     display: flex;
     justify-content: center;
     align-items: center;
+
 }
 
 .planPalette {

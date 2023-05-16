@@ -26,8 +26,9 @@
     border-radius: 7px;
     margin-left: 10px;
     font-size: 19px;
-    line-height: 45px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .image {
@@ -42,7 +43,27 @@
     font-family: "Times New Roman", serif;
     display: inline-block;
     text-align: center;
-    margin-left: 550px;
+    margin-left: 570px;
+}
+
+.questionMark {
+    width: 45px;
+    height: 45px;
+    margin-left: 910px;
+}
+
+.guideWrapper {
+    width : 500px;
+    min-height: 500px;
+    border: black solid 2px;
+    margin-top: 10px;
+    margin-left: 1760px;
+    padding: 20px;
+
+    position: fixed;
+    z-index: 9999;
+    background-color: white;
+    opacity: 1;
 }
 
 @media (prefers-reduced-motion: no-preference) {

@@ -58,14 +58,21 @@ const CourseCatagory = (props) => {
 
 const Header = () => {
     const navigate = useNavigate();
-    const handleButtonClick = () => {
+
+    const [showGuide, setShowGuide] = useState(false);
+
+    const handleBackButtonClick = () => {
         navigate("/");
     };
+
+    const handleHelpButtonClick = () => {
+        setShowGuide(!showGuide);
+    }
 
     return (
         <header className="header">
             <div className="header-content">
-                <button className="backButton" onClick={handleButtonClick}>
+                <button className="backButton" onClick={handleBackButtonClick}>
                     <a>← Back</a>
                 </button>
                 <div>
@@ -76,7 +83,47 @@ const Header = () => {
                 <div>
                     <a className="site-title">Mechanical Engineering Program Plan Visualizer</a>
                 </div>
+                <img alt="question mark" src="questionMark.png" className="questionMark"
+                     onClick={handleHelpButtonClick}/>
             </div>
+
+            {showGuide && (
+                <div className="guideWrapper">
+                    <div>
+                        <h3>Visualizer Instruction</h3>
+                        <p>Welcome to the University of Alberta's Engineering Program Plan Visualizer.</p>
+                        <p>This tool is designed to help you navigate the structure of your chosen program plan. </p>
+                        <p>Here is a guide to using the tool:</p>
+                        <ul>
+                            <li><strong>Select plans:</strong>
+                                To see all the courses in a program, choose a plan from the Plan menu at the top. All
+                                courses in 8 or more terms will be displayed below. For Mechanical Engineering, you will
+                                need to select a group after selecting a plan.
+                            </li>
+                            <li><strong>Course Description:</strong> By hovering over a course in the terms below, you
+                                can view its course description. This provides details about the course content, hours
+                                and credits.
+                            </li>
+                            <li><strong>Prerequisites and Corequisites:</strong> Left-clicking on a course will display
+                                any prerequisites with yellow arrows and corequisites with red arrows.
+                            </li>
+                            <li><strong>Course Group:</strong> Click on a course in the Course Group Palette to see all
+                                the courses that belong to the course group. This is useful for getting an overview of
+                                courses with similar content or learning objectives.
+                            </li>
+                            <li><strong>Graduation Attributes:</strong> Clicking on a graduate attribute in the Graduate
+                                Attributes palette highlights each course in that category. The more red a course, the
+                                more it embodies that attribute. Please refer to the Graduate Attributes legends for
+                                more details. This displays where each learning outcome is met throughout a degree
+                                program.
+                            </li>
+                        </ul>
+                        <p>We hope this tool aids your understanding of your chosen engineering program and supports
+                            your academic planning process. If you have any questions or encounter any difficulties,
+                            please do not hesitate to contact us at dnobes@ualberta.ca. </p>
+                    </div>
+                </div>
+            )}
         </header>
     );
 };
