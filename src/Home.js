@@ -6,7 +6,13 @@ import './Home.css';
 //programList is in state variable so now make a div for each program
 const Program = (props) => {
     const navigate= useNavigate()
-    const cells0 = props.programList0.map((program,index)=> {
+
+
+
+
+
+
+    const cells0 = props.programList[0].map((program,index)=> {
         return(
             <div
                 key={index}
@@ -27,7 +33,7 @@ const Program = (props) => {
             </div>
         )})
 
-    const cells1 = props.programList1.map((program,index)=> {
+    const cells1 = props.programList[1].map((program,index)=> {
         return(
             <div
                 key={index}
@@ -48,7 +54,7 @@ const Program = (props) => {
             </div>
         )})
 
-    const cells2 = props.programList2.map((program,index)=> {
+    const cells2 = props.programList[2].map((program,index)=> {
         return(
             <div
                 key={index}
@@ -69,7 +75,7 @@ const Program = (props) => {
             </div>
         )})
 
-    const cells3 = props.programList3.map((program,index)=> {
+    const cells3 = props.programList[3].map((program,index)=> {
         return(
             <div
                 key={index}
@@ -106,37 +112,37 @@ const Program = (props) => {
 class Home extends Component {
     constructor(props){
         super(props);
+
+
         this.state = {
             selectedProgram: "",
 
-            programList0: [
-                "Chemical Engineering",
-                "Materials Engineering",
-            ],
-
-            programList1: [
-                "Civil Engineering",
-                "Mining Engineering",
-                "Petroleum Engineering",
-            ],
-
-            programList2: [
-                "Computer Engineering",
-                "Electrical Engineering",
-                "Engineering Physics",
-            ],
-
-            programList3: [
-                "Mechanical Engineering",
+            programList: [
+                [
+                    "Chemical Engineering",
+                    "Materials Engineering",
+                ],
+                [
+                    "Civil Engineering",
+                    "Mining Engineering",
+                    "Petroleum Engineering",
+                ],
+                [
+                    "Computer Engineering",
+                    "Electrical Engineering",
+                    "Engineering Physics",
+                ],
+                [
+                    "Mechanical Engineering",
+                ],
             ],
         }
     }
 
     render() {
-        const {programList0} = this.state;
-        const {programList1} = this.state;
-        const {programList2} = this.state;
-        const {programList3} = this.state;
+        const {programList} = this.state;
+
+        
 
         return (
             <div className="frontPageWrapper">
@@ -155,7 +161,7 @@ class Home extends Component {
                 </div>
 
                 <div className='wrapperTermProgram'>
-                    <Program programList1={programList1} programList0={programList0} programList2={programList2} programList3={programList3} onClickProgram={this.onClickProgram}/>
+                    <Program programList={programList} onClickProgram={this.onClickProgram}/>
                 </div>
             </div>
         )
