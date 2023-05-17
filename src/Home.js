@@ -9,100 +9,42 @@ const Program = (props) => {
 
 
 
-
-
-
-    const cells0 = props.programList[0].map((program,index)=> {
-        return(
-            <div
-                key={index}
-                programInfo={program}
-                className = "indvProgram0"
-                onClick={(event) =>
-                    navigate("/App",
-                        {
-                            state: {
-                                selectedProgram: program,
-                                replace: false
+    const cells = props.programList.map((programs, yIndex) => {
+        let cell = programs.map((program, xIndex)=> {
+            return(
+                <div
+                    key={xIndex}
+                    programInfo={program}
+                    className = {"indvProgram" + " row" + yIndex}
+                    onClick={(event) =>
+                        navigate("/App",
+                            {
+                                state: {
+                                    selectedProgram: program,
+                                    replace: false
+                                }
                             }
-                        }
-                    )
-                }
-            >
-                {program}
-            </div>
-        )})
+                        )
+                    }
+                >
+                    {program}
+                </div>
+            )
+        })
 
-    const cells1 = props.programList[1].map((program,index)=> {
         return(
-            <div
-                key={index}
-                programInfo={program}
-                className = "indvProgram1"
-                onClick={(event) =>
-                    navigate("/App",
-                        {
-                            state: {
-                                selectedProgram: program,
-                                replace: false
-                            }
-                        }
-                    )
-                }
-            >
-                {program}
-            </div>
-        )})
+            cell
+        )
+    })
 
-    const cells2 = props.programList[2].map((program,index)=> {
-        return(
-            <div
-                key={index}
-                programInfo={program}
-                className = "indvProgram2"
-                onClick={(event) =>
-                    navigate("/App",
-                        {
-                            state: {
-                                selectedProgram: program,
-                                replace: false
-                            }
-                        }
-                    )
-                }
-            >
-                {program}
-            </div>
-        )})
-
-    const cells3 = props.programList[3].map((program,index)=> {
-        return(
-            <div
-                key={index}
-                programInfo={program}
-                className = "indvProgram3"
-                onClick={(event) =>
-                    navigate("/App",
-                        {
-                            state: {
-                                selectedProgram: program,
-                                replace: false
-                            }
-                        }
-                    )
-                }
-            >
-                {program}
-            </div>
-        )})
 
     return(
 
         <div className = "programPalette">
-            <div className = "programPalette0">{cells0}</div>
-            <div className = "programPalette1">{cells1}</div>
-            <div className = "programPalette2">{cells2}</div>
-            <div className = "programPalette3">{cells3}</div>
+            <div className = "programPalette0">{cells[0]}</div>
+            <div className = "programPalette1">{cells[1]}</div>
+            <div className = "programPalette2">{cells[2]}</div>
+            <div className = "programPalette3">{cells[3]}</div>
         </div>
 
     )
@@ -159,6 +101,8 @@ class Home extends Component {
                 <div className="frontPageTextWrapper">
                     <h2>2022 - 2023 </h2>
                 </div>
+
+                <br></br>
 
                 <div className='wrapperTermProgram'>
                     <Program programList={programList} onClickProgram={this.onClickProgram}/>
