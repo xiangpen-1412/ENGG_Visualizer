@@ -13,6 +13,7 @@ class Structure extends Component {
             selectedCourse: "",
         };
 
+        this.orCaseList = [];
         this.divRefs = [];
     }
 
@@ -20,7 +21,7 @@ class Structure extends Component {
      * show the prerequisite and corequisite of a course by lines when click detected
      *
      * */
-    handleOnClick = (courses, index, update, lineMap) => {
+    handleOnClick = (courses, index, update, lineMap, reqMap) => {
 
         const selectedCourseName = courses[index].name;
 
@@ -41,9 +42,9 @@ class Structure extends Component {
 
             const selectedRef = this.divRefs[index];
 
-            if (courses[index].prerequisites != null) {
+            if (reqMap[courses[index].name] !== undefined && reqMap[courses[index].name].preRe != null) {
 
-                courses[index].prerequisites.map((prerequisite) => {
+                reqMap[courses[index].name].preRe.map((prerequisite) => {
 
                     // use dash line to show there is a or case
                     if (prerequisite.toLowerCase().includes("or")) {
@@ -61,15 +62,18 @@ class Structure extends Component {
                             if (prerequisiteIndex !== null) {
                                 const startRef = this.divRefs[prerequisiteIndex];
                                 const line = new LeaderLine(startRef, selectedRef, {
-                                    color: 'gold',
+                                    color: 'red',
                                     dash: {},
                                 });
 
                                 if (!lineMap.has(selectedCourse)) {
                                     lineMap.set(selectedCourse, []);
                                 }
-                                lineMap.get(selectedCourse).push(line);
-                                update(lineMap);
+
+                                if (!lineMap.get(selectedCourse).includes(line)) {
+                                    lineMap.get(selectedCourse).push(line);
+                                    update(lineMap);
+                                }
 
                             } else {
                                 console.log(`Prerequisites for ${selectedRef.textContent} not found.`);
@@ -87,14 +91,17 @@ class Structure extends Component {
                         if (prerequisiteIndex !== null) {
                             const startRef = this.divRefs[prerequisiteIndex];
                             const line = new LeaderLine(startRef, selectedRef, {
-                                color: 'gold',
+                                color: 'red',
                             });
 
                             if (!lineMap.has(selectedCourse)) {
                                 lineMap.set(selectedCourse, []);
                             }
-                            lineMap.get(selectedCourse).push(line);
-                            update(lineMap);
+
+                            if (!lineMap.get(selectedCourse).includes(line)) {
+                                lineMap.get(selectedCourse).push(line);
+                                update(lineMap);
+                            }
 
                         } else {
                             console.log(`Prerequisites for ${selectedRef.textContent} not found.`);
@@ -104,8 +111,8 @@ class Structure extends Component {
             }
             ;
 
-            if (courses[index].corequisites != null) {
-                courses[index].corequisites.map((corequisite) => {
+            if (reqMap[courses[index].name] !== undefined && reqMap[courses[index].name].coRe != null) {
+                reqMap[courses[index].name].coRe.map((corequisite) => {
 
                     if (corequisite.toLowerCase().includes("or")) {
 
@@ -129,8 +136,12 @@ class Structure extends Component {
                                 if (!lineMap.has(selectedCourse)) {
                                     lineMap.set(selectedCourse, []);
                                 }
-                                lineMap.get(selectedCourse).push(line);
-                                update(lineMap);
+
+                                if (!lineMap.get(selectedCourse).includes(line)) {
+                                    lineMap.get(selectedCourse).push(line);
+                                    update(lineMap);
+                                }
+
                             } else {
                                 console.log(`Corequisites for ${selectedRef.textContent} not found.`);
                             }
@@ -152,8 +163,11 @@ class Structure extends Component {
                             if (!lineMap.has(selectedCourse)) {
                                 lineMap.set(selectedCourse, []);
                             }
-                            lineMap.get(selectedCourse).push(line);
-                            update(lineMap);
+
+                            if (!lineMap.get(selectedCourse).includes(line)) {
+                                lineMap.get(selectedCourse).push(line);
+                                update(lineMap);
+                            }
 
                         } else {
                             console.log(`Corequisites for ${selectedRef.textContent} not found.`);
@@ -177,23 +191,18 @@ class Structure extends Component {
         reqList = reqList.map((requisite) => {
             return requisite.trimEnd().trimStart();
         })
-        const department = reqList[0].match(/[a-zA-Z\s]+/)[0].trimEnd();
 
-        let catalogs = reqList.map((splitRequisite) => {
-            if (/^\d+$/.test(splitRequisite)) {
-                return (department + " " + splitRequisite);
-            } else {
-                return splitRequisite;
-            }
-        });
-
-        return catalogs;
-
+        return reqList;
     }
 
     render() {
 
-        const {structure, updateLineMap, lineMap} = this.props;
+        const {structure, updateLineMap, lineMap, reqMap} = this.props;
+
+        const map = new Map(Object.entries(reqMap));
+        console.log("type is");
+        console.log(typeof map);
+        console.log(map);
 
         let cloneStructure = cloneDeep(structure);
 
@@ -206,17 +215,14 @@ class Structure extends Component {
 
         let globalIndex = 0;
 
-        let previousIsOrCase = false;
-
         const term = structure.map((termColumn) => {
-            const courseDivs = termColumn.courses.map((courseItem) => {
+            const courseDivs = termColumn.courses.map((courseItem, index) => {
 
-                if (previousIsOrCase === true) {
-                    previousIsOrCase = false;
+                if (this.orCaseList.includes(courseItem.name)) {
                     return null;
                 }
 
-                const index = globalIndex;
+                const indexx = globalIndex;
                 globalIndex++;
                 let name = courseItem.name;
 
@@ -225,82 +231,111 @@ class Structure extends Component {
                 } else if (courseItem.name.includes("ITS")) {
                     name = name.replace("ITS", "ITS Electives");
                 } else if (courseItem.name.includes("PROG")) {
-                    name = name.replace("PROG", "Program Electives");
+                    name = name.replace("PROG", "Program/Technical Electives");
                 }
 
                 if (courseItem.orCase) {
 
-                    previousIsOrCase = true;
+                    globalIndex--;
+                    let orCaseIndex = globalIndex;
 
-                    const orCaseCourseName = courseItem.orCase;
-                    const orCaseCourseIndex = coursesList.findIndex(item => item.name === orCaseCourseName);
-                    if (orCaseCourseIndex != -1) {
-                        const orCaseNameOne = courseItem.name;
-                        const orCaseNameTwo = coursesList[orCaseCourseIndex].name;
+                    let orCaseList = [];
+                    orCaseList.push(courseItem.name);
+                    orCaseList.push(courseItem.orCase);
 
-                        globalIndex++;
-                        let secondIndex = globalIndex;
+                    while (index < termColumn.courses.length) {
 
-                        return (
-                            <div className='orCaseDiv'>
-                                <div className='indivOrCourseOne'
-                                     key={index}
-                                     ref={(el) => this.divRefs[index] = el}
-                                     onClick={() => this.handleOnClick(coursesList, index, updateLineMap, lineMap)}
-                                     style={{backgroundColor: courseItem.color}}
-                                     onMouseEnter={(event) => this.props.showToolTip(event)}
-                                     onMouseDown={(event) => this.props.hideToolTip(event)}
-                                     onMouseLeave={(event) => this.props.hideToolTip(event)}
-                                     data-tooltip-content={courseItem.description} data-tooltip-id='toolTip1'
-                                     extendedName={courseItem.extendedName}
-                                     accreditionUnits={courseItem.accreditionUnits}
-                                >
-                                    {orCaseNameOne}
-                                </div>
-                                <div className='orCircle'>
-                                    <div className='orText'>OR</div>
-                                </div>
-                                <div className='indivOrCourseTwo'
-                                     key={secondIndex}
-                                     ref={(el) => this.divRefs[secondIndex] = el}
-                                     onClick={() => this.handleOnClick(coursesList, secondIndex, updateLineMap, lineMap)}
-                                     style={{backgroundColor: courseItem.color}}
-                                     onMouseEnter={(event) => this.props.showToolTip(event)}
-                                     onMouseDown={(event) => this.props.hideToolTip(event)}
-                                     onMouseLeave={(event) => this.props.hideToolTip(event)}
-                                     data-tooltip-content={courseItem.description} data-tooltip-id='toolTip1'
-                                     extendedName={courseItem.extendedName}
-                                     accreditionUnits={courseItem.accreditionUnits}
-                                >
-                                    {orCaseNameTwo}
-                                </div>
-                            </div>
-                        )
+                        if (termColumn.courses[index + 1].orCase) {
+                            orCaseList.push(termColumn.courses[index + 1].orCase);
+                        } else {
+                            break;
+                        }
+
+                        if (index + 1 < termColumn.courses.length) {
+                            index++;
+                        }
                     }
+
+                    this.orCaseList = orCaseList;
+
+                    const orCase = orCaseList.map((orCaseCourse, index) => {
+                        if (index !== orCaseList.length - 1) {
+                            globalIndex++;
+
+                            return (
+                                <div>
+                                    <div className='indivOrCourseOne'
+                                         key={orCaseIndex}
+                                         ref={(el) => this.divRefs[orCaseIndex] = el}
+                                         onClick={() => this.handleOnClick(coursesList, orCaseIndex, updateLineMap, lineMap, reqMap)}
+                                         style={{backgroundColor: courseItem.color}}
+                                         onMouseEnter={(event) => this.props.showToolTip(event)}
+                                         onMouseDown={(event) => this.props.hideToolTip(event)}
+                                         onMouseLeave={(event) => this.props.hideToolTip(event)}
+                                         data-tooltip-content={courseItem.description} data-tooltip-id='toolTip1'
+                                         extendedName={courseItem.extendedName}
+                                         accreditionUnits={courseItem.accreditionUnits}
+                                    >
+                                        {orCaseCourse}
+                                    </div>
+                                    <div className='orCircle'>
+                                        <div className='orText'>OR</div>
+                                    </div>
+                                </div>
+                            )
+                        } else {
+
+                            const indexTwo = globalIndex;
+                            globalIndex++;
+
+                            return (
+                                <div className='indivOrCourseTwo'
+                                     key={indexTwo}
+                                     ref={(el) => this.divRefs[indexTwo] = el}
+                                     onClick={() => this.handleOnClick(coursesList, indexTwo, updateLineMap, lineMap, reqMap)}
+                                     style={{backgroundColor: courseItem.color}}
+                                     onMouseEnter={(event) => this.props.showToolTip(event)}
+                                     onMouseDown={(event) => this.props.hideToolTip(event)}
+                                     onMouseLeave={(event) => this.props.hideToolTip(event)}
+                                     data-tooltip-content={courseItem.description} data-tooltip-id='toolTip1'
+                                     extendedName={courseItem.extendedName}
+                                     accreditionUnits={courseItem.accreditionUnits}
+                                >
+                                    {orCaseCourse}
+                                </div>
+                            )
+                        }
+                    })
+
+                    return (
+                        <div className='orCaseDiv'>
+                            {orCase}
+                        </div>
+                    )
+                } else {
+                    return (
+                        <div className='indivCourses'
+                             key={indexx}
+                             ref={(el) => this.divRefs[indexx] = el}
+                             onClick={() => this.handleOnClick(coursesList, indexx, updateLineMap, lineMap, reqMap)}
+                             style={{backgroundColor: courseItem.color}}
+                             onMouseEnter={(event) => this.props.showToolTip(event)}
+                             onMouseDown={(event) => this.props.hideToolTip(event)}
+                             onMouseLeave={(event) => this.props.hideToolTip(event)}
+                             data-tooltip-content={courseItem.description} data-tooltip-id='toolTip1'
+                             extendedName={courseItem.extendedName}
+                             accreditionUnits={courseItem.accreditionUnits}
+                        >
+                            {name}
+                        </div>
+                    )
                 }
-
-                return (
-                    <div className='indivCourses'
-                         key={index}
-                         ref={(el) => this.divRefs[index] = el}
-                         onClick={() => this.handleOnClick(coursesList, index, updateLineMap, lineMap)}
-                         style={{backgroundColor: courseItem.color}}
-                         onMouseEnter={(event) => this.props.showToolTip(event)}
-                         onMouseDown={(event) => this.props.hideToolTip(event)}
-                         onMouseLeave={(event) => this.props.hideToolTip(event)}
-                         data-tooltip-content={courseItem.description} data-tooltip-id='toolTip1'
-                         extendedName={courseItem.extendedName}
-                         accreditionUnits={courseItem.accreditionUnits}
-                    >
-                        {name}
-                    </div>
-                )
-
             })
+
 
             return (
                 <div className='term'>
-                    <b style={{ fontFamily: 'Times New Roman', fontSize: '20px' }}>
+                    <b style={{fontFamily: 'Times New Roman', fontSize: '20px'}}>
                         {termColumn.term}
                     </b>
                     <div className='courseWrapper'>

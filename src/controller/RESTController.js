@@ -29,65 +29,32 @@ class RESTController extends Component {
     }
 
     getCourseInfo = (data) => {
-
         return axios
             .post(`/nobes/timetable/visualizer/getInfo`, data, this.config)
             .then(response => {
-                let courseMap = response.data.obj;
+                const courseMap = response.data.obj;
                 const courses = [];
 
                 for (const term in courseMap) {
-
-                    let description;
-                    let courseTitle;
-                    let attributes;
-                    let courseGroup;
-                    let accreditionUnits;
-                    let courseName;
-                    let preReqs = [];
-                    let coReqs = [];
-                    let orCase;
-
-                    if (courseMap[term] != null) {
-                        let course = courseMap[term].map((course) => {
-
-                            description = course.description;
-
-                            attributes = course.attribute.map(Number);
-
-                            courseGroup = course.group.map(Number);
-
-                            courseTitle = course.title;
-                            courseName = course.courseName;
-                            preReqs = course.preReqs;
-                            coReqs = course.coReqs;
-                            orCase = course.orCase;
-
-                            if (!course.aucount) {
-                                course.aucount = {};
-                            }
-
-                            accreditionUnits = Object.entries(course.aucount)
+                    if (courseMap[term] !== null) {
+                        const courseList = courseMap[term].map(course => ({
+                            name: course.courseName,
+                            attribute: course.attribute.map(Number),
+                            extendedName: course.title,
+                            description: course.description,
+                            accreditionUnits: Object.entries(course.aucount ?? {})
                                 .map(([key, value]) => `${key}: ${value}`)
-                                .join('\n');
-
-                            return {
-                                name: courseName,
-                                attribute: attributes,
-                                extendedName: courseTitle,
-                                description: description,
-                                accreditionUnits: accreditionUnits,
-                                prerequisites : preReqs,
-                                corequisites : coReqs,
-                                catagory : courseGroup,
-                                orCase : orCase,
-                            }
-                        });
+                                .join('\n'),
+                            prerequisites: course.preReqs,
+                            corequisites: course.coReqs,
+                            category: course.group.map(Number),
+                            orCase: course.orCase,
+                        }));
 
                         courses.push({
                             term: term,
-                            courses: course
-                        })
+                            courses: courseList
+                        });
                     }
                 }
 
@@ -100,6 +67,16 @@ class RESTController extends Component {
             });
     }
 
+
+    getReqMap = (data) => {
+        return axios
+            .post(`/nobes/timetable/visualizer/getReqMap`, data, this.config)
+            .then(response => {
+                return response.data.obj;
+            }).catch(error => {
+                console.error('getLec: Error fetching data:', error);
+            });
+    }
 }
 
 export default RESTController;

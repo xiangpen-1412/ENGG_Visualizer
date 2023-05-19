@@ -354,6 +354,7 @@ class App extends Component {
             ],
 
             structure: [],
+            reqMap : new Map(),
             courseGroup: new Map(),
             selectedAtt: "",
             selectedGroup: "",
@@ -637,9 +638,15 @@ class App extends Component {
             planName: selectedPlan
         };
 
+        console.log(data);
+
         this.controller.getCourseInfo(data).then((courses) => {
             this.setState({structure: courses});
         });
+
+        this.controller.getReqMap(data).then((reqMap) => {
+            this.setState({reqMap : reqMap});
+        })
     }
 
     updateLineMap = (update) => {
@@ -661,7 +668,7 @@ class App extends Component {
     }
 
     render() {
-        const {structure, courseGroup, selectedProgram, selectedPlan, lineMap, planChanged} = this.state;
+        const {structure, courseGroup, selectedProgram, selectedPlan, lineMap, planChanged, reqMap} = this.state;
         return (
             <div className='all'>
 
@@ -714,6 +721,7 @@ class App extends Component {
                                selectedPlan={selectedPlan}
                                updateLineMap={this.updateLineMap}
                                lineMap={lineMap}
+                               reqMap={reqMap}
                     />
                 </div>
 
