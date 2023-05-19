@@ -711,10 +711,8 @@ class App extends Component {
                             <GALegend GALegendList={this.state.GALegendList}/>
                         </div>
                     </div>
-                </div>
 
-                <div className='structureWrapper'>
-                    {/* <div className='terms-box'> */}
+                    <div className='structureWrapper'>
                         <Structure structure={structure}
                                 isToolTipOpen={this.state.isToolTipOpen}
                                 showToolTip={this.showToolTip}
@@ -724,7 +722,7 @@ class App extends Component {
                                 lineMap={lineMap}
                                 reqMap={reqMap}
                         />
-                    {/* </div> */}
+                    </div>
                 </div>
 
 
