@@ -714,15 +714,17 @@ class App extends Component {
                 </div>
 
                 <div className='structureWrapper'>
-                    <Structure structure={structure}
-                               isToolTipOpen={this.state.isToolTipOpen}
-                               showToolTip={this.showToolTip}
-                               hideToolTip={this.hideToolTip}
-                               selectedPlan={selectedPlan}
-                               updateLineMap={this.updateLineMap}
-                               lineMap={lineMap}
-                               reqMap={reqMap}
-                    />
+                    {/* <div className='terms-box'> */}
+                        <Structure structure={structure}
+                                isToolTipOpen={this.state.isToolTipOpen}
+                                showToolTip={this.showToolTip}
+                                hideToolTip={this.hideToolTip}
+                                selectedPlan={selectedPlan}
+                                updateLineMap={this.updateLineMap}
+                                lineMap={lineMap}
+                                reqMap={reqMap}
+                        />
+                    {/* </div> */}
                 </div>
 
 

@@ -199,11 +199,6 @@ class Structure extends Component {
 
         const {structure, updateLineMap, lineMap, reqMap} = this.props;
 
-        const map = new Map(Object.entries(reqMap));
-        console.log("type is");
-        console.log(typeof map);
-        console.log(map);
-
         let cloneStructure = cloneDeep(structure);
 
         const coursesList = [].concat(...cloneStructure.map(term => term.courses

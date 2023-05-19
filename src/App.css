@@ -72,7 +72,33 @@
 
     /* display: flex;
     overflow-x: scroll; */
+
+    /* flex: 1;
+    display: flex;
+    overflow: auto; */
+
+    /* width: 100%;
+    overflow-x: auto;
+    white-space: nowrap; */
+
+    /* overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap; */
+
+    /* display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto; */
 }
+
+/* .terms-box {
+
+    display: flex;
+    min-width: min-content;
+
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+} */
 
 
 .indvPlan {
