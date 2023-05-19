@@ -36,39 +36,6 @@
 }
 
 
-.indvPlan {
-
-    /* Background color of each term div*/
-    background-color: rgb(140, 101, 101);
-
-    /* Text color of each term div*/
-    color: white;
-
-    /* Width of eachterm div*/
-    width: 130px;
-    height: 30px;
-
-    /* Font of text inside term div*/
-    font-size: 15px;
-
-
-    /*Spacing on all sides of text inside a term div*/
-    padding: 10px;
-
-    /* Make the term divs rounded corners*/
-    border-radius: 5px;
-
-    /*Spacing between terms in term palette*/
-    margin-top: 5px;
-    margin-bottom: 5px;
-
-    /* Looks good when cursor points to a term div*/
-    cursor: pointer;
-
-    text-align: center;
-}
-
-
 .wrapperTermProgram {
     display: flex;
     justify-content: center;

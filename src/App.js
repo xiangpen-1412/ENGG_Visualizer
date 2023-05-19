@@ -700,7 +700,7 @@ class App extends Component {
                             {/* <GALegend GALegendList={this.state.GALegendList}/> */}
                         </div>
 
-                        <div className='idk'>
+                        <div className='ga-legend'>
                             <GALegend GALegendList={this.state.GALegendList}/>
                         </div>
                     </div>
