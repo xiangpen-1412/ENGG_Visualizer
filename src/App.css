@@ -66,6 +66,17 @@
     opacity: 1;
 }
 
+/* 
+.lowerStuff {
+    vertical-align: top;
+} */
+
+
+.idk {
+    display: inline-block;
+    vertical-align: top;
+}
+
 @media (prefers-reduced-motion: no-preference) {
     .App-logo {
         animation: App-logo-spin infinite 20s linear;

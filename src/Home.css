@@ -1,93 +1,38 @@
-.indvProgram0 {
+.indvProgram {
+    color: white;
+
+
+    width: 200px;
+    height: 70px;
+    margin: 10px;
+
+    text-align: center;
+    vertical-align: middle;
+
+    padding-top: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    cursor: pointer;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+
+.row0 {
     background-color: rgb(140, 101, 101);
-    color: white;
-
-    width: 200px;
-
-    height: 50px;
-
-    margin: 10px;
-
-    text-align: center;
-
-    padding-top: 25px;
-    padding-left: 5px;
-    padding-right: 5px;
-
-    cursor: pointer;
-
-    border-radius: 10px;
-
-    display: inline-block;
 }
 
-.indvProgram1 {
+.row1 {
     background-color: rgb(100, 81, 120);
-    color: white;
-
-    width: 200px;
-
-    height: 50px;
-
-    margin: 10px;
-
-    text-align: center;
-
-    padding-top: 25px;
-    padding-left: 5px;
-    padding-right: 5px;
-
-    cursor: pointer;
-
-    border-radius: 10px;
-
-    display: inline-block;
 }
 
-.indvProgram2 {
+.row2 {
     background-color: rgb(106, 116, 65);
-    color: white;
-
-    width: 200px;
-
-    height: 50px;
-
-    margin: 10px;
-
-    text-align: center;
-
-    padding-top: 25px;
-    padding-left: 5px;
-    padding-right: 5px;
-
-    cursor: pointer;
-
-    border-radius: 10px;
-
-    display: inline-block;
 }
 
-.indvProgram3 {
+.row3 {
     background-color: rgb(97, 130, 164);
-    color: white;
-
-    width: 200px;
-
-    height: 50px;
-
-    margin: 10px;
-
-    text-align: center;
-
-    padding-top: 25px;
-    padding-left: 5px;
-    padding-right: 5px;
-
-    cursor: pointer;
-
-    border-radius: 10px;
-
-    display: inline-block;
 }
 
 

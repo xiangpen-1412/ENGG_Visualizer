@@ -6,97 +6,45 @@ import './Home.css';
 //programList is in state variable so now make a div for each program
 const Program = (props) => {
     const navigate= useNavigate()
-    const cells0 = props.programList0.map((program,index)=> {
-        return(
-            <div
-                key={index}
-                programInfo={program}
-                className = "indvProgram0"
-                onClick={(event) =>
-                    navigate("/App",
-                        {
-                            state: {
-                                selectedProgram: program,
-                                replace: false
-                            }
-                        }
-                    )
-                }
-            >
-                {program}
-            </div>
-        )})
 
-    const cells1 = props.programList1.map((program,index)=> {
-        return(
-            <div
-                key={index}
-                programInfo={program}
-                className = "indvProgram1"
-                onClick={(event) =>
-                    navigate("/App",
-                        {
-                            state: {
-                                selectedProgram: program,
-                                replace: false
-                            }
-                        }
-                    )
-                }
-            >
-                {program}
-            </div>
-        )})
 
-    const cells2 = props.programList2.map((program,index)=> {
-        return(
-            <div
-                key={index}
-                programInfo={program}
-                className = "indvProgram2"
-                onClick={(event) =>
-                    navigate("/App",
-                        {
-                            state: {
-                                selectedProgram: program,
-                                replace: false
-                            }
-                        }
-                    )
-                }
-            >
-                {program}
-            </div>
-        )})
 
-    const cells3 = props.programList3.map((program,index)=> {
-        return(
-            <div
-                key={index}
-                programInfo={program}
-                className = "indvProgram3"
-                onClick={(event) =>
-                    navigate("/App",
-                        {
-                            state: {
-                                selectedProgram: program,
-                                replace: false
+    const cells = props.programList.map((programs, yIndex) => {
+        let cell = programs.map((program, xIndex)=> {
+            return(
+                <div
+                    key={xIndex}
+                    programInfo={program}
+                    className = {"indvProgram" + " row" + yIndex}
+                    onClick={(event) =>
+                        navigate("/App",
+                            {
+                                state: {
+                                    selectedProgram: program,
+                                    replace: false
+                                }
                             }
-                        }
-                    )
-                }
-            >
-                {program}
-            </div>
-        )})
+                        )
+                    }
+                >
+                    {program}
+                </div>
+            )
+        })
+
+        return(
+            cell
+        )
+    })
+
 
     return(
 
         <div className = "programPalette">
-            <div className = "programPalette0">{cells0}</div>
-            <div className = "programPalette1">{cells1}</div>
-            <div className = "programPalette2">{cells2}</div>
-            <div className = "programPalette3">{cells3}</div>
+            <div className = "programPalette0">{cells[0]}</div>
+            <div className = "programPalette1">{cells[1]}</div>
+            <div className = "programPalette2">{cells[2]}</div>
+            <div className = "programPalette3">{cells[3]}</div>
         </div>
 
     )
@@ -106,37 +54,37 @@ const Program = (props) => {
 class Home extends Component {
     constructor(props){
         super(props);
+
+
         this.state = {
             selectedProgram: "",
 
-            programList0: [
-                "Chemical Engineering",
-                "Materials Engineering",
-            ],
-
-            programList1: [
-                "Civil Engineering",
-                "Mining Engineering",
-                "Petroleum Engineering",
-            ],
-
-            programList2: [
-                "Computer Engineering",
-                "Electrical Engineering",
-                "Engineering Physics",
-            ],
-
-            programList3: [
-                "Mechanical Engineering",
+            programList: [
+                [
+                    "Chemical Engineering",
+                    "Materials Engineering",
+                ],
+                [
+                    "Civil Engineering",
+                    "Mining Engineering",
+                    "Petroleum Engineering",
+                ],
+                [
+                    "Computer Engineering",
+                    "Electrical Engineering",
+                    "Engineering Physics",
+                ],
+                [
+                    "Mechanical Engineering",
+                ],
             ],
         }
     }
 
     render() {
-        const {programList0} = this.state;
-        const {programList1} = this.state;
-        const {programList2} = this.state;
-        const {programList3} = this.state;
+        const {programList} = this.state;
+
+        
 
         return (
             <div className="frontPageWrapper">
@@ -154,8 +102,10 @@ class Home extends Component {
                     <h2>2022 - 2023 </h2>
                 </div>
 
+                <br></br>
+
                 <div className='wrapperTermProgram'>
-                    <Program programList1={programList1} programList0={programList0} programList2={programList2} programList3={programList3} onClickProgram={this.onClickProgram}/>
+                    <Program programList={programList} onClickProgram={this.onClickProgram}/>
                 </div>
             </div>
         )
