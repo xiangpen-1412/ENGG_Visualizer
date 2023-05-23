@@ -31,19 +31,70 @@ const GradAttributes = (props) => {
 }
 
 const CourseCatagory = (props) => {
+
+    const location = useLocation();
+    const {selectedProgram} = location.state;
+
     const cells = props.CatagoryList.map((catagory, index) => {
-        return (
-            <div
-                key={index}
-                className="indvCatagory"
-                onClick={(event) => {
-                    props.setCatagoryColor(event, catagory)
-                }}
-                style={{backgroundColor: catagory.color}}
-            >
-                {catagory.name}
-            </div>
-        )
+
+        if (selectedProgram === "Computer Engineering") {
+
+            if (index > 9) {
+                return null;
+            }
+
+            return (
+                <div
+                    key={index}
+                    className="indvCatagory"
+                    onClick={(event) => {
+                        props.setCatagoryColor(event, catagory)
+                    }}
+                    style={{backgroundColor: catagory.color}}
+                >
+                    {catagory.name}
+                </div>
+            )
+
+        } else if (selectedProgram === "Mechatronics Engineering") {
+
+            if (index === 9) {
+                return null;
+            }
+
+            return (
+                <div
+                    key={index}
+                    className="indvCatagory"
+                    onClick={(event) => {
+                        props.setCatagoryColor(event, catagory)
+                    }}
+                    style={{backgroundColor: catagory.color}}
+                >
+                    {catagory.name}
+                </div>
+            )
+
+        } else {
+
+            if (index > 8) {
+                return null;
+            }
+
+            return (
+                <div
+                    key={index}
+                    className="indvCatagory"
+                    onClick={(event) => {
+                        props.setCatagoryColor(event, catagory)
+                    }}
+                    style={{backgroundColor: catagory.color}}
+                >
+                    {catagory.name}
+                </div>
+            )
+        }
+
     })
 
     return (
@@ -327,6 +378,54 @@ class App extends Component {
                     name: "Other",
                     color: "#5ce0c4",
                 },
+                {
+                    name: "Computing Science",
+                    color: "#ff9696",
+                },
+                {
+                    name: "Mechatronics",
+                    color: "#ff9966"
+                },
+                {
+                    name: "SEMINARS",
+                    color: "#00db25",
+                },
+                {
+                    name: "LABS",
+                    color: "#00d8db",
+                },
+                {
+                    name: "CODING",
+                    color: "#f5f500",
+                },
+                {
+                    name: "CAD",
+                    color: "#669999",
+                },
+                {
+                    name: "Group Work",
+                    color: "#f500e0",
+                },
+                {
+                    name: "Solid Mechanics",
+                    color: "#66ffb5",
+                },
+                {
+                    name: "Thermo Fluids",
+                    color: "#f500e0",
+                },
+                {
+                    name: "Electrical",
+                    color: "#74cc00",
+                },
+                {
+                    name: "Control",
+                    color: "#cc0000",
+                },
+                {
+                    name: "Management",
+                    color: "#666699",
+                },
             ],
 
             GALegendList: [
@@ -354,7 +453,7 @@ class App extends Component {
             ],
 
             structure: [],
-            reqMap : new Map(),
+            reqMap: new Map(),
             courseGroup: new Map(),
             selectedAtt: "",
             selectedGroup: "",
@@ -498,13 +597,49 @@ class App extends Component {
                 case "Other":
                     catagoryIndex = 8;
                     break;
+                case "Computing Science":
+                    catagoryIndex = 9;
+                    break;
+                case "Mechatronics":
+                    catagoryIndex = 10;
+                    break;
+                case "SEMINARS":
+                    catagoryIndex = 11;
+                    break;
+                case "LABS":
+                    catagoryIndex = 12;
+                    break;
+                case "CODING":
+                    catagoryIndex = 13;
+                    break;
+                case "CAD":
+                    catagoryIndex = 14;
+                    break;
+                case "Group Work":
+                    catagoryIndex = 15;
+                    break;
+                case "Solid Mechanics":
+                    catagoryIndex = 16;
+                    break;
+                case "Thermo Fluids":
+                    catagoryIndex = 17;
+                    break;
+                case "Electrical":
+                    catagoryIndex = 18;
+                    break;
+                case "Control":
+                    catagoryIndex = 19;
+                    break;
+                case "Management":
+                    catagoryIndex = 20;
+                    break;
                 default:
                     catagoryIndex = 0;
             }
 
             structure.map((term, termIndex) => {
                 term.courses.map((courseMap, courseIndex) => {
-                    let catagoryLevel = courseMap.catagory[catagoryIndex]
+                    let catagoryLevel = courseMap.category[catagoryIndex];
 
                     if (catagoryLevel === 0) {
                         structure[termIndex].courses[courseIndex].color = "white";
@@ -638,14 +773,13 @@ class App extends Component {
             planName: selectedPlan
         };
 
-        console.log(data);
 
         this.controller.getCourseInfo(data).then((courses) => {
             this.setState({structure: courses});
         });
 
         this.controller.getReqMap(data).then((reqMap) => {
-            this.setState({reqMap : reqMap});
+            this.setState({reqMap: reqMap});
         })
     }
 
@@ -697,7 +831,8 @@ class App extends Component {
                     <div className="lowerStuff">
                         <div className='catagoryWrapper'>
                             <CourseCatagory CatagoryList={this.state.CatagoryList}
-                                            setCatagoryColor={this.setCatagoryColor}/>
+                                            setCatagoryColor={this.setCatagoryColor}
+                            />
 
                         </div>
 

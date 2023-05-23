@@ -5,9 +5,7 @@ import './Home.css';
 
 //programList is in state variable so now make a div for each program
 const Program = (props) => {
-    const navigate= useNavigate()
-
-
+    const navigate= useNavigate();
 
     const cells = props.programList.map((programs, yIndex) => {
         let cell = programs.map((program, xIndex)=> {
@@ -45,6 +43,7 @@ const Program = (props) => {
             <div className = "programPalette1">{cells[1]}</div>
             <div className = "programPalette2">{cells[2]}</div>
             <div className = "programPalette3">{cells[3]}</div>
+            <div className = "programPalette4">{cells[4]}</div>
         </div>
 
     )
@@ -76,6 +75,9 @@ class Home extends Component {
                 ],
                 [
                     "Mechanical Engineering",
+                ],
+                [
+                    "Mechatronics Engineering",
                 ],
             ],
         }
