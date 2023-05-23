@@ -189,17 +189,6 @@
 }
 
 
-.catagoryWrapper {
-
-    margin-right: 20px;
-    margin-left: 20px;
-
-    /* overflow: scroll; */
-    height: auto;
-}
-
-
-
 .GAWrapper {
 
     /* Spacing on all sides of outside of Term palette*/
@@ -212,13 +201,13 @@
     /*Width and height of term palette*/
     /* min-width: 600px; */
     width: 600px;
-    height: 240px;
+    /* height: 240px; */
 
     display: flex;
     vertical-align: top;
     /* flex-direction: column; */
 
-    /* overflow: scroll; */
+    overflow: hidden;
 }
 
 
@@ -262,9 +251,10 @@
     padding: 15px;
 
     width: 470px;
-    height: 240px;
+    /* height: 240px; */
 
     display: flex;
+    overflow: hidden;
 
 }
 
@@ -273,6 +263,13 @@
     flex-direction: row;
     margin: 5px 5px 80px 5px;
     /* overflow: inline-block; */
+
+    /* height: max-content; */
+    /* clear: both; */
+
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 
