@@ -197,15 +197,12 @@ class Structure extends Component {
 
     /**
      * 
-     * Redraw the leader lines when a scroll occurs in the termWrapper box
+     * Loop through and redraw the leader lines when a scroll occurs in the termWrapper box
      * 
      */
     handleScroll = (lineMap) => {
-
         Array.from(lineMap.entries()).map((course) => {
-
             course[1].map((line) => {
-                console.log(line);
                 line.position();
             });
         });
