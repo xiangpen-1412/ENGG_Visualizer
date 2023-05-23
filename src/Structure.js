@@ -2,7 +2,7 @@ import {Component} from 'react';
 import './index.css';
 import 'react-tooltip/dist/react-tooltip.css'
 import LeaderLine from "leader-line-new";
-import {cloneDeep} from "lodash";
+import {cloneDeep, map} from "lodash";
 
 
 class Structure extends Component {
@@ -195,6 +195,20 @@ class Structure extends Component {
         return reqList;
     }
 
+    /**
+     * 
+     * Loop through and redraw the leader lines when a scroll occurs in the termWrapper box
+     * 
+     */
+    handleScroll = (lineMap) => {
+        Array.from(lineMap.entries()).map((course) => {
+            course[1].map((line) => {
+                line.position();
+            });
+        });
+    }
+
+
     render() {
 
         const {structure, updateLineMap, lineMap, reqMap} = this.props;
@@ -342,7 +356,9 @@ class Structure extends Component {
 
         return (
             <p>
-                <div className="termWrapper">
+                <div className="termWrapper" 
+                     onScroll={() => this.handleScroll(lineMap)}
+                >
                     {term}
                 </div>
             </p>

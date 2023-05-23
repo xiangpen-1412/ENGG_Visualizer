@@ -639,7 +639,9 @@ class App extends Component {
 
             structure.map((term, termIndex) => {
                 term.courses.map((courseMap, courseIndex) => {
+
                     let catagoryLevel = courseMap.category[catagoryIndex];
+
 
                     if (catagoryLevel === 0) {
                         structure[termIndex].courses[courseIndex].color = "white";
@@ -846,18 +848,18 @@ class App extends Component {
                             <GALegend GALegendList={this.state.GALegendList}/>
                         </div>
                     </div>
-                </div>
 
-                <div className='structureWrapper'>
-                    <Structure structure={structure}
-                               isToolTipOpen={this.state.isToolTipOpen}
-                               showToolTip={this.showToolTip}
-                               hideToolTip={this.hideToolTip}
-                               selectedPlan={selectedPlan}
-                               updateLineMap={this.updateLineMap}
-                               lineMap={lineMap}
-                               reqMap={reqMap}
-                    />
+                    <div className='structureWrapper'>
+                        <Structure structure={structure}
+                                   isToolTipOpen={this.state.isToolTipOpen}
+                                   showToolTip={this.showToolTip}
+                                   hideToolTip={this.hideToolTip}
+                                   selectedPlan={selectedPlan}
+                                   updateLineMap={this.updateLineMap}
+                                   lineMap={lineMap}
+                                   reqMap={reqMap}
+                        />
+                    </div>
                 </div>
 
 
