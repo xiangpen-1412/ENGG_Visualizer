@@ -504,7 +504,7 @@ class App extends Component {
 
             structure.map((term, termIndex) => {
                 term.courses.map((courseMap, courseIndex) => {
-                    let catagoryLevel = courseMap.catagory[catagoryIndex]
+                    let catagoryLevel = courseMap.category[catagoryIndex]
 
                     if (catagoryLevel === 0) {
                         structure[termIndex].courses[courseIndex].color = "white";
