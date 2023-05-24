@@ -21,11 +21,13 @@ const GradAttributes = (props) => {
     })
 
     return (
-        <div className="gradAttributePalette">
+        <div>
             <h3>Graduate Attributes</h3>
-            <p style={{fontFamily: 'Times New Roman', fontWeight: 'bold', fontSize: '16px'}}>Click on a Graduate
-                Attribute Below to Highlight all Related Courses</p>
-            {cells}
+            <div className="gradAttributePalette">
+                <p style={{fontSize: '16px'}}>Click on a Graduate
+                    Attribute Below to Highlight all Related Courses</p>
+                {cells}
+            </div>
         </div>
     )
 }
@@ -98,12 +100,15 @@ const CourseCatagory = (props) => {
     })
 
     return (
-        <div className="courseCategoryPalette">
+        <div>
             <h3>Course Category</h3>
-            <p style={{fontFamily: 'Times New Roman', fontWeight: 'bold', fontSize: '16px'}}>Click on a Category Below
-                to Highlight all Related Courses</p>
-            {cells}
+            <div className="courseCategoryPalette">
+                <p style={{fontSize: '16px'}}>Click on a Category Below
+                    to Highlight all Related Courses</p>
+                {cells}
+            </div>
         </div>
+        
     )
 }
 
@@ -198,9 +203,12 @@ const GALegend = (props) => {
     })
 
     return (
-        <div className="gradAttributeLegend">
+        <div>
             <h3>Graduate Attributes Legend</h3>
-            {cells}
+            <div className="gradAttributeLegend">
+                
+                {cells}
+            </div>
         </div>
     )
 }
@@ -857,7 +865,7 @@ class App extends Component {
                             {/* <GALegend GALegendList={this.state.GALegendList}/> */}
                         </div>
 
-                        <div className='ga-legend'>
+                        <div className='gradLegendWrapper'>
                             <GALegend GALegendList={this.state.GALegendList}/>
                         </div>
                     </div>
