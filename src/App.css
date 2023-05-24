@@ -44,6 +44,7 @@
     font-family: "Times New Roman", serif;
     display: inline-block;
     text-align: center;
+    justify-content: center;
     /* margin-left: 570px; */
 
     white-space: nowrap;
