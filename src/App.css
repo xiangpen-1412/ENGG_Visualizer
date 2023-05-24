@@ -310,6 +310,8 @@
    /* Spacing on all sides of inside of term palette*/
    padding: 15px;
    vertical-align: top;
+
+   min-width: 200px;
 }
 
 
