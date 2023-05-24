@@ -276,7 +276,7 @@ class Structure extends Component {
                         globalIndex++;
 
                         const orCourseElement = (
-                            <div className='indivOrCourseOne'
+                            <div className='indivOrCourse'
                                  key={orCaseIndex}
                                  ref={(el) => this.divRefs[orCaseIndex] = el}
                                  onClick={() => this.handleOnClick(coursesList, orCaseIndex, updateLineMap, lineMap, reqMap)}
