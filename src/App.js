@@ -253,7 +253,7 @@ const Plans = (props) => {
                     setSelectedPlan(plan);
                     props.setSelectedProgramPlan(selectedProgram, plan);
                 }}
-                style={{backgroundColor: isSelected ? "gold" : "rgb(140, 101, 101)"}}
+                style={{backgroundColor: isSelected ? "gold" : "rgb(140, 120, 120)"}}
             >
                 {plan}
             </div>
@@ -294,7 +294,7 @@ const CourseGroup = (props) => {
     const keyComponent = courseGroupKeys.map((key) => {
         const groupComponent = props.courseGroup.get(key).map((group) => {
             const isSelected = selectedButtons.get(key) === group;
-            const color = isSelected ? "gold" : "rgb(140, 101, 101)";
+            const color = isSelected ? "gold" : "rgb(140, 120, 120)";
             return (
                 <div
                     className="indivCourseGroup"

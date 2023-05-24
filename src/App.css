@@ -209,7 +209,7 @@
 
 .indvCatagory {
     /* Background color of each category div*/
-    background-color: rgb(140, 101, 101);
+    background-color: rgb(140, 120, 120);
     /* Text color of each category div*/
     color: white;
     /* Width of each category div*/
@@ -265,7 +265,7 @@
 
 .indvGradAttribute {
     /* Background color of each GA div*/
-    background-color: rgb(140, 101, 101);
+    background-color: rgb(140, 120, 120);
 
     /* Text color of each GA div*/
     color: white;

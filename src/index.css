@@ -67,7 +67,7 @@ code {
 .indivCourses {
     border: 2px solid black;
     /* Background color of each term div*/
-    background-color: rgb(140, 101, 101);
+    background-color: rgb(140, 120, 120);
     /* Text color of each term div*/
     color: black;
     /* Width of eachterm div*/
@@ -93,7 +93,7 @@ code {
 }
 
 .indivCourses:hover {
-    background-color: rgb(140, 101, 101)
+    background-color: rgb(140, 120, 120)
 }
 
 .orCaseDiv {
@@ -112,7 +112,7 @@ code {
 .indivOrCourse {
     border: 2px solid black;
     /* Background color of each term div*/
-    background-color: rgb(140, 101, 101);
+    background-color: rgb(140, 120, 120);
     /* Text color of each term div*/
     color: black;
     /* Width of eachterm div*/
