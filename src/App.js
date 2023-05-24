@@ -131,8 +131,8 @@ const Header = () => {
                         <img alt="University of Alberta logo" src="uofalogo.png" className="image"/>
                     </a>
                 </div>
-                <div>
-                    <a className="site-title">Mechanical Engineering Program Plan Visualizer</a>
+                <div className="site-title">
+                    Mechanical Engineering Program Plan Visualizer
                 </div>
                 <img alt="question mark" src="questionMark.png" className="questionMark"
                      onClick={handleHelpButtonClick}/>
