@@ -196,9 +196,9 @@ class Structure extends Component {
     }
 
     /**
-     * 
+     *
      * Loop through and redraw the leader lines when a scroll occurs in the termWrapper box
-     * 
+     *
      */
     handleScroll = (lineMap) => {
         Array.from(lineMap.entries()).map((course) => {
@@ -226,8 +226,12 @@ class Structure extends Component {
 
         const term = structure.map((termColumn) => {
             const courseDivs = termColumn.courses.map((courseItem, index) => {
-
-                if (this.orCaseList.includes(courseItem.name)) {
+                let contains;
+                if (this.orCaseList) {
+                    contains = this.orCaseList.some((orCaseCourse) => courseItem.name.includes(orCaseCourse));
+                }
+                if (contains) {
+                    this.orCaseList = null;
                     return null;
                 }
 
@@ -246,7 +250,6 @@ class Structure extends Component {
                 if (courseItem.orCase) {
 
                     globalIndex--;
-                    let orCaseIndex = globalIndex;
 
                     let orCaseList = [];
                     orCaseList.push(courseItem.name);
@@ -268,51 +271,37 @@ class Structure extends Component {
                     this.orCaseList = orCaseList;
 
                     const orCase = orCaseList.map((orCaseCourse, index) => {
+
+                        let orCaseIndex = globalIndex;
+                        globalIndex++;
+
+                        const orCourseElement = (
+                            <div className='indivOrCourseOne'
+                                 key={orCaseIndex}
+                                 ref={(el) => this.divRefs[orCaseIndex] = el}
+                                 onClick={() => this.handleOnClick(coursesList, orCaseIndex, updateLineMap, lineMap, reqMap)}
+                                 style={{backgroundColor: courseItem.color}}
+                                 onMouseEnter={(event) => this.props.showToolTip(event)}
+                                 onMouseDown={(event) => this.props.hideToolTip(event)}
+                                 onMouseLeave={(event) => this.props.hideToolTip(event)}
+                                 data-tooltip-content={courseItem.description} data-tooltip-id='toolTip1'
+                                 extendedName={courseItem.extendedName}
+                                 accreditionUnits={courseItem.accreditionUnits}
+                            >
+                                {orCaseCourse}
+                            </div>
+                        );
+
+                        const orElement = (
+                            <div className='orCircle'>
+                                <div className='orText'>OR</div>
+                            </div>
+                        );
+
                         if (index !== orCaseList.length - 1) {
-                            globalIndex++;
-
-                            return (
-                                <div>
-                                    <div className='indivOrCourseOne'
-                                         key={orCaseIndex}
-                                         ref={(el) => this.divRefs[orCaseIndex] = el}
-                                         onClick={() => this.handleOnClick(coursesList, orCaseIndex, updateLineMap, lineMap, reqMap)}
-                                         style={{backgroundColor: courseItem.color}}
-                                         onMouseEnter={(event) => this.props.showToolTip(event)}
-                                         onMouseDown={(event) => this.props.hideToolTip(event)}
-                                         onMouseLeave={(event) => this.props.hideToolTip(event)}
-                                         data-tooltip-content={courseItem.description} data-tooltip-id='toolTip1'
-                                         extendedName={courseItem.extendedName}
-                                         accreditionUnits={courseItem.accreditionUnits}
-                                    >
-                                        {orCaseCourse}
-                                    </div>
-                                    <div className='orCircle'>
-                                        <div className='orText'>OR</div>
-                                    </div>
-                                </div>
-                            )
+                            return [orCourseElement, orElement];
                         } else {
-
-                            const indexTwo = globalIndex;
-                            globalIndex++;
-
-                            return (
-                                <div className='indivOrCourseTwo'
-                                     key={indexTwo}
-                                     ref={(el) => this.divRefs[indexTwo] = el}
-                                     onClick={() => this.handleOnClick(coursesList, indexTwo, updateLineMap, lineMap, reqMap)}
-                                     style={{backgroundColor: courseItem.color}}
-                                     onMouseEnter={(event) => this.props.showToolTip(event)}
-                                     onMouseDown={(event) => this.props.hideToolTip(event)}
-                                     onMouseLeave={(event) => this.props.hideToolTip(event)}
-                                     data-tooltip-content={courseItem.description} data-tooltip-id='toolTip1'
-                                     extendedName={courseItem.extendedName}
-                                     accreditionUnits={courseItem.accreditionUnits}
-                                >
-                                    {orCaseCourse}
-                                </div>
-                            )
+                            return orCourseElement;
                         }
                     })
 
@@ -356,7 +345,7 @@ class Structure extends Component {
 
         return (
             <p>
-                <div className="termWrapper" 
+                <div className="termWrapper"
                      onScroll={() => this.handleScroll(lineMap)}
                 >
                     {term}
