@@ -83,7 +83,6 @@
 
 
 .allPlans {
-
     margin: 10px 10px 10px 20px;
 }
 
@@ -99,18 +98,13 @@
 .indvPlan {
     /* Text color of each term div*/
     color: white;
-    /* Width of eachterm div*/
-    width: 100px;
+    
+    width: 100px;           /* Width of eachterm div*/
     height: 38px;
-
-    /* Font of text inside term div*/
-    font-size: 14px;
-    /*Spacing on all sides of text inside a term div*/
-    padding: 10px;
-    /* Make the term divs rounded corners*/
-    border-radius: 5px;
-    /*Spacing between terms in term palette*/
-    margin-left: 5px;
+    font-size: 14px;        /* Font of text inside term div*/
+    padding: 10px;          /*Spacing on all sides of text inside a term div*/
+    border-radius: 5px;     /* Make the term divs rounded corners*/
+    margin-left: 5px;       /*Spacing between terms in term palette*/
 
     /* Looks good when cursor points to a term div*/
     cursor: pointer;
@@ -126,13 +120,11 @@
 
 
 .allGroups {
-
     margin: 10px 10px 10px 20px;
     display: flex;
 }
 
 .courseGroupPalatte {
-
     /* Spacing on all sides of outside of Term palette*/
     margin-left: 20px;
     margin-right: 15px;
@@ -142,21 +134,15 @@
 }
 
 .indivCourseGroup {
-
     /* Text color of each term div*/
     color: white;
-    /* Width of eachterm div*/
-    width: 52px;
+    
+    width: 52px;            /* Width of eachterm div*/
     height: 26px;
-
-    /* Font of text inside term div*/
-    font-size: 14px;
-    /*Spacing on all sides of text inside a term div*/
-    padding: 7px;
-    /* Make the term divs rounded corners*/
-    border-radius: 5px;
-    /*Spacing between terms in term palette*/
-    margin-left: 5px;
+    font-size: 14px;        /* Font of text inside term div*/
+    padding: 7px;           /*Spacing on all sides of text inside a term div*/
+    border-radius: 5px;     /* Make the term divs rounded corners*/
+    margin-left: 5px;       /*Spacing between terms in term palette*/
 
     /* Looks good when cursor points to a term div*/
     cursor: pointer;
@@ -175,25 +161,18 @@
     display: flex;
     flex-direction: row;
     margin: 5px 5px 80px 5px;
-    /* overflow: inline-block; */
-
-    /* height: max-content; */
-    /* clear: both; */
 
     justify-content: flex-start;
 
     width: 100%;
     height: 100%;
     overflow: hidden;
-
 }
 
 
 .catagoryWrapper {
-
     /* Spacing on all sides of inside of term palette*/
     padding: 15px;
-
     min-width: 100px;
     max-width: 600px;
 
@@ -202,28 +181,21 @@
 }
 
 .courseCategoryPalette {
-
     margin: 10px 10px 10px 15px;
 }
 
 
 .indvCatagory {
-    /* Background color of each category div*/
+    /* Background and text color of each category div*/
     background-color: rgb(140, 120, 120);
-    /* Text color of each category div*/
     color: white;
-    /* Width of each category div*/
-    width: 120px;
+    
+    width: 120px;           /* Width of each category div*/
     height: 30px;
-
-    /* Font of text inside category div*/
-    font-size: 15px;
-    /*Spacing on all sides of text inside a category div*/
-    padding: 10px;
-    /* Make the category divs rounded corners*/
-    border-radius: 10px;
-    /*Spacing between terms in category palette*/
-    margin-left: 5px;
+    font-size: 15px;        /* Font of text inside category div*/
+    padding: 10px;          /*Spacing on all sides of text inside a category div*/
+    border-radius: 10px;    /* Make the category divs rounded corners*/
+    margin-left: 5px;       /*Spacing between terms in category palette*/
     margin-bottom: 5px;
 
     /* Looks good when cursor points to a category div*/
@@ -240,26 +212,17 @@
 
 
 .GAWrapper {
-
     /* Spacing on all sides of inside of term palette*/
     padding: 15px;
 
-    /*Width and height of term palette*/
-    /* min-width: 800px; */
-
-    /* width: 600px; */
-    /* height: 240px; */
-
     display: flex;
     vertical-align: top;
-    /* flex-direction: column; */
 
     overflow: hidden;
     max-width: 600px;
 }
 
 .gradAttributePalette {
-
     margin: 10px 10px 10px 15px;
 }
 
@@ -270,21 +233,12 @@
     /* Text color of each GA div*/
     color: white;
 
-    /* Width of each GA div*/
-    width: 120px;
+    width: 120px;           /* Width of each GA div*/
     height: 30px;
-
-    /* Font of text inside GA div*/
-    font-size: 15px;
-
-    /*Spacing on all sides of text inside a GA div*/
-    padding: 10px;
-
-    /* Make the GA divs rounded corners*/
-    border-radius: 7px;
-
-    /*Spacing between GA in term palette*/
-    margin-left: 5px;
+    font-size: 15px;        /* Font of text inside GA div*/
+    padding: 10px;          /* Spacing on all sides of text inside a GA div*/
+    border-radius: 7px;     /* Make the GA divs rounded corners*/
+    margin-left: 5px;       /* Spacing between GA in term palette*/
     margin-bottom: 5px;
 
     /* Looks good when cursor points to a GA div*/
@@ -300,8 +254,6 @@
 
 
 .gradAttributeLegend {
-    /* margin-top: 50px; */
-
     margin: 10px 10px 10px 10px;
     max-width: 500px;
 }
@@ -309,15 +261,13 @@
 .gradLegendWrapper {
    /* Spacing on all sides of inside of term palette*/
    padding: 15px;
-   vertical-align: top;
-
    min-width: 200px;
+   vertical-align: top;
 }
 
 
 .part {
     margin-left: 10px;
-    /* display: inline-block; */
 }
 
 
