@@ -107,12 +107,16 @@ const CourseCatagory = (props) => {
     )
 }
 
-const Header = () => {
+const Header = (props) => {
+
+    const location = useLocation();
+    const {selectedProgram} = location.state;
     const navigate = useNavigate();
 
     const [showGuide, setShowGuide] = useState(false);
 
     const handleBackButtonClick = () => {
+        props.deletelinemap();
         navigate("/");
     };
 
@@ -132,7 +136,7 @@ const Header = () => {
                     </a>
                 </div>
                 <div className="site-title">
-                    Mechanical Engineering Program Plan Visualizer
+                    {selectedProgram} Program Plan Visualizer
                 </div>
                 <img alt="question mark" src="questionMark.png" className="questionMark"
                      onClick={handleHelpButtonClick}/>
@@ -240,7 +244,6 @@ const Plans = (props) => {
                 onClick={(event) => {
                     setSelectedPlan(plan);
                     props.setSelectedProgramPlan(selectedProgram, plan);
-                    props.deleteLineMap();
                 }}
                 style={{backgroundColor: isSelected ? "gold" : "rgb(140, 101, 101)"}}
             >
@@ -472,7 +475,16 @@ class App extends Component {
         this.controller = new RESTController();
     }
 
-    showToolTip = (event) => {
+
+    componentDidMount() {
+        window.addEventListener("popstate", this.deleteWhenPopstate);
+    }
+
+    deleteWhenPopstate = () => {
+        this.deleteLineMap();
+    }
+
+    showToolTip = () => {
         this.setState({isToolTipOpen: true})
     }
 
@@ -811,13 +823,12 @@ class App extends Component {
             <div className='all'>
 
                 <div className='header'>
-                    <Header/>
+                    <Header deletelinemap={this.deleteLineMap}/>
                 </div>
 
                 <div className='part'>
                     <div className='planWrapper'>
                         <Plans setSelectedProgramPlan={this.setSelectedProgramPlan}
-                               deleteLineMap={this.deleteLineMap}
                         />
                     </div>
 

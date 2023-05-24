@@ -109,7 +109,7 @@ code {
     justify-content: center;
 }
 
-.indivOrCourseOne {
+.indivOrCourse {
     border: 2px solid black;
     /* Background color of each term div*/
     background-color: rgb(140, 101, 101);
@@ -129,7 +129,7 @@ code {
     text-align: center;
 
     margin-top: 5px;
-
+    margin-bottom: 5px;
     /* Center text both horizontally and vertically */
     display: flex;
     justify-content: center;
@@ -145,7 +145,7 @@ code {
     justify-content: center;
     align-items: center;
 
-    margin: 15px 0px 10px 60px;
+    margin: 10px 0px 10px 60px;
 }
 
 .orText {
@@ -153,33 +153,6 @@ code {
     font-family: "Times New Roman", serif;
     font-weight: bold;
 }
-
-.indivOrCourseTwo {
-    border: 2px solid black;
-    /* Background color of each term div*/
-    background-color: rgb(140, 101, 101);
-    /* Text color of each term div*/
-    color: black;
-    /* Width of eachterm div*/
-    width: 135px;
-    height: 40px;
-    /* Font of text inside term div*/
-    font-size: 15px;
-    /*Spacing on all sides of text inside a term div*/
-    padding: 10px;
-    /* Make the term divs rounded corners*/
-    border-radius: 5px;
-    /* Looks good when cursor points to a term div*/
-    cursor: pointer;
-    text-align: center;
-
-    margin-bottom: 6px;
-    /* Center text both horizontally and vertically */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 
 .TOOLTIPPPP {
     white-space: pre-line;
