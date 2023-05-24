@@ -250,9 +250,11 @@ const Plans = (props) => {
     })
 
     return (
-        <div className="planPalette">
+        <div className="allPlans">
             <h3>Plan</h3>
-            {cells}
+            <div className="planPalette">
+                {cells}
+            </div>
         </div>
     )
 }
