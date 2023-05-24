@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useRef, useState} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import './App.css';
 import './index.css';
 import Structure from './Structure.js';
@@ -235,7 +235,7 @@ const Plans = (props) => {
         return (
             <div
                 key={index}
-                programInfo={plan}
+                programinfo={plan}
                 className="indvPlan"
                 onClick={(event) => {
                     setSelectedPlan(plan);
