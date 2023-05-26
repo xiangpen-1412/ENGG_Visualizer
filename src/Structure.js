@@ -20,6 +20,22 @@ class Structure extends Component {
         this.divRefs = [];
     }
 
+    componentDidMount() {
+        window.addEventListener('scroll', this.handleWindowScroll);
+    }
+
+    handleWindowScroll = () => {
+
+        if (this.state.showDescriptions !== {}) {
+            const updatedShowDescriptions = Object.keys(this.state.showDescriptions).reduce((acc, key) => {
+                acc[key] = false;
+                return acc;
+            }, {});
+
+            this.setState({showDescriptions : updatedShowDescriptions});
+        }
+    }
+
     /**
      * show the prerequisite and corequisite of a course by lines when click detected
      *
