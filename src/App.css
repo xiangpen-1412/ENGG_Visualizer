@@ -49,6 +49,7 @@
 
     white-space: nowrap;
     flex: auto;
+    margin-right: 15%;
 }
 
 .questionMark {
@@ -66,11 +67,13 @@
     min-height: 500px;
     border: black solid 2px;
     margin-top: 10px;
-    margin-left: 1760px;
     padding: 20px;
 
-    position: fixed;
-    z-index: 5000;
+
+    right: 10px;
+    position: absolute;
+    z-index: 9999;
+
     background-color: white;
     opacity: 1;
 }
@@ -81,59 +84,29 @@
 }
 
 
-.indvPlan {
-    /* Text color of each term div*/
-    color: white;
-    /* Width of eachterm div*/
-    width: 100px;
-    height: 38px;
-
-    /* Font of text inside term div*/
-    font-size: 14px;
-    /*Spacing on all sides of text inside a term div*/
-    padding: 10px;
-    /* Make the term divs rounded corners*/
-    border-radius: 5px;
-    /*Spacing between terms in term palette*/
-    margin-left: 5px;
-
-    /* Looks good when cursor points to a term div*/
-    cursor: pointer;
-    text-align: center;
-    float: left;
-
-    /* Center text both horizontally and vertically */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
+.allPlans {
+    margin: 10px 10px 10px 20px;
 }
 
 .planPalette {
     /* Spacing on all sides of outside of Term palette*/
-    margin: 10px 10px 10px 15px;
+    margin: 10px 10px 10px 20px;
 
     min-width: 300px;
     height: auto;
     display: flex;
 }
 
-.indivCourseGroup {
-
+.indvPlan {
     /* Text color of each term div*/
     color: white;
-    /* Width of eachterm div*/
-    width: 52px;
-    height: 26px;
-
-    /* Font of text inside term div*/
-    font-size: 14px;
-    /*Spacing on all sides of text inside a term div*/
-    padding: 7px;
-    /* Make the term divs rounded corners*/
-    border-radius: 5px;
-    /*Spacing between terms in term palette*/
-    margin-left: 5px;
+    
+    width: 100px;           /* Width of eachterm div*/
+    height: 38px;
+    font-size: 14px;        /* Font of text inside term div*/
+    padding: 10px;          /*Spacing on all sides of text inside a term div*/
+    border-radius: 5px;     /* Make the term divs rounded corners*/
+    margin-left: 5px;       /*Spacing between terms in term palette*/
 
     /* Looks good when cursor points to a term div*/
     cursor: pointer;
@@ -144,10 +117,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+}
+
+
+.allGroups {
+    margin: 10px 10px 10px 20px;
+    display: flex;
 }
 
 .courseGroupPalatte {
-
     /* Spacing on all sides of outside of Term palette*/
     margin-left: 20px;
     margin-right: 15px;
@@ -156,37 +135,18 @@
     display: flex;
 }
 
-.allGroups {
-
-    margin: 10px 10px 10px 25px;
-    display: flex;
-}
-
-.indvGradAttribute {
-    /* Background color of each GA div*/
-    background-color: rgb(140, 101, 101);
-
-    /* Text color of each GA div*/
+.indivCourseGroup {
+    /* Text color of each term div*/
     color: white;
+    
+    width: 52px;            /* Width of eachterm div*/
+    height: 26px;
+    font-size: 14px;        /* Font of text inside term div*/
+    padding: 7px;           /*Spacing on all sides of text inside a term div*/
+    border-radius: 5px;     /* Make the term divs rounded corners*/
+    margin-left: 5px;       /*Spacing between terms in term palette*/
 
-    /* Width of each GA div*/
-    width: 120px;
-    height: 30px;
-
-    /* Font of text inside GA div*/
-    font-size: 15px;
-
-    /*Spacing on all sides of text inside a GA div*/
-    padding: 10px;
-
-    /* Make the GA divs rounded corners*/
-    border-radius: 7px;
-
-    /*Spacing between GA in term palette*/
-    margin-left: 5px;
-    margin-bottom: 5px;
-
-    /* Looks good when cursor points to a GA div*/
+    /* Looks good when cursor points to a term div*/
     cursor: pointer;
     text-align: center;
     float: left;
@@ -198,46 +158,46 @@
 }
 
 
-.GAWrapper {
 
-    /* Spacing on all sides of outside of Term palette*/
-    margin-right: 20px;
-    margin-left: 20px;
-
-    /* Spacing on all sides of inside of term palette*/
-    padding: 20px;
-
-    /*Width and height of term palette*/
-    /* min-width: 800px; */
-
-    /* width: 600px; */
-    /* height: 240px; */
-
+.lowerStuff {
     display: flex;
-    vertical-align: top;
-    /* flex-direction: column; */
+    flex-direction: row;
+    margin: 5px 5px 80px 5px;
 
+    justify-content: flex-start;
+
+    width: 100%;
+    height: 100%;
     overflow: hidden;
 }
 
 
-.indvCatagory {
-    /* Background color of each category div*/
-    background-color: rgb(140, 101, 101);
-    /* Text color of each category div*/
-    color: white;
-    /* Width of each category div*/
-    width: 120px;
-    height: 30px;
+.catagoryWrapper {
+    /* Spacing on all sides of inside of term palette*/
+    padding: 15px;
+    min-width: 100px;
+    max-width: 600px;
 
-    /* Font of text inside category div*/
-    font-size: 15px;
-    /*Spacing on all sides of text inside a category div*/
-    padding: 10px;
-    /* Make the category divs rounded corners*/
-    border-radius: 10px;
-    /*Spacing between terms in category palette*/
-    margin-left: 5px;
+    display: flex;
+    overflow: hidden;
+}
+
+.courseCategoryPalette {
+    margin: 10px 10px 10px 15px;
+}
+
+
+.indvCatagory {
+    /* Background and text color of each category div*/
+    background-color: rgb(140, 120, 120);
+    color: white;
+    
+    width: 120px;           /* Width of each category div*/
+    height: 30px;
+    font-size: 15px;        /* Font of text inside category div*/
+    padding: 10px;          /*Spacing on all sides of text inside a category div*/
+    border-radius: 10px;    /* Make the category divs rounded corners*/
+    margin-left: 5px;       /*Spacing between terms in category palette*/
     margin-bottom: 5px;
 
     /* Looks good when cursor points to a category div*/
@@ -252,67 +212,73 @@
 
 }
 
-.catagoryWrapper {
 
-    margin-left: 30px;
-    margin-right: 30px;
-
+.GAWrapper {
     /* Spacing on all sides of inside of term palette*/
     padding: 15px;
 
-    min-width: 100px;
-
-    /* width: 470px; */
-    /* height: 240px; */
-
     display: flex;
-    overflow: hidden;
+    vertical-align: top;
 
+    overflow: hidden;
+    max-width: 600px;
 }
 
-.lowerStuff {
+.gradAttributePalette {
+    margin: 10px 10px 10px 15px;
+}
+
+.indvGradAttribute {
+    /* Background color of each GA div*/
+    background-color: rgb(140, 120, 120);
+
+    /* Text color of each GA div*/
+    color: white;
+
+    width: 120px;           /* Width of each GA div*/
+    height: 30px;
+    font-size: 15px;        /* Font of text inside GA div*/
+    padding: 10px;          /* Spacing on all sides of text inside a GA div*/
+    border-radius: 7px;     /* Make the GA divs rounded corners*/
+    margin-left: 5px;       /* Spacing between GA in term palette*/
+    margin-bottom: 5px;
+
+    /* Looks good when cursor points to a GA div*/
+    cursor: pointer;
+    text-align: center;
+    float: left;
+
+    /* Center text both horizontally and vertically */
     display: flex;
-    flex-direction: row;
-    margin: 5px 5px 80px 5px;
-    /* overflow: inline-block; */
-
-    /* height: max-content; */
-    /* clear: both; */
-
-    justify-content: space-evenly;
-
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+    justify-content: center;
+    align-items: center;
 }
 
 
 .gradAttributeLegend {
-    /* margin-top: 50px; */
-    padding: 15px;
-    display: inline-block;
-    vertical-align: top;
+    margin: 10px 10px 10px 10px;
+    max-width: 500px;
 }
 
-.ga-legend {
-    display: flex;
-    vertical-align: top;
-
-    min-width: 200px;
-
-    margin-right: 20px;
-    margin-left: 20px;
+.gradLegendWrapper {
+   /* Spacing on all sides of inside of term palette*/
+   padding: 15px;
+   min-width: 200px;
+   vertical-align: top;
 }
-
 
 
 .part {
     margin-left: 10px;
-    /* display: inline-block; */
 }
 
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> e7edff64d1052a3abe9e82f015ee51cadaf6f410
 @media (prefers-reduced-motion: no-preference) {
     .App-logo {
         animation: App-logo-spin infinite 20s linear;

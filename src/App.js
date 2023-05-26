@@ -5,6 +5,8 @@ import Structure from './Structure.js';
 import {useLocation, useNavigate} from 'react-router-dom';
 import RESTController from "./controller/RESTController";
 
+
+
 const GradAttributes = (props) => {
     const cells = props.gradAttributeList.map((gradAttribute, index) => {
         return (
@@ -21,11 +23,13 @@ const GradAttributes = (props) => {
     })
 
     return (
-        <div className="gradAttributePalette">
+        <div>
             <h3>Graduate Attributes</h3>
-            <p style={{fontFamily: 'Times New Roman', fontWeight: 'bold', fontSize: '16px'}}>Click on a Graduate
-                Attribute Below to Highlight all Related Courses</p>
-            {cells}
+            <div className="gradAttributePalette">
+                <p style={{fontSize: '16px'}}>Click on a Graduate
+                    Attribute Below to Highlight all Related Courses</p>
+                {cells}
+            </div>
         </div>
     )
 }
@@ -35,84 +39,96 @@ const CourseCatagory = (props) => {
     const location = useLocation();
     const {selectedProgram} = location.state;
 
-    const cells = props.CatagoryList.map((catagory, index) => {
+    const cells = props.categoryList.map((catagory, index) => {
 
         if (selectedProgram === "Computer Engineering") {
-
             if (index > 9) {
                 return null;
             }
 
-            return (
-                <div
-                    key={index}
-                    className="indvCatagory"
-                    onClick={(event) => {
-                        props.setCatagoryColor(event, catagory)
-                    }}
-                    style={{backgroundColor: catagory.color}}
-                >
-                    {catagory.name}
-                </div>
-            )
-
         } else if (selectedProgram === "Mechatronics Engineering") {
-
             if (index === 9) {
                 return null;
             }
 
-            return (
-                <div
-                    key={index}
-                    className="indvCatagory"
-                    onClick={(event) => {
-                        props.setCatagoryColor(event, catagory)
-                    }}
-                    style={{backgroundColor: catagory.color}}
-                >
-                    {catagory.name}
-                </div>
-            )
-
         } else {
-
             if (index > 8) {
                 return null;
             }
 
-            return (
-                <div
-                    key={index}
-                    className="indvCatagory"
-                    onClick={(event) => {
-                        props.setCatagoryColor(event, catagory)
-                    }}
-                    style={{backgroundColor: catagory.color}}
-                >
-                    {catagory.name}
-                </div>
-            )
-        }
-
+        } return (
+            <div
+                key={index}
+                className="indvCatagory"
+                onClick={(event) => {
+                    props.setCatagoryColor(event, catagory)
+                }}
+                style={{backgroundColor: catagory.color}}
+            >
+                {catagory.name}
+            </div>
+        )
     })
 
     return (
-        <div className="courseCategoryPalette">
+        <div>
             <h3>Course Category</h3>
-            <p style={{fontFamily: 'Times New Roman', fontWeight: 'bold', fontSize: '16px'}}>Click on a Category Below
-                to Highlight all Related Courses</p>
-            {cells}
+            <div className="courseCategoryPalette">
+                <p style={{fontSize: '16px'}}>Click on a Category Below
+                    to Highlight all Related Courses</p>
+                {cells}
+            </div>
         </div>
+        
     )
 }
+
+
+const Instructions = () => {
+
+    return (
+        <div>
+        <h3>Visualizer Instruction</h3>
+        <p>Welcome to the University of Alberta's Engineering Program Plan Visualizer.</p>
+        <p>This tool is designed to help you navigate the structure of your chosen program plan. </p>
+        <p>Here is a guide to using the tool:</p>
+        <ul>
+            <li><strong>Select plans:</strong>
+                To see all the courses in a program, choose a plan from the Plan menu at the top. All
+                courses in 8 or more terms will be displayed below. For Mechanical Engineering, you will
+                need to select a group after selecting a plan.
+            </li>
+            <li><strong>Course Description:</strong> By hovering over a course in the terms below, you
+                can view its course description. This provides details about the course content, hours
+                and credits.
+            </li>
+            <li><strong>Prerequisites and Corequisites:</strong> Left-clicking on a course will display
+                any prerequisites with yellow arrows and corequisites with red arrows.
+            </li>
+            <li><strong>Course Group:</strong> Click on a course in the Course Group Palette to see all
+                the courses that belong to the course group. This is useful for getting an overview of
+                courses with similar content or learning objectives.
+            </li>
+            <li><strong>Graduation Attributes:</strong> Clicking on a graduate attribute in the Graduate
+                Attributes palette highlights each course in that category. The more red a course, the
+                more it embodies that attribute. Please refer to the Graduate Attributes legends for
+                more details. This displays where each learning outcome is met throughout a degree
+                program.
+            </li>
+        </ul>
+        <p>We hope this tool aids your understanding of your chosen engineering program and supports
+            your academic planning process. If you have any questions or encounter any difficulties,
+            please do not hesitate to contact us at dnobes@ualberta.ca. </p>
+        </div>
+    );
+}
+
 
 const Header = (props) => {
 
     const location = useLocation();
     const {selectedProgram} = location.state;
     const navigate = useNavigate();
-
     const [showGuide, setShowGuide] = useState(false);
 
     const handleBackButtonClick = () => {
@@ -144,39 +160,7 @@ const Header = (props) => {
 
             {showGuide && (
                 <div className="guideWrapper">
-                    <div>
-                        <h3>Visualizer Instruction</h3>
-                        <p>Welcome to the University of Alberta's Engineering Program Plan Visualizer.</p>
-                        <p>This tool is designed to help you navigate the structure of your chosen program plan. </p>
-                        <p>Here is a guide to using the tool:</p>
-                        <ul>
-                            <li><strong>Select plans:</strong>
-                                To see all the courses in a program, choose a plan from the Plan menu at the top. All
-                                courses in 8 or more terms will be displayed below. For Mechanical Engineering, you will
-                                need to select a group after selecting a plan.
-                            </li>
-                            <li><strong>Course Description:</strong> By hovering over a course in the terms below, you
-                                can view its course description. This provides details about the course content, hours
-                                and credits.
-                            </li>
-                            <li><strong>Prerequisites and Corequisites:</strong> Left-clicking on a course will display
-                                any prerequisites with yellow arrows and corequisites with red arrows.
-                            </li>
-                            <li><strong>Course Group:</strong> Click on a course in the Course Group Palette to see all
-                                the courses that belong to the course group. This is useful for getting an overview of
-                                courses with similar content or learning objectives.
-                            </li>
-                            <li><strong>Graduation Attributes:</strong> Clicking on a graduate attribute in the Graduate
-                                Attributes palette highlights each course in that category. The more red a course, the
-                                more it embodies that attribute. Please refer to the Graduate Attributes legends for
-                                more details. This displays where each learning outcome is met throughout a degree
-                                program.
-                            </li>
-                        </ul>
-                        <p>We hope this tool aids your understanding of your chosen engineering program and supports
-                            your academic planning process. If you have any questions or encounter any difficulties,
-                            please do not hesitate to contact us at dnobes@ualberta.ca. </p>
-                    </div>
+                    <Instructions />
                 </div>
             )}
         </header>
@@ -184,8 +168,11 @@ const Header = (props) => {
 };
 
 
+// Legend for graduate attributes
 const GALegend = (props) => {
-    const cells = props.GALegendList.map((gradLegendItem, index) => {
+
+    // Get the rows and colors of the legend
+    const cells = props.gaLegendList.map((gradLegendItem, index) => {
         return (
             <div
                 key={index}
@@ -197,20 +184,24 @@ const GALegend = (props) => {
         )
     })
 
+    // Return full table component
     return (
-        <div className="gradAttributeLegend">
+        <div>
             <h3>Graduate Attributes Legend</h3>
-            {cells}
+            <div className="gradAttributeLegend">
+                
+                {cells}
+            </div>
         </div>
     )
 }
+
 
 //Plans has to be a simple component as it contains navigation
 const Plans = (props) => {
 
     const location = useLocation();
     const {selectedProgram} = location.state;
-
     const [planList, setPlanList] = useState([]);
     const [selectedPlan, setSelectedPlan] = useState(null);
 
@@ -224,6 +215,7 @@ const Plans = (props) => {
     let planSet = new Set();
     const cells = planList.map((plan, index) => {
 
+        // Remove unwanted characters from start and end of MecE plans
         if (selectedProgram === "Mechanical Engineering") {
             plan = plan.replace(/\{[^)]*\}/g, "").trimEnd().trimStart();
 
@@ -236,6 +228,7 @@ const Plans = (props) => {
 
         const isSelected = plan === selectedPlan;
 
+        // Return component with individual plan
         return (
             <div
                 key={index}
@@ -245,20 +238,24 @@ const Plans = (props) => {
                     setSelectedPlan(plan);
                     props.setSelectedProgramPlan(selectedProgram, plan);
                 }}
-                style={{backgroundColor: isSelected ? "gold" : "rgb(140, 101, 101)"}}
+                style={{backgroundColor: isSelected ? "gold" : "rgb(140, 120, 120)"}}
             >
                 {plan}
             </div>
         )
     })
 
+    // Return component with all the discipline's plans
     return (
-        <div className="planPalette">
+        <div className="allPlans">
             <h3>Plan</h3>
-            {cells}
+            <div className="planPalette">
+                {cells}
+            </div>
         </div>
     )
 }
+
 
 const CourseGroup = (props) => {
     const courseGroupKeys = [...props.courseGroup.keys()];
@@ -284,7 +281,7 @@ const CourseGroup = (props) => {
     const keyComponent = courseGroupKeys.map((key) => {
         const groupComponent = props.courseGroup.get(key).map((group) => {
             const isSelected = selectedButtons.get(key) === group;
-            const color = isSelected ? "gold" : "rgb(140, 101, 101)";
+            const color = isSelected ? "gold" : "rgb(140, 120, 120)";
             return (
                 <div
                     className="indivCourseGroup"
@@ -318,6 +315,7 @@ const CourseGroup = (props) => {
     return <div className="allGroups">{keyComponent}</div>;
 };
 
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -344,7 +342,7 @@ class App extends Component {
                 "Life-long-learning"
             ],
 
-            CatagoryList: [
+            categoryList: [
                 {
                     name: "Math",
                     color: "#ff5050",
@@ -431,28 +429,23 @@ class App extends Component {
                 },
             ],
 
-            GALegendList: [
-
+            gaLegendList: [
                 {
                     name: "Introduced",
                     color: 'white',
                 },
-
                 {
                     name: "Developed",
                     color: '#eca5a0',
                 },
-
                 {
                     name: "Applied",
                     color: '#e7574d',
                 },
-
                 {
                     name: "Collected",
                     color: '#e93427',
                 },
-
             ],
 
             structure: [],
@@ -482,14 +475,6 @@ class App extends Component {
         this.deleteLineMap();
     }
 
-    showToolTip = () => {
-        this.setState({isToolTipOpen: true})
-    }
-
-    hideToolTip = () => {
-        this.setState({isToolTipOpen: false})
-    }
-
     setGradAttributeColor = (event, gradAttribute) => {
 
         let attributeIndex = 0;
@@ -502,61 +487,17 @@ class App extends Component {
                     structure[termIndex].courses[courseIndex].color = '#8C6565';
                 })
             })
-        } else {
-            switch (gradAttribute) {
-                case "Knowledge Base for Engineering":
-                    attributeIndex = 0;
-                    break;
-                case "Problem Analysis":
-                    attributeIndex = 1;
-                    break;
-                case "Investigation":
-                    attributeIndex = 2;
-                    break;
-                case "Design":
-                    attributeIndex = 3;
-                    break;
-                case "Engineering Tools":
-                    attributeIndex = 4;
-                    break;
-                case "Indiv and Teamwork":
-                    attributeIndex = 5;
-                    break;
-                case "Communication Skills":
-                    attributeIndex = 6;
-                    break;
-                case "Professionalism":
-                    attributeIndex = 7;
-                    break;
-                case "Impact on Society":
-                    attributeIndex = 8;
-                    break;
-                case "Ethics and Equity":
-                    attributeIndex = 9;
-                    break;
-                case "Economics and Mgt":
-                    attributeIndex = 10;
-                    break;
-                case "Life-long-learning":
-                    attributeIndex = 11;
-                    break;
-                default:
-                    attributeIndex = 0;
-            }
+        } 
+        else {
+            // Get index of Grad Attribute from state array gradAttributeList
+            attributeIndex = this.state.gradAttributeList.indexOf(gradAttribute);
 
             structure.map((term, termIndex) => {
                 term.courses.map((courseMap, courseIndex) => {
                     let attributeLevel = courseMap.attribute[attributeIndex]
 
-                    if (attributeLevel === 0) {
-                        structure[termIndex].courses[courseIndex].color = 'white';
-                    } else if (attributeLevel === 1) {
-                        structure[termIndex].courses[courseIndex].color = '#eca5a0';
-                    } else if (attributeLevel === 2) {
-                        structure[termIndex].courses[courseIndex].color = '#e7574d';
-                    } else if (attributeLevel === 3) {
-                        structure[termIndex].courses[courseIndex].color = '#e93427';
-                    }
+                    // Set red hue of each course based on grad attribute level
+                    structure[termIndex].courses[courseIndex].color = this.state.gaLegendList[attributeLevel].color;
                 })
             })
 
@@ -565,7 +506,6 @@ class App extends Component {
                 selectedAtt: gradAttribute,
             })
         }
-
     }
 
     setCatagoryColor = (event, catagory) => {
@@ -580,7 +520,8 @@ class App extends Component {
                     structure[termIndex].courses[courseIndex].color = "#8C6565";
                 })
             })
-        } else {
+        } 
+        else {
             switch (catagory.name) {
                 case "Math":
                     catagoryIndex = 0;
@@ -654,7 +595,6 @@ class App extends Component {
 
                     let catagoryLevel = courseMap.category[catagoryIndex];
 
-
                     if (catagoryLevel === 0) {
                         structure[termIndex].courses[courseIndex].color = "white";
                     } else if (catagoryLevel === 1) {
@@ -675,13 +615,10 @@ class App extends Component {
         this.deleteLineMap();
 
         this.setState({selectedProgram: selectedProgram, selectedPlan: selectedPlan, structure: [], planChanged: true});
-
         this.setState({group2: "", group3: "", group4: ""});
-
+        
         const haveCourseGroupOption = selectedProgram === "Mechanical Engineering" && !selectedPlan.includes("Co-op Plan 3");
-
         this.setState({containCourseGroup: haveCourseGroupOption}, () => {
-
             if (this.state.containCourseGroup) {
                 this.setCourseGroup(selectedPlan);
             } else {
@@ -847,7 +784,7 @@ class App extends Component {
 
                     <div className="lowerStuff">
                         <div className='catagoryWrapper'>
-                            <CourseCatagory CatagoryList={this.state.CatagoryList}
+                            <CourseCatagory categoryList={this.state.categoryList}
                                             setCatagoryColor={this.setCatagoryColor}
                             />
 
@@ -856,11 +793,11 @@ class App extends Component {
                         <div className='GAWrapper'>
                             <GradAttributes gradAttributeList={this.state.gradAttributeList}
                                             setGradAttributeColor={this.setGradAttributeColor}/>
-                            {/* <GALegend GALegendList={this.state.GALegendList}/> */}
+                            {/* <GALegend gaLegendList={this.state.gaLegendList}/> */}
                         </div>
 
-                        <div className='ga-legend'>
-                            <GALegend GALegendList={this.state.GALegendList}/>
+                        <div className='gradLegendWrapper'>
+                            <GALegend gaLegendList={this.state.gaLegendList}/>
                         </div>
                     </div>
 
