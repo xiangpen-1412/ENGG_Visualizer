@@ -1,31 +1,29 @@
 import * as React from 'react';
 
-import { Routes, Route } from 'react-router-dom';
+import {Routes, Route} from 'react-router-dom';
 
- 
 
 import Home from './Home';
 
 import App from './App';
 
- 
 
 export default function Mid() {
 
-  return (
+    return (
 
-    <div className="Mid">
+        <div className="Mid">
 
-      <Routes>
+            <Routes>
 
-        <Route path="/" element={<Home />} />
+                <Route path="/" element={<Home/>}/>
 
-        <Route path="/App" element={<App />} />
+                <Route path="/App" element={<App/>}/>
 
-      </Routes>
+            </Routes>
 
-    </div>
+        </div>
 
-  );
+    );
 
 }

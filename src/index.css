@@ -93,7 +93,7 @@ code {
 }
 
 .indivCourses:hover {
-    background-color: rgb(140, 101, 101)
+    background-color: rgb(140, 101, 101);
 }
 
 .orCaseDiv {
@@ -134,6 +134,7 @@ code {
     display: flex;
     justify-content: center;
     align-items: center;
+
 }
 
 .orCircle {
@@ -154,8 +155,34 @@ code {
     font-weight: bold;
 }
 
-.TOOLTIPPPP {
+.description {
+    background-color: beige;
+    color: black;
+    width: 700px;
+    min-height:50px;
+    border: 2px solid black;
+    position: absolute;
+    z-index: 30000;
+    border-radius: 6px;
     white-space: pre-line;
-    width: 450px;
+
+    padding: 5px;
 }
 
+
+.description strong {
+    font-size: 26px;
+    text-align: center;
+}
+
+.description b {
+    font-size: 21px;
+    text-align: left;
+}
+
+
+.description div {
+    border-top: black 2px solid;
+    font-size: 17px;
+    text-align: left;
+}

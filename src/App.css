@@ -70,7 +70,7 @@
     padding: 20px;
 
     position: fixed;
-    z-index: 9999;
+    z-index: 5000;
     background-color: white;
     opacity: 1;
 }
@@ -310,12 +310,6 @@
     margin-left: 10px;
     /* display: inline-block; */
 }
-
-
-
-
-
-
 
 
 

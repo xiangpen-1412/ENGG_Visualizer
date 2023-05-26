@@ -69,6 +69,9 @@ class RESTController extends Component {
 
 
     getReqMap = (data) => {
+
+        console.log(data);
+
         return axios
             .post(`/nobes/timetable/visualizer/getReqMap`, data, this.config)
             .then(response => {

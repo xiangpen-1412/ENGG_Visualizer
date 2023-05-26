@@ -486,7 +486,7 @@ class App extends Component {
         this.setState({isToolTipOpen: true})
     }
 
-    hideToolTip = (event) => {
+    hideToolTip = () => {
         this.setState({isToolTipOpen: false})
     }
 
@@ -672,6 +672,8 @@ class App extends Component {
 
     setSelectedProgramPlan = (selectedProgram, selectedPlan) => {
 
+        this.deleteLineMap();
+
         this.setState({selectedProgram: selectedProgram, selectedPlan: selectedPlan, structure: [], planChanged: true});
 
         this.setState({group2: "", group3: "", group4: ""});
@@ -787,13 +789,13 @@ class App extends Component {
             planName: selectedPlan
         };
 
-
         this.controller.getCourseInfo(data).then((courses) => {
             this.setState({structure: courses});
         });
 
         this.controller.getReqMap(data).then((reqMap) => {
             this.setState({reqMap: reqMap});
+            console.log(reqMap);
         })
     }
 
@@ -804,7 +806,9 @@ class App extends Component {
     deleteLineMap = () => {
         for (let [key] of this.state.lineMap) {
             this.state.lineMap.get(key).map((line) => {
-                line.remove();
+                if (line !== undefined) {
+                    line.remove();
+                }
             });
         }
 

@@ -1,8 +1,9 @@
+import * as React from 'react';
 import {Component} from 'react';
 import './index.css';
 import 'react-tooltip/dist/react-tooltip.css'
 import LeaderLine from "leader-line-new";
-import {cloneDeep, map} from "lodash";
+import {cloneDeep} from "lodash";
 
 
 class Structure extends Component {
@@ -11,6 +12,8 @@ class Structure extends Component {
         super(props);
         this.state = {
             selectedCourse: "",
+            showDescriptions: {},
+            shouldAdjustPosition: false,
         };
 
         this.orCaseList = [];
@@ -208,6 +211,45 @@ class Structure extends Component {
         });
     }
 
+    handleMouseEnter = (indexx) => {
+        this.setState(
+            {
+                showDescriptions: {...this.state.showDescriptions, [indexx]: true},
+                shouldAdjustPosition: true,
+            },
+            () => {
+                if (this.state.shouldAdjustPosition) {
+                    this.adjustDescriptionPosition(indexx);
+                    this.setState({shouldAdjustPosition: false});
+                }
+            }
+        );
+    }
+
+    handleMouseLeave = (indexx) => {
+        this.setState({showDescriptions: {...this.state.showDescriptions, [indexx]: false}});
+    }
+
+    adjustDescriptionPosition = (indexx) => {
+        const descriptionDiv = document.querySelector('.description');
+        const rect = descriptionDiv.getBoundingClientRect();
+
+        const structureWrapper = document.querySelector('.structureWrapper');
+        const structureWrapperRect = structureWrapper.getBoundingClientRect();
+
+        let courseDiv = document.getElementById(indexx.toString());
+        let courseRect;
+        courseRect = courseDiv.getBoundingClientRect();
+
+        if (rect.bottom > structureWrapperRect.bottom) {
+            descriptionDiv.style.bottom = `${structureWrapperRect.bottom - courseRect.top + 40}px`;
+        }
+
+        if (rect.right > structureWrapperRect.right) {
+            descriptionDiv.style.left = `${structureWrapperRect.right - descriptionDiv.offsetWidth - courseRect.width}px`;
+        }
+    };
+
 
     render() {
 
@@ -224,14 +266,27 @@ class Structure extends Component {
 
         let globalIndex = 0;
 
-        const term = structure.map((termColumn) => {
+        const term = structure.map((termColumn, termIndex) => {
             const courseDivs = termColumn.courses.map((courseItem, index) => {
+
+                const courseIndex = index;
+
                 let contains;
                 if (this.orCaseList) {
                     contains = this.orCaseList.some((orCaseCourse) => courseItem.name.includes(orCaseCourse));
                 }
+
                 if (contains) {
-                    this.orCaseList = null;
+                    this.orCaseList = this.orCaseList.map((orCase) => {
+                        if (orCase !== courseItem.name) {
+                            return orCase;
+                        }
+                    })
+
+                    if (this.orCaseList.length === 1) {
+                        this.orCaseList = null;
+                    }
+
                     return null;
                 }
 
@@ -275,20 +330,39 @@ class Structure extends Component {
                         let orCaseIndex = globalIndex;
                         globalIndex++;
 
+                        const orCaseCourseInfo = structure[termIndex].courses[courseIndex + index];
+
                         const orCourseElement = (
-                            <div className='indivOrCourse'
-                                 key={orCaseIndex}
-                                 ref={(el) => this.divRefs[orCaseIndex] = el}
-                                 onClick={() => this.handleOnClick(coursesList, orCaseIndex, updateLineMap, lineMap, reqMap)}
-                                 style={{backgroundColor: courseItem.color}}
-                                 onMouseEnter={(event) => this.props.showToolTip(event)}
-                                 onMouseDown={(event) => this.props.hideToolTip(event)}
-                                 onMouseLeave={(event) => this.props.hideToolTip(event)}
-                                 data-tooltip-content={courseItem.description} data-tooltip-id='toolTip1'
-                                 extendedName={courseItem.extendedName}
-                                 accreditionUnits={courseItem.accreditionUnits}
-                            >
-                                {orCaseCourse}
+                            <div>
+                                <div className='indivOrCourse'
+                                     id={orCaseIndex.toString()}
+                                     key={orCaseIndex}
+                                     ref={(el) => this.divRefs[orCaseIndex] = el}
+                                     onClick={() => this.handleOnClick(coursesList, orCaseIndex, updateLineMap, lineMap, reqMap)}
+                                     style={{backgroundColor: courseItem.color}}
+                                     onMouseEnter={() => this.handleMouseEnter(orCaseIndex)}
+                                     onMouseLeave={() => this.handleMouseLeave(orCaseIndex)}
+                                     onMouseDown={() => this.handleMouseLeave(orCaseIndex)}
+                                >
+                                    {orCaseCourse}
+                                </div>
+                                {this.state.showDescriptions[orCaseIndex] &&
+                                    <div className="description">
+                                        <strong>{orCaseCourseInfo.extendedName}</strong>
+                                        <br/>
+                                        <div>
+                                            {orCaseCourseInfo.description}
+                                            {orCaseCourseInfo.accreditionUnits && (
+                                                <>
+                                                    <br/>
+                                                    <b>Accreditation Unit:</b>
+                                                    <br/>
+                                                    {orCaseCourseInfo.accreditionUnits}
+                                                </>
+                                            )}
+
+                                        </div>
+                                    </div>}
                             </div>
                         );
 
@@ -312,19 +386,36 @@ class Structure extends Component {
                     )
                 } else {
                     return (
-                        <div className='indivCourses'
-                             key={indexx}
-                             ref={(el) => this.divRefs[indexx] = el}
-                             onClick={() => this.handleOnClick(coursesList, indexx, updateLineMap, lineMap, reqMap)}
-                             style={{backgroundColor: courseItem.color}}
-                             onMouseEnter={(event) => this.props.showToolTip(event)}
-                             onMouseDown={(event) => this.props.hideToolTip(event)}
-                             onMouseLeave={(event) => this.props.hideToolTip(event)}
-                             data-tooltip-content={courseItem.description} data-tooltip-id='toolTip1'
-                             extendedName={courseItem.extendedName}
-                             accreditionUnits={courseItem.accreditionUnits}
-                        >
-                            {name}
+                        <div>
+                            <div className='indivCourses'
+                                 key={indexx}
+                                 id={indexx.toString()}
+                                 ref={(el) => this.divRefs[indexx] = el}
+                                 onClick={() => this.handleOnClick(coursesList, indexx, updateLineMap, lineMap, reqMap)}
+                                 style={{backgroundColor: courseItem.color}}
+                                 onMouseEnter={() => this.handleMouseEnter(indexx)}
+                                 onMouseLeave={() => this.handleMouseLeave(indexx)}
+                                 onMouseDown={() => this.handleMouseLeave(indexx)}
+                            >
+                                {name}
+                            </div>
+                            {this.state.showDescriptions[indexx] &&
+                                <div className="description">
+                                    <strong>{courseItem.extendedName}</strong>
+                                    <br/>
+                                    <div>
+                                        {courseItem.description}
+                                        {courseItem.accreditionUnits && (
+                                            <>
+                                                <br/>
+                                                <b>Accreditation Unit:</b>
+                                                <br/>
+                                                {courseItem.accreditionUnits}
+                                            </>
+                                        )}
+
+                                    </div>
+                                </div>}
                         </div>
                     )
                 }
