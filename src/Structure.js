@@ -32,7 +32,7 @@ class Structure extends Component {
                 return acc;
             }, {});
 
-            this.setState({showDescriptions : updatedShowDescriptions});
+            this.setState({showDescriptions: updatedShowDescriptions});
         }
     }
 
@@ -228,9 +228,17 @@ class Structure extends Component {
     }
 
     handleMouseEnter = (indexx) => {
+
+        const updatedShowDescriptions = Object.keys(this.state.showDescriptions).reduce((acc, key) => {
+            acc[key] = false;
+            return acc;
+        }, {});
+
+        updatedShowDescriptions[indexx] = true;
+
         this.setState(
             {
-                showDescriptions: {...this.state.showDescriptions, [indexx]: true},
+                showDescriptions: updatedShowDescriptions,
                 shouldAdjustPosition: true,
             },
             () => {
