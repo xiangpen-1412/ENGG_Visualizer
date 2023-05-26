@@ -231,22 +231,29 @@ class Structure extends Component {
     }
 
     adjustDescriptionPosition = (indexx) => {
+
         const descriptionDiv = document.querySelector('.description');
-        const rect = descriptionDiv.getBoundingClientRect();
 
-        const structureWrapper = document.querySelector('.structureWrapper');
-        const structureWrapperRect = structureWrapper.getBoundingClientRect();
+        if (descriptionDiv !== null) {
+            const rect = descriptionDiv.getBoundingClientRect();
 
-        let courseDiv = document.getElementById(indexx.toString());
-        let courseRect;
-        courseRect = courseDiv.getBoundingClientRect();
+            const structureWrapper = document.querySelector('.structureWrapper');
+            const structureWrapperRect = structureWrapper.getBoundingClientRect();
 
-        if (rect.bottom > structureWrapperRect.bottom) {
-            descriptionDiv.style.bottom = `${structureWrapperRect.bottom - courseRect.top - 140}px`;
-        }
+            let courseDiv = document.getElementById(indexx.toString());
 
-        if (rect.right > structureWrapperRect.right) {
-            descriptionDiv.style.left = `${structureWrapperRect.right - descriptionDiv.offsetWidth - courseRect.width}px`;
+            if (courseDiv !== null) {
+                let courseRect;
+                courseRect = courseDiv.getBoundingClientRect();
+
+                if (rect.bottom > structureWrapperRect.bottom) {
+                    descriptionDiv.style.bottom = `${structureWrapperRect.bottom - courseRect.top - 140}px`;
+                }
+
+                if (rect.right > structureWrapperRect.right) {
+                    descriptionDiv.style.left = `${structureWrapperRect.right - descriptionDiv.offsetWidth - courseRect.width}px`;
+                }
+            }
         }
     };
 
