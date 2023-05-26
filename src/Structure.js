@@ -242,7 +242,7 @@ class Structure extends Component {
         courseRect = courseDiv.getBoundingClientRect();
 
         if (rect.bottom > structureWrapperRect.bottom) {
-            descriptionDiv.style.bottom = `${structureWrapperRect.bottom - courseRect.top + 40}px`;
+            descriptionDiv.style.bottom = `${structureWrapperRect.bottom - courseRect.top - 140}px`;
         }
 
         if (rect.right > structureWrapperRect.right) {
