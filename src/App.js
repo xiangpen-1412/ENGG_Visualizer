@@ -5,8 +5,6 @@ import Structure from './Structure.js';
 import {useLocation, useNavigate} from 'react-router-dom';
 import RESTController from "./controller/RESTController";
 
-
-
 const GradAttributes = (props) => {
     const cells = props.gradAttributeList.map((gradAttribute, index) => {
         return (
@@ -248,7 +246,7 @@ const Plans = (props) => {
     // Return component with all the discipline's plans
     return (
         <div className="allPlans">
-            <h3>Plan</h3>
+            <h3>Choose Your Plan: </h3>
             <div className="planPalette">
                 {cells}
             </div>
@@ -732,7 +730,6 @@ class App extends Component {
 
         this.controller.getReqMap(data).then((reqMap) => {
             this.setState({reqMap: reqMap});
-            console.log(reqMap);
         })
     }
 
