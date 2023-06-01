@@ -87,7 +87,7 @@
 }
 
 .pageTitle {
-    margin: 40px 10px 30px 20px;
+    margin: 40px 10px 30px 0px;
     color: rgb(39, 93, 56);
     font-size: 50px;
     font-family: 'Roboto', sans-serif;
@@ -95,7 +95,7 @@
 }
 
 .allPlans {
-    margin: 10px 10px 10px 20px;
+    margin: 10px 10px 10px 0px;
 }
 
 .planPalette {
@@ -109,13 +109,16 @@
 
 .indvPlan {
     /* Text color of each term div*/
-    color: white;
+    background-color: rgb(255, 255, 255); /* Background color of each term div*/
+    border-color: rgb(39, 93, 56); /* Text color of each term div*/
+    border-style: solid;
+    border-radius: 0px;
+    border-width: 3px;
     
     width: 100px;           /* Width of eachterm div*/
     height: 38px;
     font-size: 14px;        /* Font of text inside term div*/
     padding: 10px;          /*Spacing on all sides of text inside a term div*/
-    border-radius: 5px;     /* Make the term divs rounded corners*/
     margin-left: 5px;       /*Spacing between terms in term palette*/
 
     /* Looks good when cursor points to a term div*/
@@ -127,12 +130,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 
 .allGroups {
-    margin: 10px 10px 10px 20px;
+    margin: 10px 10px 10px 0px;
     display: flex;
 }
 
@@ -147,13 +149,16 @@
 
 .indivCourseGroup {
     /* Text color of each term div*/
-    color: white;
+    background-color: rgb(255, 255, 255); /* Background color of each term div*/
+    border-color: rgb(39, 93, 56); /* Text color of each term div*/
+    border-style: solid;
+    border-radius: 0px;
+    border-width: 3px;
     
     width: 52px;            /* Width of eachterm div*/
     height: 26px;
     font-size: 14px;        /* Font of text inside term div*/
     padding: 7px;           /*Spacing on all sides of text inside a term div*/
-    border-radius: 5px;     /* Make the term divs rounded corners*/
     margin-left: 5px;       /*Spacing between terms in term palette*/
 
     /* Looks good when cursor points to a term div*/
