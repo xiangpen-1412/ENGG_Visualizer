@@ -390,9 +390,7 @@ class Structure extends Component {
                         const orCourseElement = this.renderCourseDiv(coursesList, orCaseIndex, orCaseCourseInfo, orCaseCourse, true);
 
                         const orElement = (
-                            <div className='orCircle'>
-                                <div className='orText'>OR</div>
-                            </div>
+                            <div className='orText'>OR</div>
                         );
 
                         if (index !== orCaseList.length - 1) {
@@ -419,9 +417,9 @@ class Structure extends Component {
 
             return (
                 <div className='term'>
-                    <b style={{fontFamily: 'Times New Roman', fontSize: '20px'}}>
+                    <div className='termTitle'>
                         {termColumn.term}
-                    </b>
+                    </div>
                     <div className='courseWrapper'>
                         {courseDivs}
                     </div>
