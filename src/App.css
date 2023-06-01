@@ -167,14 +167,24 @@
     align-items: center;
 }
 
-
+.additionOptions {
+    width: 527px;
+    height: 68px;
+    color: #275D38;
+    font-size: 35px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
 
 .lowerStuff {
 
     background-color: #E8ECEF;
     display: flex;
     flex-direction: row;
-    margin: 25px 0px 50px 0px;
+    margin: 23px 0px 50px 0px;
 
     justify-content: flex-start;
 
@@ -187,35 +197,53 @@
 .catagoryWrapper {
     /* Spacing on all sides of inside of term palette*/
     padding: 15px;
-    min-width: 100px;
-    max-width: 600px;
+    width: 490px;
+    min-height: 400px;
 
     display: flex;
     overflow: hidden;
 }
 
-.courseCategoryPalette {
-    margin: 10px 10px 10px 15px;
+.courseCategoryTitle {
+    font-size: 28px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    color: darkgreen
 }
 
+.courseCategoryPalette {
+    margin: 10px 10px 10px 3px;
+}
+
+.categoryDescription {
+    color: #464646;
+    height: 55px;
+    width: 428px;
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
 
 .indvCatagory {
     /* Background and text color of each category div*/
-    background-color: rgb(140, 120, 120);
-    color: white;
+    background-color: rgb(206, 212, 218);
     
-    width: 120px;           /* Width of each category div*/
-    height: 30px;
-    font-size: 15px;        /* Font of text inside category div*/
+    width: 174px;           /* Width of each category div*/
+    height: 47px;
+    font-size: 16px;        /* Font of text inside category div*/
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    color: black;
     padding: 10px;          /*Spacing on all sides of text inside a category div*/
-    border-radius: 10px;    /* Make the category divs rounded corners*/
-    margin-left: 5px;       /*Spacing between terms in category palette*/
+    margin-right: 10px;
     margin-bottom: 5px;
 
     /* Looks good when cursor points to a category div*/
     cursor: pointer;
     text-align: center;
     float: left;
+
+    border-radius: 1px;
 
     /* Center text both horizontally and vertically */
     display: flex;
@@ -229,6 +257,7 @@
     /* Spacing on all sides of inside of term palette*/
     padding: 15px;
 
+    width: 490px;
     display: flex;
     vertical-align: top;
 
@@ -236,29 +265,47 @@
     max-width: 600px;
 }
 
+.gradAttTitle {
+    font-size: 28px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    color: darkgreen;
+
+    align-items: center;
+}
+
 .gradAttributePalette {
-    margin: 10px 10px 10px 15px;
+    margin: 10px 10px 10px 3px;
+}
+
+.attributeDescription {
+    color: #464646;
+    height: 55px;
+    width: 428px;
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
 }
 
 .indvGradAttribute {
-    /* Background color of each GA div*/
-    background-color: rgb(140, 120, 120);
+    /* Background and text color of each category div*/
+    background-color: rgb(206, 212, 218);
 
-    /* Text color of each GA div*/
-    color: white;
-
-    width: 120px;           /* Width of each GA div*/
-    height: 30px;
-    font-size: 15px;        /* Font of text inside GA div*/
+    width: 174px;           /* Width of each category div*/
+    height: 47px;
+    font-size: 16px;        /* Font of text inside category div*/
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    color: black;
     padding: 10px;          /* Spacing on all sides of text inside a GA div*/
-    border-radius: 7px;     /* Make the GA divs rounded corners*/
-    margin-left: 5px;       /* Spacing between GA in term palette*/
     margin-bottom: 5px;
-
+    margin-right: 10px;
     /* Looks good when cursor points to a GA div*/
     cursor: pointer;
     text-align: center;
     float: left;
+
+    border-radius: 1px;
 
     /* Center text both horizontally and vertically */
     display: flex;
@@ -266,9 +313,66 @@
     align-items: center;
 }
 
+.indivGALegend0 {
+    width: 414px;
+    height: 30px;
+
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    border-radius: 1px;
+    display: flex;
+    align-items: center;
+}
+
+.indivGALegend1 {
+    width: 414px;
+    height: 30px;
+
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    border-radius: 1px;
+    display: flex;
+    align-items: center;
+}
+
+.indivGALegend2 {
+    width: 414px;
+    height: 30px;
+
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    border-radius: 1px;
+    display: flex;
+    align-items: center;
+}
+
+.indivGALegend3 {
+    width: 414px;
+    height: 30px;
+
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    border-radius: 1px;
+    display: flex;
+    align-items: center;
+
+    border: #22CA65 solid 2px;
+    margin-top: 30px;
+}
+
+.gaLegend {
+    font-size: 32px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    color: darkgreen
+}
 
 .gradAttributeLegend {
-    margin: 10px 10px 10px 10px;
+    margin: 10px 10px 10px 3px;
     max-width: 500px;
 }
 
@@ -277,6 +381,10 @@
    padding: 15px;
    min-width: 200px;
    vertical-align: top;
+}
+
+.gradLegendWrapper b {
+    margin-left: 15px;
 }
 
 

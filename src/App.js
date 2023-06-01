@@ -22,10 +22,9 @@ const GradAttributes = (props) => {
 
     return (
         <div>
-            <h3>Graduate Attributes</h3>
+            <div className="gradAttTitle">GRADUATE ATTRIBUTES</div>
             <div className="gradAttributePalette">
-                <p style={{fontSize: '16px'}}>Click on a Graduate
-                    Attribute Below to Highlight all Related Courses</p>
+                <div className="attributeDescription">Learn more about which courses satisfy your degree requirements.</div>
                 {cells}
             </div>
         </div>
@@ -61,7 +60,6 @@ const CourseCatagory = (props) => {
                 onClick={(event) => {
                     props.setCatagoryColor(event, catagory)
                 }}
-                style={{backgroundColor: catagory.color}}
             >
                 {catagory.name}
             </div>
@@ -70,10 +68,9 @@ const CourseCatagory = (props) => {
 
     return (
         <div>
-            <div style={{ color: 'darkgreen', fontSize: '23px' }}>COURSE CATEGORIES</div>
+            <div className="courseCategoryTitle">COURSE CATEGORIES</div>
             <div className="courseCategoryPalette">
-                <p style={{fontSize: '16px'}}>Click on a Category Below
-                    to Highlight all Related Courses</p>
+                <div className="categoryDescription">Learn more about what categories your courses belong to.</div>
                 {cells}
             </div>
         </div>
@@ -171,12 +168,15 @@ const GALegend = (props) => {
 
     // Get the rows and colors of the legend
     const cells = props.gaLegendList.map((gradLegendItem, index) => {
+        const className = "indivGALegend" + index;
+        console.log(className);
         return (
             <div
+                className={className}
                 key={index}
                 style={{backgroundColor: gradLegendItem.color}}
             >
-                {gradLegendItem.name}
+                <b>{gradLegendItem.name}</b>
             </div>
 
         )
@@ -185,9 +185,9 @@ const GALegend = (props) => {
     // Return full table component
     return (
         <div>
-            <h3>Graduate Attributes Legend</h3>
+            <div className="gaLegend">LEGEND</div>
             <div className="gradAttributeLegend">
-                
+                <div className="attributeDescription">Learn more about which courses satisfy your degree requirements.</div>
                 {cells}
             </div>
         </div>
@@ -430,19 +430,19 @@ class App extends Component {
             gaLegendList: [
                 {
                     name: "Introduced",
-                    color: 'white',
+                    color: '#2697FF',
                 },
                 {
                     name: "Developed",
-                    color: '#eca5a0',
+                    color: '#32D0F2',
                 },
                 {
                     name: "Applied",
-                    color: '#e7574d',
+                    color: '#80E4C6',
                 },
                 {
                     name: "Collected",
-                    color: '#e93427',
+                    color: '#FFFFFF',
                 },
             ],
 
@@ -782,9 +782,9 @@ class App extends Component {
                             />
                         </div>)}
 
-                    <strong style={{ color: 'darkgreen', fontSize: '30px' }}>
+                    <div className='additionOptions'>
                         ADDITIONAL OPTIONS
-                    </strong>
+                    </div>
 
                     <div className="lowerStuff">
                         <div className='catagoryWrapper'>
