@@ -70,7 +70,7 @@ const CourseCatagory = (props) => {
 
     return (
         <div>
-            <h3>Course Category</h3>
+            <div style={{ color: 'darkgreen', fontSize: '23px' }}>COURSE CATEGORIES</div>
             <div className="courseCategoryPalette">
                 <p style={{fontSize: '16px'}}>Click on a Category Below
                     to Highlight all Related Courses</p>
