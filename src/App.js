@@ -482,7 +482,7 @@ class App extends Component {
             this.setState({selectedAtt: ""});
             structure.map((term, termIndex) => {
                 term.courses.map((courseMap, courseIndex) => {
-                    structure[termIndex].courses[courseIndex].color = '#8C6565';
+                    structure[termIndex].courses[courseIndex].color = '#ced4da';
                 })
             })
         } 
@@ -515,7 +515,7 @@ class App extends Component {
             this.setState({selectedGroup: ""});
             structure.map((term, termIndex) => {
                 term.courses.map((courseMap, courseIndex) => {
-                    structure[termIndex].courses[courseIndex].color = "#8C6565";
+                    structure[termIndex].courses[courseIndex].color = "#ced4da";
                 })
             })
         } 
@@ -781,6 +781,10 @@ class App extends Component {
                                          setPlanChanged={this.setPlanChanged}
                             />
                         </div>)}
+
+                    <strong style={{ color: 'darkgreen', fontSize: '30px' }}>
+                        ADDITIONAL OPTIONS
+                    </strong>
 
                     <div className="lowerStuff">
                         <div className='catagoryWrapper'>
