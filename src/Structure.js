@@ -16,6 +16,7 @@ class Structure extends Component {
             shouldAdjustPosition: false,
         };
 
+        this.courseList = [];
         this.orCaseList = [];
         this.divRefs = [];
     }
@@ -42,120 +43,41 @@ class Structure extends Component {
      * */
     handleOnClick = (courses, index, update, lineMap, reqMap) => {
 
-        console.log(lineMap);
+        const selectedCourse = courses[index].name;
 
-        lineMap.forEach((value, key) => {
-            lineMap.get(key).map((line) => {
-                var textContent = line.end.textContent;
-                console.log(textContent);
-            })
-        })
-
-        const selectedCourseName = courses[index].name;
-
-        // removes all the lines when click a course again
-        if (lineMap.has(selectedCourseName)) {
-            lineMap.get(selectedCourseName).map((line) => {
+        // removes all the lines when click a course the second time
+        if (lineMap.has(selectedCourse)) {
+            lineMap.get(selectedCourse).map((line) => {
                 line.remove();
             });
-            lineMap.delete(selectedCourseName);
+            lineMap.delete(selectedCourse);
             update(lineMap);
 
         } else {
             this.setState({
-                selectedCourse: courses[index].name,
+                selectedCourse: selectedCourse,
             });
-
-            let selectedCourse = courses[index].name;
 
             const selectedRef = this.divRefs[index];
 
             if (reqMap[courses[index].name] !== undefined && reqMap[courses[index].name].preRe != null) {
-
                 const reqList = this.handleOrCase(reqMap[courses[index].name].preRe);
-
-                reqList.map((prerequisite) => {
-
-                    const courseWithPrerequisite = courses.find((course, index) => {
-                        return prerequisite === course.name;
-                    })
-
-                    const prerequisiteIndex = courseWithPrerequisite ? courses.indexOf(courseWithPrerequisite) : null;
-
-                    if (prerequisiteIndex !== null) {
-                        const startRef = this.divRefs[prerequisiteIndex];
-                        lineMap = this.handleLineDrawing(startRef, selectedRef, lineMap, selectedCourse, true);
-                        update(lineMap);
-                    } else {
-                        console.log(`Prerequisites for ${selectedRef.textContent} not found.`);
-                    }
-                })
+                this.handleLine(reqList, lineMap, selectedCourse, update, courses, selectedRef, true, false);
             }
 
             if (reqMap[courses[index].name] !== undefined && reqMap[courses[index].name].coRe != null) {
-
                 const reqList = this.handleOrCase(reqMap[courses[index].name].coRe);
-
-                reqList.map((corequisite) => {
-
-                    const courseWithCorequisite = courses.find((course, index) => {
-                        return corequisite === course.name;
-                    })
-
-                    const corequisiteIndex = courseWithCorequisite ? courses.indexOf(courseWithCorequisite) : null;
-
-                    if (corequisiteIndex !== null) {
-                        const startRef = this.divRefs[corequisiteIndex];
-                        lineMap = this.handleLineDrawing(startRef, selectedRef, lineMap, selectedCourse, false);
-                        update(lineMap);
-                    } else {
-                        console.log(`Corequisites for ${selectedRef.textContent} not found.`);
-                    }
-                })
+                this.handleLine(reqList, lineMap, selectedCourse, update, courses, selectedRef, false,false);
             }
 
             if (reqMap[courses[index].name] !== undefined && reqMap[courses[index].name].postReq != null) {
-
                 const reqList = this.handleOrCase(reqMap[courses[index].name].postReq);
-
-                reqList.map((postRequisite) => {
-
-                    const courseWithPostRequisite = courses.find((course, index) => {
-                        return postRequisite === course.name;
-                    })
-
-                    const postRequisiteIndex = courseWithPostRequisite ? courses.indexOf(courseWithPostRequisite) : null;
-
-                    if (postRequisiteIndex !== null) {
-                        const endRef = this.divRefs[postRequisiteIndex];
-                        lineMap = this.handleLineDrawing(selectedRef, endRef, lineMap, selectedCourse, true);
-                        update(lineMap);
-                    } else {
-                        console.log(`PostRequisites for ${selectedRef.textContent} not found.`);
-                    }
-                })
+                this.handleLine(reqList, lineMap, selectedCourse, update, courses, selectedRef, true,true);
             }
 
             if (reqMap[courses[index].name] !== undefined && reqMap[courses[index].name].cocoRe != null) {
-
                 const reqList = this.handleOrCase(reqMap[courses[index].name].cocoRe);
-
-                reqList.map((cocorequisite) => {
-
-                    const courseWithCocorequisite = courses.find((course, index) => {
-                        return cocorequisite === course.name;
-                    })
-
-                    const cocoRequisiteIndex = courseWithCocorequisite ? courses.indexOf(courseWithCocorequisite) : null;
-
-                    if (cocoRequisiteIndex !== null) {
-                        const endRef = this.divRefs[cocoRequisiteIndex];
-                        lineMap = this.handleLineDrawing(selectedRef, endRef, lineMap, selectedCourse, false);
-                        update(lineMap);
-                    } else {
-                        console.log(`CocoRequisites for ${selectedRef.textContent} not found.`);
-                    }
-                })
+                this.handleLine(reqList, lineMap, selectedCourse, update, courses, selectedRef, false,true);
             }
 
         }
@@ -185,6 +107,57 @@ class Structure extends Component {
         }
 
         return updatedPreReList;
+    }
+
+    handleLine = (reqList, lineMap, selectedCourse, update, courses, selectedRef, preOrCo, preOrPost) => {
+
+        reqList.map((requisite) => {
+
+            // remove duplicate lines
+            lineMap.forEach((value, key) => {
+                lineMap.get(key).map((line) => {
+                    let lineText;
+
+                    if (preOrPost) {
+                        lineText = line.start.textContent;
+                    } else {
+                        lineText = line.end.textContent;
+                    }
+
+                    if (key === requisite && lineText === selectedCourse) {
+                        line.remove();
+                        const updatedLines = lineMap.get(key).filter((indivLine) => indivLine !== line);
+                        lineMap.set(key, updatedLines);
+
+                        if (lineMap.get(key).length === 0) {
+                            lineMap.delete(key);
+                        }
+                    }
+                })
+            })
+
+            update(lineMap);
+
+            const courseWithRequisite = courses.find((course, index) => {
+                return requisite === course.name;
+            })
+
+            const requisiteIndex = courseWithRequisite ? courses.indexOf(courseWithRequisite) : null;
+
+            if (requisiteIndex !== null) {
+                if (preOrPost) {
+                    const endRef = this.divRefs[requisiteIndex];
+                    lineMap = this.handleLineDrawing(selectedRef, endRef, lineMap, selectedCourse, preOrCo);
+                    update(lineMap);
+                } else {
+                    const startRef = this.divRefs[requisiteIndex];
+                    lineMap = this.handleLineDrawing(startRef, selectedRef, lineMap, selectedCourse, preOrCo);
+                    update(lineMap);
+                }
+            } else {
+                console.log(`Requisites for ${selectedRef.textContent} not found.`);
+            }
+        })
     }
 
     handleLineDrawing = (startRef, endRef, lineMap, selectedCourse, type) => {
@@ -227,6 +200,9 @@ class Structure extends Component {
 
     handleMouseEnter = (indexx) => {
 
+        /**
+         * only one course description can be poped up at a time
+         * */
         const updatedShowDescriptions = Object.keys(this.state.showDescriptions).reduce((acc, key) => {
             acc[key] = false;
             return acc;
@@ -252,6 +228,9 @@ class Structure extends Component {
         this.setState({showDescriptions: {...this.state.showDescriptions, [indexx]: false}});
     }
 
+    /**
+     * relocate the out of bound description
+     * */
     adjustDescriptionPosition = (indexx) => {
 
         const descriptionDiv = document.querySelector('.description');
@@ -279,10 +258,51 @@ class Structure extends Component {
         }
     };
 
+    /**
+     * render the individual course div
+     * */
+    renderCourseDiv = (coursesList, index, courseItem, name, orCase) => {
+
+        const className = (orCase) ? 'indivOrCourse' : 'indivCourses'
+
+        return (
+            <div>
+                <div className={className}
+                     id={index.toString()}
+                     key={index}
+                     ref={(el) => this.divRefs[index] = el}
+                     onClick={() => this.handleOnClick(coursesList, index, this.props.updateLineMap, this.props.lineMap, this.props.reqMap)}
+                     style={{backgroundColor: courseItem.color}}
+                     onMouseEnter={() => this.handleMouseEnter(index)}
+                     onMouseLeave={() => this.handleMouseLeave(index)}
+                     onMouseDown={() => this.handleMouseLeave(index)}
+                >
+                    {name}
+                </div>
+                {this.state.showDescriptions[index] &&
+                    <div className="description">
+                        <strong>{courseItem.extendedName}</strong>
+                        <br/>
+                        <div>
+                            {courseItem.description}
+                            {courseItem.accreditionUnits && (
+                                <>
+                                    <br/>
+                                    <b>Accreditation Unit:</b>
+                                    <br/>
+                                    {courseItem.accreditionUnits}
+                                </>
+                            )}
+
+                        </div>
+                    </div>}
+            </div>
+        )
+    }
 
     render() {
 
-        const {structure, updateLineMap, lineMap, reqMap} = this.props;
+        const {structure, lineMap} = this.props;
 
         let cloneStructure = cloneDeep(structure);
 
@@ -293,10 +313,24 @@ class Structure extends Component {
             })
         ));
 
-        let globalIndex = 0;
+        this.courseList = [];
 
         const term = structure.map((termColumn, termIndex) => {
             const courseDivs = termColumn.courses.map((courseItem, index) => {
+
+                let name = courseItem.name;
+
+                const nameReplaceMap = {
+                    "COMP": "Complementary Studies",
+                    "ITS": "ITS Electives",
+                    "PROG": "Program/Technical Electives"
+                };
+
+                Object.keys(nameReplaceMap).forEach(key => {
+                    if (name.includes(key)) {
+                        name = name.replace(key, nameReplaceMap[key]);
+                    }
+                });
 
                 const courseIndex = index;
 
@@ -319,22 +353,11 @@ class Structure extends Component {
                     return null;
                 }
 
-                const indexx = globalIndex;
-                globalIndex++;
-                let name = courseItem.name;
-
-                if (name.includes("COMP")) {
-                    name = name.replace("COMP", "Complementary Studies")
-                } else if (courseItem.name.includes("ITS")) {
-                    name = name.replace("ITS", "ITS Electives");
-                } else if (courseItem.name.includes("PROG")) {
-                    name = name.replace("PROG", "Program/Technical Electives");
-                }
-
                 if (courseItem.orCase) {
 
-                    globalIndex--;
-
+                    /**
+                     * get the or course list
+                     * */
                     let orCaseList = [];
                     orCaseList.push(courseItem.name);
                     orCaseList.push(courseItem.orCase);
@@ -354,46 +377,17 @@ class Structure extends Component {
 
                     this.orCaseList = orCaseList;
 
+                    /**
+                     * iterate the orCaseList to create all the or case element
+                     * */
                     const orCase = orCaseList.map((orCaseCourse, index) => {
 
-                        let orCaseIndex = globalIndex;
-                        globalIndex++;
+                        let orCaseIndex = this.courseList.length;
+                        this.courseList.push(orCaseCourse);
 
                         const orCaseCourseInfo = structure[termIndex].courses[courseIndex + index];
 
-                        const orCourseElement = (
-                            <div>
-                                <div className='indivOrCourse'
-                                     id={orCaseIndex.toString()}
-                                     key={orCaseIndex}
-                                     ref={(el) => this.divRefs[orCaseIndex] = el}
-                                     onClick={() => this.handleOnClick(coursesList, orCaseIndex, updateLineMap, lineMap, reqMap)}
-                                     style={{backgroundColor: courseItem.color}}
-                                     onMouseEnter={() => this.handleMouseEnter(orCaseIndex)}
-                                     onMouseLeave={() => this.handleMouseLeave(orCaseIndex)}
-                                     onMouseDown={() => this.handleMouseLeave(orCaseIndex)}
-                                >
-                                    {orCaseCourse}
-                                </div>
-                                {this.state.showDescriptions[orCaseIndex] &&
-                                    <div className="description">
-                                        <strong>{orCaseCourseInfo.extendedName}</strong>
-                                        <br/>
-                                        <div>
-                                            {orCaseCourseInfo.description}
-                                            {orCaseCourseInfo.accreditionUnits && (
-                                                <>
-                                                    <br/>
-                                                    <b>Accreditation Unit:</b>
-                                                    <br/>
-                                                    {orCaseCourseInfo.accreditionUnits}
-                                                </>
-                                            )}
-
-                                        </div>
-                                    </div>}
-                            </div>
-                        );
+                        const orCourseElement = this.renderCourseDiv(coursesList, orCaseIndex, orCaseCourseInfo, orCaseCourse, true);
 
                         const orElement = (
                             <div className='orCircle'>
@@ -414,39 +408,11 @@ class Structure extends Component {
                         </div>
                     )
                 } else {
-                    return (
-                        <div>
-                            <div className='indivCourses'
-                                 key={indexx}
-                                 id={indexx.toString()}
-                                 ref={(el) => this.divRefs[indexx] = el}
-                                 onClick={() => this.handleOnClick(coursesList, indexx, updateLineMap, lineMap, reqMap)}
-                                 style={{backgroundColor: courseItem.color}}
-                                 onMouseEnter={() => this.handleMouseEnter(indexx)}
-                                 onMouseLeave={() => this.handleMouseLeave(indexx)}
-                                 onMouseDown={() => this.handleMouseLeave(indexx)}
-                            >
-                                {name}
-                            </div>
-                            {this.state.showDescriptions[indexx] &&
-                                <div className="description">
-                                    <strong>{courseItem.extendedName}</strong>
-                                    <br/>
-                                    <div>
-                                        {courseItem.description}
-                                        {courseItem.accreditionUnits && (
-                                            <>
-                                                <br/>
-                                                <b>Accreditation Unit:</b>
-                                                <br/>
-                                                {courseItem.accreditionUnits}
-                                            </>
-                                        )}
 
-                                    </div>
-                                </div>}
-                        </div>
-                    )
+                    let indexx = this.courseList.length;
+                    this.courseList.push(courseItem.name);
+
+                    return this.renderCourseDiv(coursesList, indexx, courseItem, name, false);
                 }
             })
 
