@@ -42,6 +42,15 @@ class Structure extends Component {
      * */
     handleOnClick = (courses, index, update, lineMap, reqMap) => {
 
+        console.log(lineMap);
+
+        lineMap.forEach((value, key) => {
+            lineMap.get(key).map((line) => {
+                var textContent = line.end.textContent;
+                console.log(textContent);
+            })
+        })
+
         const selectedCourseName = courses[index].name;
 
         // removes all the lines when click a course again
@@ -63,155 +72,144 @@ class Structure extends Component {
 
             if (reqMap[courses[index].name] !== undefined && reqMap[courses[index].name].preRe != null) {
 
-                reqMap[courses[index].name].preRe.map((prerequisite) => {
+                const reqList = this.handleOrCase(reqMap[courses[index].name].preRe);
 
-                    // use dash line to show there is a or case
-                    if (prerequisite.toLowerCase().includes("or")) {
+                reqList.map((prerequisite) => {
 
-                        let catalogs = this.handleOrCase(prerequisite);
+                    const courseWithPrerequisite = courses.find((course, index) => {
+                        return prerequisite === course.name;
+                    })
 
-                        catalogs.map((prerequisite) => {
+                    const prerequisiteIndex = courseWithPrerequisite ? courses.indexOf(courseWithPrerequisite) : null;
 
-                            const courseWitPrerequisite = courses.find((course) => {
-                                return prerequisite === course.name;
-                            });
-
-                            const prerequisiteIndex = courseWitPrerequisite ? courses.indexOf(courseWitPrerequisite) : null;
-
-                            if (prerequisiteIndex !== null) {
-                                const startRef = this.divRefs[prerequisiteIndex];
-                                const line = new LeaderLine(startRef, selectedRef, {
-                                    color: 'red',
-                                    dash: {},
-                                });
-
-                                if (!lineMap.has(selectedCourse)) {
-                                    lineMap.set(selectedCourse, []);
-                                }
-
-                                if (!lineMap.get(selectedCourse).includes(line)) {
-                                    lineMap.get(selectedCourse).push(line);
-                                    update(lineMap);
-                                }
-
-                            } else {
-                                console.log(`Prerequisites for ${selectedRef.textContent} not found.`);
-                            }
-                        })
-
+                    if (prerequisiteIndex !== null) {
+                        const startRef = this.divRefs[prerequisiteIndex];
+                        lineMap = this.handleLineDrawing(startRef, selectedRef, lineMap, selectedCourse, true);
+                        update(lineMap);
                     } else {
-                        // use solid line to show general case
-                        const courseWitPrerequisite = courses.find((course, index) => {
-                            return prerequisite === course.name;
-                        })
-
-                        const prerequisiteIndex = courseWitPrerequisite ? courses.indexOf(courseWitPrerequisite) : null;
-
-                        if (prerequisiteIndex !== null) {
-                            const startRef = this.divRefs[prerequisiteIndex];
-                            const line = new LeaderLine(startRef, selectedRef, {
-                                color: 'red',
-                            });
-
-                            if (!lineMap.has(selectedCourse)) {
-                                lineMap.set(selectedCourse, []);
-                            }
-
-                            if (!lineMap.get(selectedCourse).includes(line)) {
-                                lineMap.get(selectedCourse).push(line);
-                                update(lineMap);
-                            }
-
-                        } else {
-                            console.log(`Prerequisites for ${selectedRef.textContent} not found.`);
-                        }
+                        console.log(`Prerequisites for ${selectedRef.textContent} not found.`);
                     }
                 })
             }
-            ;
 
             if (reqMap[courses[index].name] !== undefined && reqMap[courses[index].name].coRe != null) {
-                reqMap[courses[index].name].coRe.map((corequisite) => {
 
-                    if (corequisite.toLowerCase().includes("or")) {
+                const reqList = this.handleOrCase(reqMap[courses[index].name].coRe);
 
-                        let catalogs = this.handleOrCase(corequisite);
+                reqList.map((corequisite) => {
 
-                        catalogs.map((corequisite) => {
-                            corequisite = corequisite.trimEnd().trimStart();
-                            const courseWithCorequisite = courses.find((course) => {
-                                return corequisite === course.name;
-                            });
+                    const courseWithCorequisite = courses.find((course, index) => {
+                        return corequisite === course.name;
+                    })
 
-                            const corequisiteIndex = courseWithCorequisite ? courses.indexOf(courseWithCorequisite) : null;
+                    const corequisiteIndex = courseWithCorequisite ? courses.indexOf(courseWithCorequisite) : null;
 
-                            if (corequisiteIndex !== null) {
-                                const endRef = this.divRefs[corequisiteIndex];
-                                const line = new LeaderLine(selectedRef, endRef, {
-                                    color: 'red',
-                                    dash: {},
-                                });
-
-                                if (!lineMap.has(selectedCourse)) {
-                                    lineMap.set(selectedCourse, []);
-                                }
-
-                                if (!lineMap.get(selectedCourse).includes(line)) {
-                                    lineMap.get(selectedCourse).push(line);
-                                    update(lineMap);
-                                }
-
-                            } else {
-                                console.log(`Corequisites for ${selectedRef.textContent} not found.`);
-                            }
-                        })
+                    if (corequisiteIndex !== null) {
+                        const startRef = this.divRefs[corequisiteIndex];
+                        lineMap = this.handleLineDrawing(startRef, selectedRef, lineMap, selectedCourse, false);
+                        update(lineMap);
                     } else {
-
-                        const courseWithCorequisite = courses.find((course) => {
-                            return corequisite === course.name;
-                        });
-
-                        const corequisiteIndex = courseWithCorequisite ? courses.indexOf(courseWithCorequisite) : null;
-
-                        if (corequisiteIndex != null) {
-                            const endRef = this.divRefs[corequisiteIndex];
-                            const line = new LeaderLine(selectedRef, endRef, {
-                                color: 'red',
-                            });
-
-                            if (!lineMap.has(selectedCourse)) {
-                                lineMap.set(selectedCourse, []);
-                            }
-
-                            if (!lineMap.get(selectedCourse).includes(line)) {
-                                lineMap.get(selectedCourse).push(line);
-                                update(lineMap);
-                            }
-
-                        } else {
-                            console.log(`Corequisites for ${selectedRef.textContent} not found.`);
-                        }
+                        console.log(`Corequisites for ${selectedRef.textContent} not found.`);
                     }
-                });
+                })
             }
+
+            if (reqMap[courses[index].name] !== undefined && reqMap[courses[index].name].postReq != null) {
+
+                const reqList = this.handleOrCase(reqMap[courses[index].name].postReq);
+
+                reqList.map((postRequisite) => {
+
+                    const courseWithPostRequisite = courses.find((course, index) => {
+                        return postRequisite === course.name;
+                    })
+
+                    const postRequisiteIndex = courseWithPostRequisite ? courses.indexOf(courseWithPostRequisite) : null;
+
+                    if (postRequisiteIndex !== null) {
+                        const endRef = this.divRefs[postRequisiteIndex];
+                        lineMap = this.handleLineDrawing(selectedRef, endRef, lineMap, selectedCourse, true);
+                        update(lineMap);
+                    } else {
+                        console.log(`PostRequisites for ${selectedRef.textContent} not found.`);
+                    }
+                })
+            }
+
+            if (reqMap[courses[index].name] !== undefined && reqMap[courses[index].name].cocoRe != null) {
+
+                const reqList = this.handleOrCase(reqMap[courses[index].name].cocoRe);
+
+                reqList.map((cocorequisite) => {
+
+                    const courseWithCocorequisite = courses.find((course, index) => {
+                        return cocorequisite === course.name;
+                    })
+
+                    const cocoRequisiteIndex = courseWithCocorequisite ? courses.indexOf(courseWithCocorequisite) : null;
+
+                    if (cocoRequisiteIndex !== null) {
+                        const endRef = this.divRefs[cocoRequisiteIndex];
+                        lineMap = this.handleLineDrawing(selectedRef, endRef, lineMap, selectedCourse, false);
+                        update(lineMap);
+                    } else {
+                        console.log(`CocoRequisites for ${selectedRef.textContent} not found.`);
+                    }
+                })
+            }
+
         }
     }
-
 
     /**
      *
      *  Split the requisite (if there is one or more than one "or" in the requisites to several courses)
      *
      * */
-    handleOrCase = (requisite) => {
+    handleOrCase = (reqList) => {
 
-        let reqList = requisite.split("or");
+        const updatedPreReList = [];
 
-        reqList = reqList.map((requisite) => {
-            return requisite.trimEnd().trimStart();
-        })
+        for (let i = 0; i < reqList.length; i++) {
+            const element = reqList[i];
 
-        return reqList;
+            if (element.includes("or")) {
+                // split by or
+                const splittedElements = element.split("or");
+
+                // add to new list
+                updatedPreReList.push(...splittedElements.map((item) => item.trim()));
+            } else {
+                updatedPreReList.push(element);
+            }
+        }
+
+        return updatedPreReList;
+    }
+
+    handleLineDrawing = (startRef, endRef, lineMap, selectedCourse, type) => {
+        let line;
+
+        if (type) {
+            line = new LeaderLine(startRef, endRef, {
+                color: 'black',
+            });
+        } else {
+            line = new LeaderLine(startRef, endRef, {
+                color: 'black',
+                dash: {},
+            })
+        }
+
+        if (!lineMap.has(selectedCourse)) {
+            lineMap.set(selectedCourse, []);
+        }
+
+        if (!lineMap.get(selectedCourse).includes(line)) {
+            lineMap.get(selectedCourse).push(line);
+        }
+
+        return lineMap;
     }
 
     /**
@@ -271,7 +269,7 @@ class Structure extends Component {
                 courseRect = courseDiv.getBoundingClientRect();
 
                 if (rect.bottom > structureWrapperRect.bottom) {
-                    descriptionDiv.style.bottom = `${structureWrapperRect.bottom - courseRect.top - 140}px`;
+                    descriptionDiv.style.bottom = `${structureWrapperRect.bottom - courseRect.top - 60}px`;
                 }
 
                 if (rect.right > structureWrapperRect.right) {
