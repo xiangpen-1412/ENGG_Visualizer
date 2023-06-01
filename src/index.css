@@ -26,9 +26,6 @@ code {
     /* border: 2px solid rgb(131, 131, 131); */
     /* border-radius: 5px; */
 
-    margin-left: 10%;
-    margin-right: 10%;
-
     border-left: 1px solid rgb(180, 186, 192);
     border-right: 1px solid rgb(180, 186, 192);
 }
@@ -163,6 +160,7 @@ code {
     align-items: center;
 
     margin: 10px 10px 10px 10px;
+    font-size: 15px;
 }
 
 .description {

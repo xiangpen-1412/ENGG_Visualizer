@@ -16,6 +16,9 @@
     align-items: center;
     height: 100%;
     /* justify-content: space-evenly; */
+
+    margin-left: 10%;
+    margin-right: 10%;
 }
 
 .backButton {
@@ -269,7 +272,8 @@
 
 
 .part {
-    margin-left: 10px;
+    margin-left: 10%;
+    margin-right: 10%;
 }
 
 @media (prefers-reduced-motion: no-preference) {
