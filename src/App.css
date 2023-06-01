@@ -87,7 +87,7 @@
 }
 
 .pageTitle {
-    margin: 40px 10px 30px 20px;
+    margin: 40px 10px 30px 0px;
     color: rgb(39, 93, 56);
     font-size: 50px;
     font-family: 'Roboto', sans-serif;
@@ -95,7 +95,7 @@
 }
 
 .allPlans {
-    margin: 10px 10px 10px 20px;
+    margin: 10px 10px 10px 0px;
 }
 
 .planPalette {
@@ -132,7 +132,7 @@
 
 
 .allGroups {
-    margin: 10px 10px 10px 20px;
+    margin: 10px 10px 10px 0px;
     display: flex;
 }
 
