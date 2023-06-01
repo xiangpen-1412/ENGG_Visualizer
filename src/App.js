@@ -763,6 +763,9 @@ class App extends Component {
                 </div>
 
                 <div className='part'>
+                    <div className='pageTitle'>
+                        Engineering Plan Visualizer
+                    </div>
                     <div className='planWrapper'>
                         <Plans setSelectedProgramPlan={this.setSelectedProgramPlan}
                         />
