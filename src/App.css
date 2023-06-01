@@ -163,9 +163,11 @@
 
 
 .lowerStuff {
+
+    background-color: #E8ECEF;
     display: flex;
     flex-direction: row;
-    margin: 5px 5px 80px 5px;
+    margin: 25px 0px 50px 0px;
 
     justify-content: flex-start;
 
