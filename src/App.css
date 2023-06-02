@@ -200,7 +200,7 @@
     padding: 15px;
     width: 490px;
     min-height: 400px;
-    margin-right: 60px;
+    margin-right: 10px;
 
     display: flex;
     overflow: hidden;
@@ -230,8 +230,8 @@
     /* Background and text color of each category div*/
     background-color: rgb(206, 212, 218);
     
-    width: 190px;           /* Width of each category div*/
-    height: 55px;
+    width: 170px;           /* Width of each category div*/
+    height: 47px;
     font-size: 16px;        /* Font of text inside category div*/
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
@@ -266,7 +266,7 @@
     overflow: hidden;
     max-width: 600px;
 
-    margin-right: 60px;
+    margin-right: 10px;
 }
 
 .gradAttTitle {
@@ -295,8 +295,8 @@
     /* Background and text color of each category div*/
     background-color: rgb(206, 212, 218);
 
-    width: 190px;           /* Width of each category div*/
-    height: 55px;
+    width: 170px;           /* Width of each category div*/
+    height: 47px;
     font-size: 16px;        /* Font of text inside category div*/
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
