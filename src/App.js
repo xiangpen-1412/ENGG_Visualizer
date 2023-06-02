@@ -5,120 +5,6 @@ import Structure from './Structure.js';
 import {useLocation, useNavigate} from 'react-router-dom';
 import RESTController from "./controller/RESTController";
 
-const GradAttributes = (props) => {
-    const cells = props.gradAttributeList.map((gradAttribute, index) => {
-        return (
-            <div
-                key={index}
-                className="indvGradAttribute"
-                onClick={(event) => {
-                    props.setGradAttributeColor(event, gradAttribute)
-                }}
-            >
-                {gradAttribute}
-            </div>
-        )
-    })
-
-    return (
-        <div>
-            <div className="gradAttTitle">GRADUATE ATTRIBUTES</div>
-            <div className="gradAttributePalette">
-                <div className="attributeDescription">Learn more about which courses satisfy your degree requirements.</div>
-                {cells}
-            </div>
-        </div>
-    )
-}
-
-const CourseCatagory = (props) => {
-
-    const location = useLocation();
-    const {selectedProgram} = location.state;
-
-    const cells = props.categoryList.map((catagory, index) => {
-
-        if (selectedProgram === "Computer Engineering") {
-            if (index > 9) {
-                return null;
-            }
-
-        } else if (selectedProgram === "Mechatronics Engineering") {
-            if (index === 9) {
-                return null;
-            }
-
-        } else {
-            if (index > 8) {
-                return null;
-            }
-
-        } return (
-            <div
-                key={index}
-                className="indvCatagory"
-                onClick={(event) => {
-                    props.setCatagoryColor(event, catagory)
-                }}
-            >
-                {catagory.name}
-            </div>
-        )
-    })
-
-    return (
-        <div>
-            <div className="courseCategoryTitle">COURSE CATEGORIES</div>
-            <div className="courseCategoryPalette">
-                <div className="categoryDescription">Learn more about what categories your courses belong to.</div>
-                {cells}
-            </div>
-        </div>
-        
-    )
-}
-
-
-const Instructions = () => {
-
-    return (
-        <div>
-        <h3>Visualizer Instruction</h3>
-        <p>Welcome to the University of Alberta's Engineering Program Plan Visualizer.</p>
-        <p>This tool is designed to help you navigate the structure of your chosen program plan. </p>
-        <p>Here is a guide to using the tool:</p>
-        <ul>
-            <li><strong>Select plans:</strong>
-                To see all the courses in a program, choose a plan from the Plan menu at the top. All
-                courses in 8 or more terms will be displayed below. For Mechanical Engineering, you will
-                need to select a group after selecting a plan.
-            </li>
-            <li><strong>Course Description:</strong> By hovering over a course in the terms below, you
-                can view its course description. This provides details about the course content, hours
-                and credits.
-            </li>
-            <li><strong>Prerequisites and Corequisites:</strong> Left-clicking on a course will display
-                any prerequisites with yellow arrows and corequisites with red arrows.
-            </li>
-            <li><strong>Course Group:</strong> Click on a course in the Course Group Palette to see all
-                the courses that belong to the course group. This is useful for getting an overview of
-                courses with similar content or learning objectives.
-            </li>
-            <li><strong>Graduation Attributes:</strong> Clicking on a graduate attribute in the Graduate
-                Attributes palette highlights each course in that category. The more red a course, the
-                more it embodies that attribute. Please refer to the Graduate Attributes legends for
-                more details. This displays where each learning outcome is met throughout a degree
-                program.
-            </li>
-        </ul>
-        <p>We hope this tool aids your understanding of your chosen engineering program and supports
-            your academic planning process. If you have any questions or encounter any difficulties,
-            please do not hesitate to contact us at dnobes@ualberta.ca. </p>
-        </div>
-    );
-}
-
-
 const Header = (props) => {
 
     const location = useLocation();
@@ -155,13 +41,127 @@ const Header = (props) => {
 
             {showGuide && (
                 <div className="guideWrapper">
-                    <Instructions />
+                    <Instructions/>
                 </div>
             )}
         </header>
     );
 };
 
+const Instructions = () => {
+
+    return (
+        <div>
+            <h3>Visualizer Instruction</h3>
+            <p>Welcome to the University of Alberta's Engineering Program Plan Visualizer.</p>
+            <p>This tool is designed to help you navigate the structure of your chosen program plan. </p>
+            <p>Here is a guide to using the tool:</p>
+            <ul>
+                <li><strong>Select plans:</strong>
+                    To see all the courses in a program, choose a plan from the Plan menu at the top. All
+                    courses in 8 or more terms will be displayed below. For Mechanical Engineering, you will
+                    need to select a group after selecting a plan.
+                </li>
+                <li><strong>Course Description:</strong> By hovering over a course in the terms below, you
+                    can view its course description. This provides details about the course content, hours
+                    and credits.
+                </li>
+                <li><strong>Prerequisites and Corequisites:</strong> Left-clicking on a course will display
+                    any prerequisites with yellow arrows and corequisites with red arrows.
+                </li>
+                <li><strong>Course Group:</strong> Click on a course in the Course Group Palette to see all
+                    the courses that belong to the course group. This is useful for getting an overview of
+                    courses with similar content or learning objectives.
+                </li>
+                <li><strong>Graduation Attributes:</strong> Clicking on a graduate attribute in the Graduate
+                    Attributes palette highlights each course in that category. The more red a course, the
+                    more it embodies that attribute. Please refer to the Graduate Attributes legends for
+                    more details. This displays where each learning outcome is met throughout a degree
+                    program.
+                </li>
+            </ul>
+            <p>We hope this tool aids your understanding of your chosen engineering program and supports
+                your academic planning process. If you have any questions or encounter any difficulties,
+                please do not hesitate to contact us at dnobes@ualberta.ca. </p>
+        </div>
+    );
+}
+
+
+const GradAttributes = (props) => {
+    const cells = props.gradAttributeList.map((gradAttribute, index) => {
+        return (
+            <div
+                key={index}
+                className="indvGradAttribute"
+                onClick={(event) => {
+                    props.setGradAttributeColor(event, gradAttribute)
+                }}
+            >
+                {gradAttribute}
+            </div>
+        )
+    })
+
+    return (
+        <div>
+            <div className="gradAttTitle">GRADUATE ATTRIBUTES</div>
+            <div className="gradAttributePalette">
+                <div className="attributeDescription">Learn more about which courses satisfy your degree requirements.
+                </div>
+                {cells}
+            </div>
+        </div>
+    )
+}
+
+const CourseCatagory = (props) => {
+
+    const location = useLocation();
+    const {selectedProgram} = location.state;
+
+    const cells = props.categoryList.map((catagory, index) => {
+
+        if (selectedProgram === "Computer Engineering") {
+            if (index > 9) {
+                return null;
+            }
+
+        } else if (selectedProgram === "Mechatronics Engineering") {
+            if (index === 9) {
+                return null;
+            }
+
+        } else {
+            if (index > 8) {
+                return null;
+            }
+
+        }
+        return (
+            <div
+                key={index}
+                className="indvCatagory"
+                onClick={(event) => {
+                    props.setCatagoryColor(event, catagory)
+                }}
+            >
+                {catagory.name}
+            </div>
+        )
+    })
+
+    return (
+        <div>
+            <div className="courseCategoryTitle">COURSE CATEGORIES</div>
+            <div className="courseCategoryPalette">
+                <div className="categoryDescription">Learn more about what categories your courses belong to.</div>
+                {cells}
+            </div>
+        </div>
+
+    )
+}
 
 // Legend for graduate attributes
 const GALegend = (props) => {
@@ -169,7 +169,6 @@ const GALegend = (props) => {
     // Get the rows and colors of the legend
     const cells = props.gaLegendList.map((gradLegendItem, index) => {
         const className = "indivGALegend" + index;
-        console.log(className);
         return (
             <div
                 className={className}
@@ -187,8 +186,27 @@ const GALegend = (props) => {
         <div>
             <div className="gaLegend">LEGEND</div>
             <div className="gradAttributeLegend">
-                <div className="attributeDescription">Learn more about which courses satisfy your degree requirements.</div>
+                <div className="attributeDescription">Learn more about graduate attributes levels.
+                </div>
                 {cells}
+            </div>
+        </div>
+    )
+}
+
+const RequisiteLegend = () => {
+    return (
+        <div className='requisiteLegend'>
+            <div className='requisiteLegendDescription'>Learn more about requisites symbols.</div>
+            <div className='requisiteLegendBorder'>
+                <div className='prerequisite'>
+                    Prerequisites:
+                    <img src="prerequisite.png" className='prerequisiteImage'/>
+                </div>
+                <div className='corequisite'>
+                    Corequisties:
+                    <img src="corequisite.png" className='corequisiteImage'/>
+                </div>
             </div>
         </div>
     )
@@ -483,10 +501,12 @@ class App extends Component {
             structure.map((term, termIndex) => {
                 term.courses.map((courseMap, courseIndex) => {
                     structure[termIndex].courses[courseIndex].color = '#ced4da';
+                    if (structure[termIndex].courses[courseIndex].border) {
+                        delete structure[termIndex].courses[courseIndex].border;
+                    }
                 })
             })
-        } 
-        else {
+        } else {
             // Get index of Grad Attribute from state array gradAttributeList
             attributeIndex = this.state.gradAttributeList.indexOf(gradAttribute);
 
@@ -494,8 +514,12 @@ class App extends Component {
                 term.courses.map((courseMap, courseIndex) => {
                     let attributeLevel = courseMap.attribute[attributeIndex]
 
-                    // Set red hue of each course based on grad attribute level
-                    structure[termIndex].courses[courseIndex].color = this.state.gaLegendList[attributeLevel].color;
+                    if (attributeLevel === 3) {
+                        structure[termIndex].courses[courseIndex].border = '4px solid gold';
+                    } else {
+                        // Set red hue of each course based on grad attribute level
+                        structure[termIndex].courses[courseIndex].color = this.state.gaLegendList[attributeLevel].color;
+                    }
                 })
             })
 
@@ -518,8 +542,7 @@ class App extends Component {
                     structure[termIndex].courses[courseIndex].color = "#ced4da";
                 })
             })
-        } 
-        else {
+        } else {
             switch (catagory.name) {
                 case "Math":
                     catagoryIndex = 0;
@@ -614,7 +637,7 @@ class App extends Component {
 
         this.setState({selectedProgram: selectedProgram, selectedPlan: selectedPlan, structure: [], planChanged: true});
         this.setState({group2: "", group3: "", group4: ""});
-        
+
         const haveCourseGroupOption = selectedProgram === "Mechanical Engineering" && !selectedPlan.includes("Co-op Plan 3");
         this.setState({containCourseGroup: haveCourseGroupOption}, () => {
             if (this.state.containCourseGroup) {
@@ -802,9 +825,14 @@ class App extends Component {
 
                         <div className='gradLegendWrapper'>
                             <GALegend gaLegendList={this.state.gaLegendList}/>
+                            <RequisiteLegend/>
                         </div>
                     </div>
 
+                    <div className='structureTitle'>COURSES</div>
+                    <div className='structureDescription'>  Below are each of the courses in each semester in your selected plan. Hover over a course to
+                        see it's course description. Click on a course to see it's prerequisites and coreqisites.
+                    </div>
                     <div className='structureWrapper'>
                         <Structure structure={structure}
                                    isToolTipOpen={this.state.isToolTipOpen}

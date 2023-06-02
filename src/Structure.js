@@ -67,17 +67,17 @@ class Structure extends Component {
 
             if (reqMap[courses[index].name] !== undefined && reqMap[courses[index].name].coRe != null) {
                 const reqList = this.handleOrCase(reqMap[courses[index].name].coRe);
-                this.handleLine(reqList, lineMap, selectedCourse, update, courses, selectedRef, false,false);
+                this.handleLine(reqList, lineMap, selectedCourse, update, courses, selectedRef, false, false);
             }
 
             if (reqMap[courses[index].name] !== undefined && reqMap[courses[index].name].postReq != null) {
                 const reqList = this.handleOrCase(reqMap[courses[index].name].postReq);
-                this.handleLine(reqList, lineMap, selectedCourse, update, courses, selectedRef, true,true);
+                this.handleLine(reqList, lineMap, selectedCourse, update, courses, selectedRef, true, true);
             }
 
             if (reqMap[courses[index].name] !== undefined && reqMap[courses[index].name].cocoRe != null) {
                 const reqList = this.handleOrCase(reqMap[courses[index].name].cocoRe);
-                this.handleLine(reqList, lineMap, selectedCourse, update, courses, selectedRef, false,true);
+                this.handleLine(reqList, lineMap, selectedCourse, update, courses, selectedRef, false, true);
             }
 
         }
@@ -272,7 +272,10 @@ class Structure extends Component {
                      key={index}
                      ref={(el) => this.divRefs[index] = el}
                      onClick={() => this.handleOnClick(coursesList, index, this.props.updateLineMap, this.props.lineMap, this.props.reqMap)}
-                     style={{backgroundColor: courseItem.color}}
+                     style={{
+                         backgroundColor: courseItem.color,
+                         border: courseItem.border ? courseItem.border : 'none'
+                     }}
                      onMouseEnter={() => this.handleMouseEnter(index)}
                      onMouseLeave={() => this.handleMouseLeave(index)}
                      onMouseDown={() => this.handleMouseLeave(index)}

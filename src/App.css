@@ -23,7 +23,6 @@
 
 .backButton {
     background-color: white;
-    font-size: 20px;
     font-family: "Times New Roman", serif;
     width: 90px;
     height: 45px;
@@ -79,11 +78,6 @@
 
     background-color: white;
     opacity: 1;
-}
-
-.structureWrapper {
-    margin-left: 20px;
-    margin-right: 20px;
 }
 
 .pageTitle {
@@ -182,6 +176,8 @@
     display: flex;
     align-items: center;
     justify-content: left;
+
+    margin-top: 50px;
 }
 
 .lowerStuff {
@@ -189,7 +185,7 @@
     background-color: #E8ECEF;
     display: flex;
     flex-direction: row;
-    margin: 23px 0px 50px 0px;
+    margin: 12px 0px 50px 0px;
 
     justify-content: flex-start;
 
@@ -204,6 +200,7 @@
     padding: 15px;
     width: 490px;
     min-height: 400px;
+    margin-right: 60px;
 
     display: flex;
     overflow: hidden;
@@ -233,8 +230,8 @@
     /* Background and text color of each category div*/
     background-color: rgb(206, 212, 218);
     
-    width: 174px;           /* Width of each category div*/
-    height: 47px;
+    width: 190px;           /* Width of each category div*/
+    height: 55px;
     font-size: 16px;        /* Font of text inside category div*/
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
@@ -268,6 +265,8 @@
 
     overflow: hidden;
     max-width: 600px;
+
+    margin-right: 60px;
 }
 
 .gradAttTitle {
@@ -296,8 +295,8 @@
     /* Background and text color of each category div*/
     background-color: rgb(206, 212, 218);
 
-    width: 174px;           /* Width of each category div*/
-    height: 47px;
+    width: 190px;           /* Width of each category div*/
+    height: 55px;
     font-size: 16px;        /* Font of text inside category div*/
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
@@ -318,31 +317,7 @@
     align-items: center;
 }
 
-.indivGALegend0 {
-    width: 414px;
-    height: 30px;
-
-    font-size: 15px;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 500;
-    border-radius: 1px;
-    display: flex;
-    align-items: center;
-}
-
-.indivGALegend1 {
-    width: 414px;
-    height: 30px;
-
-    font-size: 15px;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 500;
-    border-radius: 1px;
-    display: flex;
-    align-items: center;
-}
-
-.indivGALegend2 {
+.indivGALegend0, .indivGALegend1, .indivGALegend2 {
     width: 414px;
     height: 30px;
 
@@ -365,7 +340,7 @@
     display: flex;
     align-items: center;
 
-    border: #22CA65 solid 2px;
+    border: gold solid 2px;
     margin-top: 30px;
 }
 
@@ -392,6 +367,48 @@
     margin-left: 15px;
 }
 
+.requisiteLegend {
+    margin-left: 4px;
+    margin-top: 40px;
+}
+
+.requisiteLegendDescription {
+    color: #464646;
+    height: 35px;
+    width: 428px;
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+
+.requisiteLegendBorder {
+    background-color: #DDDFE1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    max-width: 420px;
+}
+
+.prerequisite, .corequisite  {
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    margin-left: 20px;
+
+    display: flex;
+    align-items: center;
+}
+
+.prerequisiteImage, .corequisiteImage {
+    margin-left: 5px;
+    width: 70%;
+    height: 50%;
+}
+
+.corequisiteImage {
+    margin-left: 9px;
+}
 
 .part {
     margin-left: 10%;

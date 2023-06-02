@@ -15,6 +15,28 @@ code {
     monospace;
 }
 
+.structureTitle {
+    width: 527px;
+    height: 68px;
+    color: #275D38;
+    font-size: 35px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+.structureDescription {
+    color: #464646;
+    height: 30px;
+    width: auto;
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+
+    margin-bottom: -15px;
+}
 .termWrapper {
     display: flex;
     flex-direction: row;
@@ -26,24 +48,28 @@ code {
     /* border: 2px solid rgb(131, 131, 131); */
     /* border-radius: 5px; */
 
-    border-left: 1px solid rgb(180, 186, 192);
+    /*border-left: 1px solid rgb(180, 186, 192);*/
     border-right: 1px solid rgb(180, 186, 192);
 }
 
 .term {
-    text-align: left;
+    text-align: center;
     /* Spacing on all sides of outside of Term palette*/
-    margin-right: 10px;
-    margin-left: 10px;
+    margin-right: 40px;
     display: inline-block;
+    align-items: center;
+    justify-content: center;
     /* width: 156px; */
     min-height: 300px;
     height: auto;
     margin-top: 15px;
 
+    max-width: 248px;
+
     border: 1px solid rgb(235, 235, 235);
     /* padding: 16px; */
 
+    border-radius: 4px;
 
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
@@ -52,7 +78,6 @@ code {
     /* font-family: 'Roboto';  */
     font-size: '30px';
     text-align: left;
-
 
     background-color: #F7F7F7;
     padding: 15px;
@@ -69,18 +94,21 @@ code {
     /* width: 140px; */
     min-height: 200px;
     height: auto;
+
+    width: 183px;
 }
 
 .indivCourses {
     /* border: 2px solid black; */
     background-color: rgb(206, 212, 218); /* Background color of each term div*/
     color: rgb(39, 93, 56); /* Text color of each term div*/
-    
-    width: 130px; /* Width of eachterm div*/
-    height: 40px;
+
+    width: 160px;/* Width of eachterm div*/
+    height: 50px;
     font-size: 15px; /* Font of text inside term div*/
     padding: 10px; /*Spacing on all sides of text inside a term div*/
     border-radius: 1px; /* Make the term divs rounded corners*/
+    margin-top: 10px;
     margin-bottom: 20px; /*Spacing between terms in term palette*/
     cursor: pointer; /* Looks good when cursor points to a term div*/
     text-align: center;
@@ -98,13 +126,13 @@ code {
 
 .orCaseDiv {
     border: 2px solid rgb(180, 186, 192);
-    width: 126px;
+    width: 160px;
 
-    min-height: 100px;
+    height: auto;
+    padding: 10px;
     /* margin-top: -20px; */
     margin-bottom: 20px;
     /* margin-left: -19px; */
-    padding: 10px 10px 10px 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -118,8 +146,8 @@ code {
 
     color: rgb(39, 93, 56);
     /* Width of eachterm div*/
-    width: 106px;
-    height: 40px;
+    width: 140px;/* Width of eachterm div*/
+    height: 45px;
     /* Font of text inside term div*/
     font-size: 15px;
     /*Spacing on all sides of text inside a term div*/
