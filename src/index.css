@@ -21,7 +21,7 @@ code {
     color: #275D38;
     font-size: 35px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 700;
+    font-weight: 500;
     display: flex;
     align-items: center;
     justify-content: left;
@@ -33,7 +33,7 @@ code {
     width: auto;
     font-size: 15px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 500;
+    font-weight: 400;
 
     margin-bottom: -15px;
 }
@@ -105,7 +105,7 @@ code {
 
     width: 160px;/* Width of eachterm div*/
     height: 50px;
-    font-size: 15px; /* Font of text inside term div*/
+    font-size: 18px; /* Font of text inside term div*/
     padding: 10px; /*Spacing on all sides of text inside a term div*/
     border-radius: 1px; /* Make the term divs rounded corners*/
     margin-top: 10px;
@@ -149,7 +149,7 @@ code {
     width: 140px;/* Width of eachterm div*/
     height: 45px;
     /* Font of text inside term div*/
-    font-size: 15px;
+    font-size: 18px;
     /*Spacing on all sides of text inside a term div*/
     padding: 10px;
     /* Make the term divs rounded corners*/

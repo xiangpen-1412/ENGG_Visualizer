@@ -41,9 +41,9 @@
 
 .site-title {
     color: goldenrod;
-    font-size: 23px;
-    font-weight: bold;
-    font-family: "Times New Roman", serif;
+    font-size: 27px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
     display: inline-block;
     text-align: center;
     justify-content: center;
@@ -85,11 +85,18 @@
     color: rgb(39, 93, 56);
     font-size: 50px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 300;
+    font-weight: 500;
 }
 
 .allPlans {
     margin: 10px 10px 10px 0px;
+}
+
+.SelectedPlanDescription {
+    color: #275d38;
+    font-size: 35px;        /* Font of text inside term div*/
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
 }
 
 .planPalette {
@@ -112,6 +119,8 @@
     width: 100px;           /* Width of eachterm div*/
     height: 38px;
     font-size: 14px;        /* Font of text inside term div*/
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
     padding: 10px;          /*Spacing on all sides of text inside a term div*/
     margin-left: 5px;       /*Spacing between terms in term palette*/
 
@@ -172,7 +181,7 @@
     color: #275D38;
     font-size: 35px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 700;
+    font-weight: 500;
     display: flex;
     align-items: center;
     justify-content: left;
@@ -209,8 +218,8 @@
 .courseCategoryTitle {
     font-size: 28px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 500;
-    color: darkgreen
+    font-weight: 400;
+    color: #275D38
 }
 
 .courseCategoryPalette {
@@ -223,7 +232,7 @@
     width: 428px;
     font-size: 15px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 500;
+    font-weight: 400;
 }
 
 .indvCatagory {
@@ -272,8 +281,8 @@
 .gradAttTitle {
     font-size: 28px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 500;
-    color: darkgreen;
+    font-weight: 400;
+    color: #275D38;
 
     align-items: center;
 }
@@ -288,7 +297,7 @@
     width: 428px;
     font-size: 15px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 500;
+    font-weight: 400;
 }
 
 .indvGradAttribute {
@@ -340,15 +349,14 @@
     display: flex;
     align-items: center;
 
-    border: gold solid 2px;
     margin-top: 30px;
 }
 
 .gaLegend {
     font-size: 32px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 500;
-    color: darkgreen
+    font-weight: 400;
+    color: #275D38
 }
 
 .gradAttributeLegend {
@@ -378,7 +386,7 @@
     width: 428px;
     font-size: 15px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 500;
+    font-weight: 400;
 }
 
 .requisiteLegendBorder {

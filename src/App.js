@@ -5,10 +5,21 @@ import Structure from './Structure.js';
 import {useLocation, useNavigate} from 'react-router-dom';
 import RESTController from "./controller/RESTController";
 
+
+const PageTitle = () => {
+    const location = useLocation();
+    const {selectedProgram} = location.state;
+
+    return (
+        <div className='pageTitle'>
+            {selectedProgram}
+        </div>
+    )
+}
+
 const Header = (props) => {
 
     const location = useLocation();
-    const {selectedProgram} = location.state;
     const navigate = useNavigate();
     const [showGuide, setShowGuide] = useState(false);
 
@@ -33,7 +44,7 @@ const Header = (props) => {
                     </a>
                 </div>
                 <div className="site-title">
-                    {selectedProgram} Program Plan Visualizer
+                    Engineering Plan Visualizer
                 </div>
                 <img alt="question mark" src="questionMark.png" className="questionMark"
                      onClick={handleHelpButtonClick}/>
@@ -87,33 +98,162 @@ const Instructions = () => {
     );
 }
 
+//Plans has to be a simple component as it contains navigation
+const Plans = (props) => {
 
-const GradAttributes = (props) => {
-    const cells = props.gradAttributeList.map((gradAttribute, index) => {
+    const location = useLocation();
+    const {selectedProgram} = location.state;
+    const [planList, setPlanList] = useState([]);
+    const [selectedPlan, setSelectedPlan] = useState(null);
+
+    useEffect(() => {
+        const controller = new RESTController();
+        controller.getPlans({programName: selectedProgram}).then((plans) => {
+            setPlanList(plans);
+        });
+    }, [selectedProgram]);
+
+    let planSet = new Set();
+    const cells = planList.map((plan, index) => {
+
+        // Remove unwanted characters from start and end of MecE plans
+        if (selectedProgram === "Mechanical Engineering") {
+            plan = plan.replace(/\{[^)]*\}/g, "").trimEnd().trimStart();
+
+            if (planSet.has(plan)) {
+                return null;
+            }
+
+            planSet.add(plan);
+        }
+
+        const isSelected = plan === selectedPlan;
+
+        // Return component with individual plan
         return (
             <div
                 key={index}
-                className="indvGradAttribute"
+                programinfo={plan}
+                className="indvPlan"
                 onClick={(event) => {
-                    props.setGradAttributeColor(event, gradAttribute)
+                    setSelectedPlan(plan);
+                    props.setSelectedProgramPlan(selectedProgram, plan);
                 }}
+                style={{backgroundColor: isSelected ? "rgb(39, 93, 56)" : "rgb(255, 255, 255)"}}
             >
-                {gradAttribute}
+                {plan}
             </div>
         )
     })
 
+    // Return component with all the discipline's plans
     return (
-        <div>
-            <div className="gradAttTitle">GRADUATE ATTRIBUTES</div>
-            <div className="gradAttributePalette">
-                <div className="attributeDescription">Learn more about which courses satisfy your degree requirements.
-                </div>
+        <div className="allPlans">
+            <div className="SelectedPlanDescription">SELECT A PLAN</div>
+            <div className="planPalette">
                 {cells}
             </div>
         </div>
     )
 }
+
+
+const CourseGroup = (props) => {
+    const courseGroupKeys = [...props.courseGroup.keys()];
+
+    const [selectedButtons, setSelectedButtons] = useState(
+        new Map(
+            courseGroupKeys
+                .filter((key) => ["group2", "group3", "group4"].includes(key))
+                .map((key) => [key, null])
+        )
+    );
+
+    useEffect(() => {
+        if (props.planChanged) {
+            const newSelectedButtons = new Map(selectedButtons);
+            courseGroupKeys.forEach((key) => {
+                newSelectedButtons.set(key, null);
+            });
+            setSelectedButtons(newSelectedButtons);
+        }
+    }, [props.planChanged]);
+
+    const keyComponent = courseGroupKeys.map((key) => {
+        const groupComponent = props.courseGroup.get(key).map((group) => {
+            const isSelected = selectedButtons.get(key) === group;
+            const color = isSelected ? "rgb(39, 93, 56)" : "rgb(255, 255, 255)";
+            return (
+                <div
+                    className="indivCourseGroup"
+                    key={group}
+                    onClick={() => {
+                        const newSelectedButtons = new Map(selectedButtons);
+                        newSelectedButtons.set(key, group);
+                        setSelectedButtons(newSelectedButtons);
+                        props.setSelectedCourseGroup(group, props.deleteLineMap);
+                    }}
+                    style={{
+                        backgroundColor: color
+                    }}
+                >
+                    {group}
+                </div>
+            );
+        });
+        return (
+            <div key={key}>
+                <h3>{key}</h3>
+                <div className="courseGroupPalatte">{groupComponent}</div>
+            </div>
+        );
+    });
+
+    if (props.planChanged) {
+        props.setPlanChanged();
+    }
+
+    return <div className="allGroups">{keyComponent}</div>;
+};
+
+
+const GradAttributes = (props) => {
+    const [selectedGradAtt, setSelectedGradAtt] = useState(null);
+
+    const cells = props.gradAttributeList.map((gradAttribute, index) => {
+        let isSelected = gradAttribute === selectedGradAtt;
+
+        return (
+            <div
+                key={index}
+                className="indvGradAttribute"
+                onClick={(event) => {
+                    if (gradAttribute === selectedGradAtt) {
+                        setSelectedGradAtt(null);
+                    } else {
+                        setSelectedGradAtt(gradAttribute);
+                    }
+                    props.setGradAttributeColor(event, gradAttribute);
+                }}
+                style={{ backgroundColor: isSelected ? "gold" : "#ced4da" }}
+            >
+                {gradAttribute}
+            </div>
+        );
+    });
+
+    return (
+        <div>
+            <div className="gradAttTitle">GRADUATE ATTRIBUTES</div>
+            <div className="gradAttributePalette">
+                <div className="attributeDescription">
+                    Learn more about which courses satisfy your degree requirements.
+                </div>
+                {cells}
+            </div>
+        </div>
+    );
+};
 
 const CourseCatagory = (props) => {
 
@@ -204,133 +344,13 @@ const RequisiteLegend = () => {
                     <img src="prerequisite.png" className='prerequisiteImage'/>
                 </div>
                 <div className='corequisite'>
-                    Corequisties:
+                    Corequisites:
                     <img src="corequisite.png" className='corequisiteImage'/>
                 </div>
             </div>
         </div>
     )
 }
-
-
-//Plans has to be a simple component as it contains navigation
-const Plans = (props) => {
-
-    const location = useLocation();
-    const {selectedProgram} = location.state;
-    const [planList, setPlanList] = useState([]);
-    const [selectedPlan, setSelectedPlan] = useState(null);
-
-    useEffect(() => {
-        const controller = new RESTController();
-        controller.getPlans({programName: selectedProgram}).then((plans) => {
-            setPlanList(plans);
-        });
-    }, [selectedProgram]);
-
-    let planSet = new Set();
-    const cells = planList.map((plan, index) => {
-
-        // Remove unwanted characters from start and end of MecE plans
-        if (selectedProgram === "Mechanical Engineering") {
-            plan = plan.replace(/\{[^)]*\}/g, "").trimEnd().trimStart();
-
-            if (planSet.has(plan)) {
-                return null;
-            }
-
-            planSet.add(plan);
-        }
-
-        const isSelected = plan === selectedPlan;
-
-        // Return component with individual plan
-        return (
-            <div
-                key={index}
-                programinfo={plan}
-                className="indvPlan"
-                onClick={(event) => {
-                    setSelectedPlan(plan);
-                    props.setSelectedProgramPlan(selectedProgram, plan);
-                }}
-                style={{backgroundColor: isSelected ? "rgb(39, 93, 56)" : "rgb(255, 255, 255)"}}
-            >
-                {plan}
-            </div>
-        )
-    })
-
-    // Return component with all the discipline's plans
-    return (
-        <div className="allPlans">
-            <h3>SELECT A PLAN</h3>
-            <div className="planPalette">
-                {cells}
-            </div>
-        </div>
-    )
-}
-
-
-const CourseGroup = (props) => {
-    const courseGroupKeys = [...props.courseGroup.keys()];
-
-    const [selectedButtons, setSelectedButtons] = useState(
-        new Map(
-            courseGroupKeys
-                .filter((key) => ["group2", "group3", "group4"].includes(key))
-                .map((key) => [key, null])
-        )
-    );
-
-    useEffect(() => {
-        if (props.planChanged) {
-            const newSelectedButtons = new Map(selectedButtons);
-            courseGroupKeys.forEach((key) => {
-                newSelectedButtons.set(key, null);
-            });
-            setSelectedButtons(newSelectedButtons);
-        }
-    }, [props.planChanged]);
-
-    const keyComponent = courseGroupKeys.map((key) => {
-        const groupComponent = props.courseGroup.get(key).map((group) => {
-            const isSelected = selectedButtons.get(key) === group;
-            const color = isSelected ? "rgb(39, 93, 56)" : "rgb(255, 255, 255)";
-            return (
-                <div
-                    className="indivCourseGroup"
-                    key={group}
-                    onClick={() => {
-                        const newSelectedButtons = new Map(selectedButtons);
-                        newSelectedButtons.set(key, group);
-                        setSelectedButtons(newSelectedButtons);
-                        props.setSelectedCourseGroup(group, props.deleteLineMap);
-                    }}
-                    style={{
-                        backgroundColor: color
-                    }}
-                >
-                    {group}
-                </div>
-            );
-        });
-        return (
-            <div key={key}>
-                <h3>{key}</h3>
-                <div className="courseGroupPalatte">{groupComponent}</div>
-            </div>
-        );
-    });
-
-    if (props.planChanged) {
-        props.setPlanChanged();
-    }
-
-    return <div className="allGroups">{keyComponent}</div>;
-};
-
 
 class App extends Component {
     constructor(props) {
@@ -448,19 +468,19 @@ class App extends Component {
             gaLegendList: [
                 {
                     name: "Introduced",
-                    color: '#2697FF',
+                    color: '#FFD700',
                 },
                 {
-                    name: "Developed",
+                    name: "Developing",
                     color: '#32D0F2',
                 },
                 {
-                    name: "Applied",
+                    name: "Mastered",
                     color: '#80E4C6',
                 },
                 {
                     name: "Collected",
-                    color: '#FFFFFF',
+                    color: 'red',
                 },
             ],
 
@@ -513,13 +533,8 @@ class App extends Component {
             structure.map((term, termIndex) => {
                 term.courses.map((courseMap, courseIndex) => {
                     let attributeLevel = courseMap.attribute[attributeIndex]
-
-                    if (attributeLevel === 3) {
-                        structure[termIndex].courses[courseIndex].border = '4px solid gold';
-                    } else {
-                        // Set red hue of each course based on grad attribute level
-                        structure[termIndex].courses[courseIndex].color = this.state.gaLegendList[attributeLevel].color;
-                    }
+                    // Set red hue of each course based on grad attribute level
+                    structure[termIndex].courses[courseIndex].color = this.state.gaLegendList[attributeLevel].color;
                 })
             })
 
@@ -533,7 +548,7 @@ class App extends Component {
     setCatagoryColor = (event, catagory) => {
 
         let catagoryIndex = 0;
-        const {structure} = this.state
+        const {structure} = this.state;
 
         if (this.state.selectedGroup === catagory) {
             this.setState({selectedGroup: ""});
@@ -617,7 +632,7 @@ class App extends Component {
                     let catagoryLevel = courseMap.category[catagoryIndex];
 
                     if (catagoryLevel === 0) {
-                        structure[termIndex].courses[courseIndex].color = "white";
+                        structure[termIndex].courses[courseIndex].color = '#ced4da';
                     } else if (catagoryLevel === 1) {
                         structure[termIndex].courses[courseIndex].color = catagory.color;
                     }
@@ -786,9 +801,7 @@ class App extends Component {
                 </div>
 
                 <div className='part'>
-                    <div className='pageTitle'>
-                        Engineering Plan Visualizer
-                    </div>
+                    <PageTitle/>
                     <div className='planWrapper'>
                         <Plans setSelectedProgramPlan={this.setSelectedProgramPlan}
                         />
@@ -830,7 +843,8 @@ class App extends Component {
                     </div>
 
                     <div className='structureTitle'>COURSES</div>
-                    <div className='structureDescription'>  Below are each of the courses in each semester in your selected plan. Hover over a course to
+                    <div className='structureDescription'> Below are each of the courses in each semester in your
+                        selected plan. Hover over a course to
                         see it's course description. Click on a course to see it's prerequisites and coreqisites.
                     </div>
                     <div className='structureWrapper'>
