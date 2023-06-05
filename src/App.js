@@ -256,52 +256,60 @@ const GradAttributes = (props) => {
 };
 
 const CourseCatagory = (props) => {
-
     const location = useLocation();
-    const {selectedProgram} = location.state;
+    const { selectedProgram } = location.state;
 
-    const cells = props.categoryList.map((catagory, index) => {
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
+    const cells = props.categoryList.map((category, index) => {
         if (selectedProgram === "Computer Engineering") {
             if (index > 9) {
                 return null;
             }
-
         } else if (selectedProgram === "Mechatronics Engineering") {
             if (index === 9) {
                 return null;
             }
-
         } else {
             if (index > 8) {
                 return null;
             }
-
         }
+
+        const isSelected = category === selectedCategory;
+
         return (
             <div
                 key={index}
                 className="indvCatagory"
                 onClick={(event) => {
-                    props.setCatagoryColor(event, catagory)
+                    if (category === selectedCategory) {
+                        setSelectedCategory(null);
+                    } else {
+                        setSelectedCategory(category);
+                    }
+                    props.setCatagoryColor(event, category);
                 }}
+                style={{ backgroundColor: isSelected ? "gold" : "#ced4da" }}
             >
-                {catagory.name}
+                {category.name}
             </div>
-        )
-    })
+        );
+    });
 
     return (
         <div>
             <div className="courseCategoryTitle">COURSE CATEGORIES</div>
             <div className="courseCategoryPalette">
-                <div className="categoryDescription">Learn more about what categories your courses belong to.</div>
+                <div className="categoryDescription">
+                    Learn more about what categories your courses belong to.
+                </div>
                 {cells}
             </div>
         </div>
+    );
+};
 
-    )
-}
 
 // Legend for graduate attributes
 const GALegend = (props) => {
