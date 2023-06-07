@@ -248,7 +248,7 @@ class Structure extends Component {
                 courseRect = courseDiv.getBoundingClientRect();
 
                 if (rect.bottom > structureWrapperRect.bottom) {
-                    descriptionDiv.style.bottom = `${structureWrapperRect.bottom - courseRect.top - 60}px`;
+                    descriptionDiv.style.bottom = `${structureWrapperRect.bottom - courseRect.top - 1200}px`;
                 }
 
                 if (rect.right > structureWrapperRect.right) {
@@ -284,9 +284,11 @@ class Structure extends Component {
                 </div>
                 {this.state.showDescriptions[index] &&
                     <div className="description">
-                        <strong>{courseItem.extendedName}</strong>
+                        <div className='extendedName'>
+                            <a>{courseItem.extendedName}</a>
+                        </div>
                         <br/>
-                        <div>
+                        <div className='descriptionDetails'>
                             {courseItem.description}
                             {courseItem.accreditionUnits && (
                                 <>

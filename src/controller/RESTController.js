@@ -29,6 +29,10 @@ class RESTController extends Component {
     }
 
     getCourseInfo = (data) => {
+
+        console.log("data sent");
+        console.log(data);
+
         return axios
             .post(`/nobes/timetable/visualizer/getInfo`, data, this.config)
             .then(response => {
@@ -66,7 +70,6 @@ class RESTController extends Component {
                 console.error('getLec: Error fetching data:', error);
             });
     }
-
 
     getReqMap = (data) => {
 
