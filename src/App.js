@@ -154,7 +154,10 @@ const Plans = (props) => {
                     setSelectedPlan(plan);
                     props.setSelectedProgramPlan(selectedProgram, plan);
                 }}
-                style={{backgroundColor: isSelected ? "rgb(39, 93, 56)" : "rgb(255, 255, 255)"}}
+                style={{
+                    backgroundColor: isSelected ? "rgb(39, 93, 56)" : "rgb(255, 255, 255)",
+                    color: isSelected ? "rgb(255, 255, 255)" : "rgb(39, 93, 56)"
+                }}
             >
                 {plan}
             </div>
@@ -222,6 +225,7 @@ const CourseGroup = (props) => {
         const groupComponent = props.courseGroup.get(key).map((group) => {
             const isSelected = selectedButtons.get(key) === group;
             const color = isSelected ? "rgb(39, 93, 56)" : "rgb(255, 255, 255)";
+            const textColor = isSelected ? "rgb(255, 255, 255)" : "rgb(39, 93, 56)";
             return (
                 <div
                     className="indivCourseGroup"
@@ -234,7 +238,8 @@ const CourseGroup = (props) => {
                         props.setSelectedCourseGroup(group, props.deleteLineMap);
                     }}
                     style={{
-                        backgroundColor: color
+                        backgroundColor: color,
+                        color: textColor
                     }}
                 >
                     {group}
