@@ -81,12 +81,48 @@
 }
 
 .pageTitle {
-    margin: 40px 10px 30px 0px;
+    margin: 40px 10px 50px 0px;
     color: rgb(39, 93, 56);
     font-size: 50px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 500;
+    font-weight: 300;
 }
+
+
+
+
+.dropdownsWrapper {
+
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+
+    justify-content: space-between;
+}
+
+.planWrapper {
+    /* Spacing on all sides of inside of term palette*/
+    width: 490px;
+    min-height: 200px;
+    margin-right: 10px;
+
+    display: flex;
+    overflow: hidden;
+}
+
+.groupWrapper {
+    /* Spacing on all sides of inside of term palette*/
+    width: 550px;
+    min-height: 200px;
+    margin-right: 10px;
+
+    display: flex;
+    overflow: hidden;
+}
+
+
+
+
 
 .allPlans {
     margin: 10px 10px 10px 0px;
@@ -97,6 +133,11 @@
     font-size: 35px;        /* Font of text inside term div*/
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
+
+    display: flex;
+    overflow: hidden;
+
+    margin-bottom: 30px;
 }
 
 .planPalette {
@@ -139,6 +180,13 @@
 .allGroups {
     margin: 10px 10px 10px 0px;
     display: flex;
+    flex-direction: column;
+}
+
+.groupDropdownWrapper {
+    margin: 20px 10px 10px 0px;
+    display: flex;
+    flex-direction: row;
 }
 
 .courseGroupPalatte {
@@ -186,7 +234,6 @@
     align-items: center;
     justify-content: left;
 
-    margin-top: 50px;
 }
 
 .lowerStuff {
