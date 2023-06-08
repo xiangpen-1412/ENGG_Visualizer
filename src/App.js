@@ -251,7 +251,7 @@ const CourseGroup = (props) => {
         const defaultGroup = selectedButtons.get(key);
         return (
             <div key={key}>
-                <h3>{key}</h3>
+                {/* <h3>{key}</h3> */}
                 {/* <div className="courseGroupPalatte">{groupComponent}</div> */}
                 <div>
                     <Dropdown 
@@ -273,7 +273,13 @@ const CourseGroup = (props) => {
         props.setPlanChanged();
     }
 
-    return <div className="allGroups">{keyComponent}</div>;
+    return (
+        <div className="allGroups">
+            <div className="SelectedPlanDescription">SELECT COURSE GROUPS</div>
+            <div>Select the sub-categories for your plan here. Each numerical group has an option A or B.</div>
+            <div className="groupDropdownWrapper">{keyComponent}</div>
+        </div>
+    );
 };
 
 const GradAttributes = (props) => {
@@ -903,25 +909,27 @@ class App extends Component {
 
                 <div className='part'>
                     <PageTitle/>
-                    <div className='planWrapper'>
-                        <Plans setSelectedProgramPlan={this.setSelectedProgramPlan}
-                               isDefault={isDefault}
-                               setIsDefault={this.setIsDefault}
-                               setStructure={this.setStructure}
-                               setContainCourseGroup={this.setContainCourseGroup}
-                        />
-                    </div>
-
-                    {this.state.containCourseGroup && (
-                        <div>
-                            <CourseGroup courseGroup={courseGroup}
-                                         setSelectedCourseGroup={this.setSelectedCourseGroup}
-                                         selectedProgram={selectedProgram}
-                                         deleteLineMap={this.deleteLineMap}
-                                         planChanged={planChanged}
-                                         setPlanChanged={this.setPlanChanged}
+                    <div className='dropdownsWrapper'>
+                        <div className='planWrapper'>
+                            <Plans setSelectedProgramPlan={this.setSelectedProgramPlan}
+                                isDefault={isDefault}
+                                setIsDefault={this.setIsDefault}
+                                setStructure={this.setStructure}
+                                setContainCourseGroup={this.setContainCourseGroup}
                             />
-                        </div>)}
+                        </div>
+
+                        {this.state.containCourseGroup && (
+                            <div className='groupWrapper'>
+                                <CourseGroup courseGroup={courseGroup}
+                                            setSelectedCourseGroup={this.setSelectedCourseGroup}
+                                            selectedProgram={selectedProgram}
+                                            deleteLineMap={this.deleteLineMap}
+                                            planChanged={planChanged}
+                                            setPlanChanged={this.setPlanChanged}
+                                />
+                            </div>)}
+                    </div>
 
                     <div className='additionOptions'>
                         ADDITIONAL OPTIONS

@@ -1,8 +1,18 @@
 .dropdown-container {
     text-align: left;
-    border: 1px solid #ccc;
     position: relative;
-    border-radius: 5px;
+
+    /* Text color of each term div*/
+    background-color: rgb(255, 255, 255); /* Background color of each term div*/
+    border-color: rgb(39, 93, 56); /* Text color of each term div*/
+    border-style: solid;
+    border-radius: 0px;
+    border-width: 3px;
+
+    width: 130px;
+    padding: 10px;
+
+    margin-right: 30px;
 }
   
 .dropdown-input {
