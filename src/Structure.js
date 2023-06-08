@@ -263,7 +263,24 @@ class Structure extends Component {
      * */
     renderCourseDiv = (coursesList, index, courseItem, name, orCase) => {
 
-        const className = (orCase) ? 'indivOrCourse' : 'indivCourses'
+        const className = (orCase) ? 'indivOrCourse' : 'indivCourses';
+
+        let backgroundColor;
+        if (typeof courseItem.color === 'string') {
+            backgroundColor = courseItem.color;
+        } else if (Array.isArray(courseItem.color)) {
+            if (courseItem.color.length === 0) {
+                backgroundColor = "#ced4da";
+            } else {
+                const percentage = 100 / courseItem.color.length;
+                const gradientColors = courseItem.color.map((color, i) => {
+                    const start = percentage * i;
+                    const end = percentage * (i + 1);
+                    return `${color} ${start}%, ${color} ${end}%`;
+                });
+                backgroundColor = `linear-gradient(to right, ${gradientColors.join(',')})`;
+            }
+        }
 
         return (
             <div>
@@ -273,8 +290,8 @@ class Structure extends Component {
                      ref={(el) => this.divRefs[index] = el}
                      onClick={() => this.handleOnClick(coursesList, index, this.props.updateLineMap, this.props.lineMap, this.props.reqMap)}
                      style={{
-                         backgroundColor: courseItem.color,
-                         border: courseItem.border ? courseItem.border : 'none'
+                         background: backgroundColor,
+                         border: courseItem.border ? courseItem.border : 'none',
                      }}
                      onMouseEnter={() => this.handleMouseEnter(index)}
                      onMouseLeave={() => this.handleMouseLeave(index)}

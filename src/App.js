@@ -4,6 +4,7 @@ import './index.css';
 import Structure from './Structure.js';
 import {useLocation, useNavigate} from 'react-router-dom';
 import RESTController from "./controller/RESTController";
+import {value} from "lodash/seq";
 
 
 const PageTitle = () => {
@@ -298,7 +299,7 @@ const CourseCatagory = (props) => {
     const location = useLocation();
     const {selectedProgram} = location.state;
 
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState([]);
 
     const cells = props.categoryList.map((category, index) => {
         if (selectedProgram === "Computer Engineering") {
@@ -315,21 +316,24 @@ const CourseCatagory = (props) => {
             }
         }
 
-        const isSelected = category === selectedCategory;
+        const isSelected = selectedCategory.includes(category);
 
         return (
             <div
                 key={index}
                 className="indvCatagory"
                 onClick={(event) => {
-                    if (category === selectedCategory) {
-                        setSelectedCategory(null);
+                    if (selectedCategory.includes(category)) {
+                        const newSelectedCategory = selectedCategory.filter(item => item !== category);
+                        setSelectedCategory(newSelectedCategory);
                     } else {
-                        setSelectedCategory(category);
+                        const newSelectedCategory = selectedCategory.concat(category);
+                        setSelectedCategory(newSelectedCategory);
                     }
                     props.setCatagoryColor(event, category);
                 }}
-                style={{backgroundColor: isSelected ? "gold" : "#ced4da"}}
+
+                style={{backgroundColor: isSelected ? category.color : "#ced4da"}}
             >
                 {category.name}
             </div>
@@ -539,7 +543,7 @@ class App extends Component {
                 ['Group 4', ["4A", "4B"]]
             ]),
             selectedAtt: "",
-            selectedGroup: "",
+            groupColorSet: new Map(),
             selectedProgram: "",
             selectedPlan: "",
             containCourseGroup: false,
@@ -553,7 +557,6 @@ class App extends Component {
 
         this.controller = new RESTController();
     }
-
 
     // componentDidMount() {
     //     window.addEventListener("popstate", this.deleteWhenPopstate);
@@ -569,6 +572,117 @@ class App extends Component {
 
     setContainCourseGroup = () => {
         this.setState({containCourseGroup: true});
+    }
+
+    setCatagoryColor = (event, catagory) => {
+        let catagoryIndex = 0;
+        let duplicateCategory = false;
+        const {structure} = this.state;
+
+        // Create a copy of selectedGroup map
+        let groupColorSet = new Map(this.state.groupColorSet);
+
+        // remove the highlight if click a category twice
+        groupColorSet.forEach((key, value) => {
+            if (groupColorSet.get(value).includes(catagory.color)) {
+                duplicateCategory = true;
+                const newValue = groupColorSet.get(value).filter(color => color !== catagory.color);
+                groupColorSet.set(value, newValue);
+            }
+        })
+
+        switch (catagory.name) {
+            case "Math":
+                catagoryIndex = 0;
+                break;
+            case "Natural Sciences":
+                catagoryIndex = 1;
+                break;
+            case "Engineering Sciences":
+                catagoryIndex = 2;
+                break;
+            case "Engineering Design":
+                catagoryIndex = 3;
+                break;
+            case "Engineering Profession":
+                catagoryIndex = 4;
+                break;
+            case "COMP":
+                catagoryIndex = 5;
+                break;
+            case "PROG":
+                catagoryIndex = 6;
+                break;
+            case "ITS":
+                catagoryIndex = 7;
+                break;
+            case "Other":
+                catagoryIndex = 8;
+                break;
+            case "Computing Science":
+                catagoryIndex = 9;
+                break;
+            case "Mechatronics":
+                catagoryIndex = 10;
+                break;
+            case "SEMINARS":
+                catagoryIndex = 11;
+                break;
+            case "LABS":
+                catagoryIndex = 12;
+                break;
+            case "CODING":
+                catagoryIndex = 13;
+                break;
+            case "CAD":
+                catagoryIndex = 14;
+                break;
+            case "Group Work":
+                catagoryIndex = 15;
+                break;
+            case "Solid Mechanics":
+                catagoryIndex = 16;
+                break;
+            case "Thermo Fluids":
+                catagoryIndex = 17;
+                break;
+            case "Electrical":
+                catagoryIndex = 18;
+                break;
+            case "Control":
+                catagoryIndex = 19;
+                break;
+            case "Management":
+                catagoryIndex = 20;
+                break;
+            default:
+                catagoryIndex = 0;
+        }
+
+        structure.map((term, termIndex) => {
+            term.courses.map((courseMap, courseIndex) => {
+
+                // get the old color set
+                let colorSet = groupColorSet.get(structure[termIndex].courses[courseIndex].name);
+                if (colorSet === undefined) {
+                    colorSet = [];
+                }
+                let catagoryLevel = courseMap.category[catagoryIndex];
+
+                if (catagoryLevel === 1 && !duplicateCategory) {
+                    colorSet.push(catagory.color);
+                }
+
+                structure[termIndex].courses[courseIndex].color = colorSet;
+
+                groupColorSet.set(structure[termIndex].courses[courseIndex].name, colorSet);
+            })
+        });
+
+        this.setState({
+            structure: structure,
+            groupColorSet: groupColorSet,
+        });
     }
 
     setGradAttributeColor = (event, gradAttribute) => {
@@ -605,106 +719,6 @@ class App extends Component {
         }
     }
 
-    setCatagoryColor = (event, catagory) => {
-
-        let catagoryIndex = 0;
-        const {structure} = this.state;
-
-        if (this.state.selectedGroup === catagory) {
-            this.setState({selectedGroup: ""});
-            structure.map((term, termIndex) => {
-                term.courses.map((courseMap, courseIndex) => {
-                    structure[termIndex].courses[courseIndex].color = "#ced4da";
-                })
-            })
-        } else {
-            switch (catagory.name) {
-                case "Math":
-                    catagoryIndex = 0;
-                    break;
-                case "Natural Sciences":
-                    catagoryIndex = 1;
-                    break;
-                case "Engineering Sciences":
-                    catagoryIndex = 2;
-                    break;
-                case "Engineering Design":
-                    catagoryIndex = 3;
-                    break;
-                case "Engineering Profession":
-                    catagoryIndex = 4;
-                    break;
-                case "COMP":
-                    catagoryIndex = 5;
-                    break;
-                case "PROG":
-                    catagoryIndex = 6;
-                    break;
-                case "ITS":
-                    catagoryIndex = 7;
-                    break;
-                case "Other":
-                    catagoryIndex = 8;
-                    break;
-                case "Computing Science":
-                    catagoryIndex = 9;
-                    break;
-                case "Mechatronics":
-                    catagoryIndex = 10;
-                    break;
-                case "SEMINARS":
-                    catagoryIndex = 11;
-                    break;
-                case "LABS":
-                    catagoryIndex = 12;
-                    break;
-                case "CODING":
-                    catagoryIndex = 13;
-                    break;
-                case "CAD":
-                    catagoryIndex = 14;
-                    break;
-                case "Group Work":
-                    catagoryIndex = 15;
-                    break;
-                case "Solid Mechanics":
-                    catagoryIndex = 16;
-                    break;
-                case "Thermo Fluids":
-                    catagoryIndex = 17;
-                    break;
-                case "Electrical":
-                    catagoryIndex = 18;
-                    break;
-                case "Control":
-                    catagoryIndex = 19;
-                    break;
-                case "Management":
-                    catagoryIndex = 20;
-                    break;
-                default:
-                    catagoryIndex = 0;
-            }
-
-            structure.map((term, termIndex) => {
-                term.courses.map((courseMap, courseIndex) => {
-
-                    let catagoryLevel = courseMap.category[catagoryIndex];
-
-                    if (catagoryLevel === 0) {
-                        structure[termIndex].courses[courseIndex].color = '#ced4da';
-                    } else if (catagoryLevel === 1) {
-                        structure[termIndex].courses[courseIndex].color = catagory.color;
-                    }
-                })
-            })
-
-            this.setState({
-                structure: structure,
-                selectedGroup: catagory,
-            })
-        }
-    }
 
     setSelectedProgramPlan = (selectedProgram, selectedPlan) => {
 
@@ -725,7 +739,10 @@ class App extends Component {
 
     setStructure = (selectedProgram, selectedPlan) => {
 
-        this.setState({selectedProgram: selectedProgram, selectedPlan: selectedProgram === "Mechanical Engineering" ? selectedPlan.replace(/\{[^)]*\}/g, "").trimEnd().trimStart() : selectedPlan});
+        this.setState({
+            selectedProgram: selectedProgram,
+            selectedPlan: selectedProgram === "Mechanical Engineering" ? selectedPlan.replace(/\{[^)]*\}/g, "").trimEnd().trimStart() : selectedPlan
+        });
 
         const data = {
             programName: selectedProgram,
