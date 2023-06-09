@@ -98,6 +98,7 @@
     overflow: visible;
 
     justify-content: space-between;
+    margin-bottom: 25px;
 }
 
 .planWrapper {
@@ -122,7 +123,7 @@
 
 
 .sectionDescription {
-    margin: 10px 50px 10px 0px;
+    margin: 10px 10px 40px 0px;
 }
 
 
