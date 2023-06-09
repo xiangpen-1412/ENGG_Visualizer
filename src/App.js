@@ -33,11 +33,6 @@ const Header = (props) => {
     const navigate = useNavigate();
     const [showGuide, setShowGuide] = useState(false);
 
-    const handleBackButtonClick = () => {
-        props.deletelinemap();
-        navigate("/");
-    };
-
     const handleHelpButtonClick = () => {
         setShowGuide(!showGuide);
     }
@@ -45,9 +40,6 @@ const Header = (props) => {
     return (
         <header className="header">
             <div className="header-content">
-                <button className="backButton" onClick={handleBackButtonClick}>
-                    <a>← Back</a>
-                </button>
                 <div>
                     <a>
                         <img alt="University of Alberta logo" src="uofalogo.png" className="image"/>
@@ -68,6 +60,27 @@ const Header = (props) => {
         </header>
     );
 };
+
+const SubHeader = (props) => {
+
+    const location = useLocation();
+    const {selectedProgram} = location.state;
+    const navigate = useNavigate();
+    const handleBackButtonClick = () => {
+        props.deletelinemap();
+        navigate("/");
+    };
+    return (
+        <div className='subHeader'>
+            <div className='subHeaderContent'>
+                <img alt="Home Button" src="home_button.png" className="homeButton" onClick={handleBackButtonClick}/>
+            </div>
+            <div className='path'>
+                > {selectedProgram} Engineering Plan Visualizer
+            </div>
+        </div>
+    )
+}
 
 const Instructions = () => {
 
@@ -244,7 +257,7 @@ const CourseGroup = (props) => {
         // });
 
         const defaultGroup = selectedButtons.get(key);
-        return (
+            return (
             <div key={key}>
                 {/* <h3>{key}</h3> */}
                 {/* <div className="courseGroupPalatte">{groupComponent}</div> */}
@@ -253,11 +266,11 @@ const CourseGroup = (props) => {
                         placeHolder={defaultGroup}
                         options={props.courseGroup.get(key)}
                         onChange={(group) => {
-                            const newSelectedButtons = new Map(selectedButtons);
-                            newSelectedButtons.set(key, group);
-                            setSelectedButtons(newSelectedButtons);
-                            props.setSelectedCourseGroup(group, props.deleteLineMap);
-                        }}
+                        const newSelectedButtons = new Map(selectedButtons);
+                        newSelectedButtons.set(key, group);
+                        setSelectedButtons(newSelectedButtons);
+                        props.setSelectedCourseGroup(group, props.deleteLineMap);
+                    }}
                     />
                 </div>
             </div>
@@ -440,6 +453,7 @@ const Footer = () => {
         </footer>
     );
 };
+
 
 class App extends Component {
     constructor(props) {
@@ -933,11 +947,16 @@ class App extends Component {
             <div className='all'>
 
                 <div className='header'>
-                    <Header deletelinemap={this.deleteLineMap}/>
+                    <Header/>
+                </div>
+
+                <div className='subheader'>
+                    <SubHeader deletelinemap={this.deleteLineMap}/>
                 </div>
 
                 <div className='part'>
                     <PageTitle/>
+
                     <div className='dropdownsWrapper'>
                         <div className='planWrapper'>
                             <Plans 
@@ -966,6 +985,7 @@ class App extends Component {
                             ADDITIONAL OPTIONS
                         </div>
                         <Icon />
+
                     </div>
 
                     {this.state.containOptions && (
@@ -1011,7 +1031,6 @@ class App extends Component {
                 <div className='footer'>
                     <Footer/>
                 </div>
-
 
             </div>
         )

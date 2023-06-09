@@ -14,7 +14,7 @@
 
     margin-right: 30px;
 }
-  
+   
 .dropdown-input {
     padding: 5px;
     display: flex;
@@ -41,10 +41,5 @@
 
 .dropdown-item:hover {
     background-color: #cccccc;
-    color: #fff;
-}
-
-.dropdown-item:selected {
-    background-color: rgb(60, 143, 86);
     color: #fff;
 }

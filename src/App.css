@@ -17,7 +17,7 @@
     height: 100%;
     /* justify-content: space-evenly; */
 
-    margin-left: 10%;
+    margin-left: 9%;
     margin-right: 10%;
 }
 
@@ -64,8 +64,31 @@
     position: absolute;
 }
 
+.subHeader {
+    display: flex;
+    flex-direction: row;
+    margin-top: 15px;
+    margin-left: 10%;
+    margin-right: 10%;
+
+    align-items: center;
+}
+
+.homeButton {
+    height: 18px;
+    width: 18px;
+}
+
+.path {
+    color: #7B7B7B;
+    margin-left: 10px;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+
 .guideWrapper {
-    width : 500px;
+    width: 500px;
     min-height: 500px;
     border: black solid 2px;
     margin-top: 10px;
@@ -81,14 +104,12 @@
 }
 
 .pageTitle {
-    margin: 40px 10px 50px 0px;
+    margin: 25px 0px 30px 0px;
     color: rgb(39, 93, 56);
-    font-size: 50px;
+    font-size: 53px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 300;
+    font-weight: 350;
 }
-
-
 
 
 .dropdownsWrapper {
@@ -120,7 +141,6 @@
     display: flex;
     overflow: hidden;
 }
-
 
 .sectionDescription {
     margin: 10px 10px 40px 0px;
@@ -159,7 +179,7 @@
     border-style: solid;
     border-radius: 0px;
     border-width: 3px;
-    
+
     width: 100px;           /* Width of eachterm div*/
     height: 38px;
     font-size: 14px;        /* Font of text inside term div*/
@@ -208,7 +228,7 @@
     border-style: solid;
     border-radius: 0px;
     border-width: 3px;
-    
+
     width: 52px;            /* Width of eachterm div*/
     height: 26px;
     font-size: 14px;        /* Font of text inside term div*/
@@ -294,7 +314,7 @@
 .indvCatagory {
     /* Background and text color of each category div*/
     background-color: rgb(206, 212, 218);
-    
+
     width: 170px;           /* Width of each category div*/
     height: 47px;
     font-size: 16px;        /* Font of text inside category div*/
@@ -421,10 +441,10 @@
 }
 
 .gradLegendWrapper {
-   /* Spacing on all sides of inside of term palette*/
-   padding: 15px;
-   min-width: 200px;
-   vertical-align: top;
+    /* Spacing on all sides of inside of term palette*/
+    padding: 15px;
+    min-width: 200px;
+    vertical-align: top;
 }
 
 .gradLegendWrapper b {
@@ -454,7 +474,7 @@
     max-width: 420px;
 }
 
-.prerequisite, .corequisite  {
+.prerequisite, .corequisite {
     font-size: 15px;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
