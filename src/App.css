@@ -226,9 +226,15 @@
     align-items: center;
 }
 
-.additionOptions {
+.collapsibleOptions {
     width: 527px;
     height: 68px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.additionOptions {
     color: #275D38;
     font-size: 35px;
     font-family: 'Roboto', sans-serif;
@@ -236,7 +242,7 @@
     display: flex;
     align-items: center;
     justify-content: left;
-
+    margin-right: 15px;
 }
 
 .lowerStuff {
