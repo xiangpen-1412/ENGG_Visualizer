@@ -128,49 +128,34 @@ const Plans = (props) => {
         });
     }, [selectedProgram]);
 
-    let planSet = new Set();
-
-    const cells = planList.map((plan, index) => {
+    const plans = planList.map((plan, index) => {
 
         // Remove unwanted characters from start and end of MecE plans
         if (selectedProgram === "Mechanical Engineering") {
             plan = plan.replace(/\{[^)]*\}/g, "").trimEnd().trimStart();
-
-            if (planSet.has(plan)) {
-                return null;
-            }
-
-            planSet.add(plan);
         }
 
-        const isSelected = plan === selectedPlan;
-
-        // Return component with individual plan
-        return (
-            <div
-                key={index}
-                programinfo={plan}
-                className="indvPlan"
-                onClick={(event) => {
-                    setSelectedPlan(plan);
-                    props.setSelectedProgramPlan(selectedProgram, plan);
-                }}
-                style={{
-                    backgroundColor: isSelected ? "rgb(39, 93, 56)" : "rgb(255, 255, 255)",
-                    color: isSelected ? "rgb(255, 255, 255)" : "rgb(39, 93, 56)"
-                }}
-            >
-                {plan}
-            </div>
-        )
+        return plan;
     })
+
+    // Remove duplicate plan names
+    const uniquePlans = [...new Set(plans)];
 
     // Return component with all the discipline's plans
     return (
         <div className="allPlans">
             <div className="SelectedPlanDescription">SELECT A PLAN</div>
-            <div className="planPalette">
-                {cells}
+            <div className="sectionDescription">Select a plan for your discipline below.</div>
+            {/* <div className="planPalette"> */}
+            <div>
+                <Dropdown 
+                    placeHolder={'Traditional Plan'}
+                    options={uniquePlans}
+                    onChange={(plan) => {
+                        setSelectedPlan(plan);
+                        props.setSelectedProgramPlan(selectedProgram, plan);
+                    }}
+                />
             </div>
         </div>
     )
@@ -911,7 +896,8 @@ class App extends Component {
                     <PageTitle/>
                     <div className='dropdownsWrapper'>
                         <div className='planWrapper'>
-                            <Plans setSelectedProgramPlan={this.setSelectedProgramPlan}
+                            <Plans 
+                                setSelectedProgramPlan={this.setSelectedProgramPlan}
                                 isDefault={isDefault}
                                 setIsDefault={this.setIsDefault}
                                 setStructure={this.setStructure}
