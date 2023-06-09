@@ -423,6 +423,24 @@ const RequisiteLegend = () => {
     )
 }
 
+const Footer = () => {
+
+    return (
+        <footer className="footer">
+            <div className='topBorder'>
+                <div className='imageDiv'>
+                    <a>
+                        <img alt="University of Alberta logo" src="uofalogo.png" className="footerImage"/>
+                    </a>
+                </div>
+                <div className='footerTag'>
+                    @ 2023 University of Alberta
+                </div>
+            </div>
+        </footer>
+    );
+};
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -988,6 +1006,10 @@ class App extends Component {
                                    reqMap={reqMap}
                         />
                     </div>
+                </div>
+
+                <div className='footer'>
+                    <Footer/>
                 </div>
 
 

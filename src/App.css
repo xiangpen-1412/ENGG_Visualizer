@@ -474,6 +474,39 @@
     margin-left: 9px;
 }
 
+.footer {
+    background-color: #275d38;
+    height: 140px;
+    display: flex;
+    justify-content: center;
+}
+
+.topBorder {
+    width: 900px;
+    border-top: 2px solid #F5F5F5;
+    margin-top: 50px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+}
+
+.imageDiv {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.footerImage {
+    height: 35px;
+    width: 150px;
+}
+
+.footerTag {
+    color: whitesmoke;
+    font-size: 10px;
+    text-align: right;
+}
+
 .part {
     margin-left: 10%;
     margin-right: 10%;
