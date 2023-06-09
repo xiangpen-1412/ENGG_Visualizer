@@ -75,8 +75,9 @@ const SubHeader = (props) => {
             <div className='subHeaderContent'>
                 <img alt="Home Button" src="home_button.png" className="homeButton" onClick={handleBackButtonClick}/>
             </div>
+            <Icon />
             <div className='path'>
-                > {selectedProgram} Engineering Plan Visualizer
+                {selectedProgram} Engineering Plan Visualizer
             </div>
         </div>
     )
