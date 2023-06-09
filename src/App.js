@@ -156,6 +156,7 @@ const Plans = (props) => {
                         setSelectedPlan(plan);
                         props.setSelectedProgramPlan(selectedProgram, plan);
                     }}
+                    width={250}
                 />
             </div>
         </div>

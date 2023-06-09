@@ -12,7 +12,7 @@ const Icon = () => {
     );
 };
 
-const Dropdown = ({ placeHolder, options, onChange }) => {
+const Dropdown = ({ placeHolder, options, onChange, width }) => {
     const [showMenu, setShowMenu] = useState(false);
     const [selectedValue, setSelectedValue] = useState(null);
     const inputRef = useRef();
@@ -55,7 +55,10 @@ const Dropdown = ({ placeHolder, options, onChange }) => {
     }
 
     return (
-        <div className="dropdown-container">
+        <div 
+            className="dropdown-container"
+            style={{width: width + 'px'}}
+        >
             <div ref={inputRef} onClick={handleInputClick} className="dropdown-input">
                 <div className="dropdown-selected-value">{getDisplay()}</div>
                 <div className="dropdown-tools">
