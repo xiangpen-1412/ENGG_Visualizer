@@ -600,6 +600,7 @@ class App extends Component {
             selectedProgram: "",
             selectedPlan: "",
             containCourseGroup: false,
+            showOptions: false,
             planChanged: false,
             group2: "",
             group3: "",
@@ -625,6 +626,12 @@ class App extends Component {
 
     setContainCourseGroup = () => {
         this.setState({containCourseGroup: true});
+    }
+
+    toggleOptionsHidden = () => {
+        this.setState(prevState => ({
+            showOptions: !prevState.showOptions
+        }));
     }
 
     setCatagoryColor = (event, catagory) => {
@@ -939,10 +946,9 @@ class App extends Component {
 
         console.log("group2");
         console.log(this.state.group2);
-        console.log("group3");
-        console.log(this.state.group3);
-        console.log("group4");
-        console.log(this.state.group4);
+
+
+        console.log(this.state.showOptions);
 
         return (
             <div className='all'>
@@ -981,7 +987,10 @@ class App extends Component {
                             </div>)}
                     </div>
 
-                    <div className='collapsibleOptions'>
+                    <div 
+                        className='collapsibleOptions'
+                        onClick={ () => {this.toggleOptionsHidden();} }
+                    >
                         <div className='additionOptions'>
                             ADDITIONAL OPTIONS
                         </div>
@@ -989,7 +998,7 @@ class App extends Component {
 
                     </div>
 
-                    {this.state.containOptions && (
+                    {this.state.showOptions && (
                         <div className="lowerStuff">
                             <div className='catagoryWrapper'>
                                 <CourseCatagory categoryList={this.state.categoryList}
@@ -1001,7 +1010,6 @@ class App extends Component {
                             <div className='GAWrapper'>
                                 <GradAttributes gradAttributeList={this.state.gradAttributeList}
                                                 setGradAttributeColor={this.setGradAttributeColor}/>
-                                {/* <GALegend gaLegendList={this.state.gaLegendList}/> */}
                             </div>
 
                             <div className='gradLegendWrapper'>
