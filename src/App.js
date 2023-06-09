@@ -4,6 +4,7 @@ import './index.css';
 import Structure from './Structure.js';
 import {useLocation, useNavigate} from 'react-router-dom';
 import RESTController from "./controller/RESTController";
+import Dropdown from "./Dropdown";
 
 
 const PageTitle = () => {
@@ -17,7 +18,18 @@ const PageTitle = () => {
     )
 }
 
-const Header = () => {
+const Icon = () => {
+    return (
+        <svg height="20" width="20" viewBox="0 0 20 20">
+            <path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path>
+        </svg>
+    );
+};
+
+const Header = (props) => {
+
+    const location = useLocation();
+    const navigate = useNavigate();
     const [showGuide, setShowGuide] = useState(false);
 
     const handleHelpButtonClick = () => {
@@ -137,46 +149,35 @@ const Plans = (props) => {
         });
     }, [selectedProgram]);
 
-    let planSet = new Set();
-
-    const cells = planList.map((plan, index) => {
+    const plans = planList.map((plan, index) => {
 
         // Remove unwanted characters from start and end of MecE plans
         if (selectedProgram === "Mechanical Engineering") {
             plan = plan.replace(/\{[^)]*\}/g, "").trimEnd().trimStart();
-
-            if (planSet.has(plan)) {
-                return null;
-            }
-
-            planSet.add(plan);
         }
 
-        const isSelected = plan === selectedPlan;
-
-        // Return component with individual plan
-        return (
-            <div
-                key={index}
-                programinfo={plan}
-                className="indvPlan"
-                onClick={(event) => {
-                    setSelectedPlan(plan);
-                    props.setSelectedProgramPlan(selectedProgram, plan);
-                }}
-                style={{backgroundColor: isSelected ? "rgb(39, 93, 56)" : "rgb(255, 255, 255)"}}
-            >
-                {plan}
-            </div>
-        )
+        return plan;
     })
+
+    // Remove duplicate plan names
+    const uniquePlans = [...new Set(plans)];
 
     // Return component with all the discipline's plans
     return (
         <div className="allPlans">
             <div className="SelectedPlanDescription">SELECT A PLAN</div>
-            <div className="planPalette">
-                {cells}
+            <div className="sectionDescription">Select a plan for your discipline below.</div>
+            {/* <div className="planPalette"> */}
+            <div>
+                <Dropdown 
+                    placeHolder={'Traditional Plan'}
+                    options={uniquePlans}
+                    onChange={(plan) => {
+                        setSelectedPlan(plan);
+                        props.setSelectedProgramPlan(selectedProgram, plan);
+                    }}
+                    width={250}
+                />
             </div>
         </div>
     )
@@ -932,49 +933,59 @@ class App extends Component {
 
                 <div className='part'>
                     <PageTitle/>
-                    <div className='planWrapper'>
-                        <Plans setSelectedProgramPlan={this.setSelectedProgramPlan}
-                               isDefault={isDefault}
-                               setIsDefault={this.setIsDefault}
-                               setStructure={this.setStructure}
-                               setContainCourseGroup={this.setContainCourseGroup}
-                        />
-                    </div>
 
-                    {this.state.containCourseGroup && (
-                        <div>
-                            <CourseGroup courseGroup={courseGroup}
-                                         setSelectedCourseGroup={this.setSelectedCourseGroup}
-                                         selectedProgram={selectedProgram}
-                                         deleteLineMap={this.deleteLineMap}
-                                         planChanged={planChanged}
-                                         setPlanChanged={this.setPlanChanged}
+                    <div className='dropdownsWrapper'>
+                        <div className='planWrapper'>
+                            <Plans 
+                                setSelectedProgramPlan={this.setSelectedProgramPlan}
+                                isDefault={isDefault}
+                                setIsDefault={this.setIsDefault}
+                                setStructure={this.setStructure}
+                                setContainCourseGroup={this.setContainCourseGroup}
                             />
-                        </div>)}
+                        </div>
 
-                    <div className='additionOptions'>
-                        ADDITIONAL OPTIONS
+                        {this.state.containCourseGroup && (
+                            <div className='groupWrapper'>
+                                <CourseGroup courseGroup={courseGroup}
+                                            setSelectedCourseGroup={this.setSelectedCourseGroup}
+                                            selectedProgram={selectedProgram}
+                                            deleteLineMap={this.deleteLineMap}
+                                            planChanged={planChanged}
+                                            setPlanChanged={this.setPlanChanged}
+                                />
+                            </div>)}
                     </div>
 
-                    <div className="lowerStuff">
-                        <div className='catagoryWrapper'>
-                            <CourseCatagory categoryList={this.state.categoryList}
-                                            setCatagoryColor={this.setCatagoryColor}
-                            />
-
+                    <div className='collapsibleOptions'>
+                        <div className='additionOptions'>
+                            ADDITIONAL OPTIONS
                         </div>
+                        <Icon />
 
-                        <div className='GAWrapper'>
-                            <GradAttributes gradAttributeList={this.state.gradAttributeList}
-                                            setGradAttributeColor={this.setGradAttributeColor}/>
-                            {/* <GALegend gaLegendList={this.state.gaLegendList}/> */}
-                        </div>
-
-                        <div className='gradLegendWrapper'>
-                            <GALegend gaLegendList={this.state.gaLegendList}/>
-                            <RequisiteLegend/>
-                        </div>
                     </div>
+
+                    {this.state.containOptions && (
+                        <div className="lowerStuff">
+                            <div className='catagoryWrapper'>
+                                <CourseCatagory categoryList={this.state.categoryList}
+                                                setCatagoryColor={this.setCatagoryColor}
+                                />
+
+                            </div>
+
+                            <div className='GAWrapper'>
+                                <GradAttributes gradAttributeList={this.state.gradAttributeList}
+                                                setGradAttributeColor={this.setGradAttributeColor}/>
+                                {/* <GALegend gaLegendList={this.state.gaLegendList}/> */}
+                            </div>
+
+                            <div className='gradLegendWrapper'>
+                                <GALegend gaLegendList={this.state.gaLegendList}/>
+                                <RequisiteLegend/>
+                            </div>
+                        </div>
+                    )}
 
                     <div className='structureTitle'>COURSES</div>
                     <div className='structureDescription'> Below are each of the courses in each semester in your

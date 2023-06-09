@@ -88,7 +88,7 @@
 }
 
 .guideWrapper {
-    width : 500px;
+    width: 500px;
     min-height: 500px;
     border: black solid 2px;
     margin-top: 10px;
@@ -111,13 +111,49 @@
     font-weight: 350;
 }
 
+
+.dropdownsWrapper {
+
+    display: flex;
+    flex-direction: row;
+    overflow: visible;
+
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.planWrapper {
+    /* Spacing on all sides of inside of term palette*/
+    width: 490px;
+    min-height: 200px;
+    margin-right: 10px;
+
+    display: flex;
+    overflow: visible;
+}
+
+.groupWrapper {
+    /* Spacing on all sides of inside of term palette*/
+    width: 550px;
+    min-height: 200px;
+    margin-right: 10px;
+
+    display: flex;
+    overflow: hidden;
+}
+
+.sectionDescription {
+    margin: 10px 10px 40px 0px;
+}
+
+
 .allPlans {
     margin: 10px 10px 10px 0px;
 }
 
 .SelectedPlanDescription {
     color: #275d38;
-    font-size: 35px;        /* Font of text inside term div*/
+    font-size: 35px; /* Font of text inside term div*/
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
 }
@@ -138,14 +174,14 @@
     border-style: solid;
     border-radius: 0px;
     border-width: 3px;
-    
-    width: 100px;           /* Width of eachterm div*/
+
+    width: 100px; /* Width of eachterm div*/
     height: 38px;
-    font-size: 14px;        /* Font of text inside term div*/
+    font-size: 14px; /* Font of text inside term div*/
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    padding: 10px;          /*Spacing on all sides of text inside a term div*/
-    margin-left: 5px;       /*Spacing between terms in term palette*/
+    padding: 10px; /*Spacing on all sides of text inside a term div*/
+    margin-left: 5px; /*Spacing between terms in term palette*/
 
     /* Looks good when cursor points to a term div*/
     cursor: pointer;
@@ -180,12 +216,12 @@
     border-style: solid;
     border-radius: 0px;
     border-width: 3px;
-    
-    width: 52px;            /* Width of eachterm div*/
+
+    width: 52px; /* Width of eachterm div*/
     height: 26px;
-    font-size: 14px;        /* Font of text inside term div*/
-    padding: 7px;           /*Spacing on all sides of text inside a term div*/
-    margin-left: 5px;       /*Spacing between terms in term palette*/
+    font-size: 14px; /* Font of text inside term div*/
+    padding: 7px; /*Spacing on all sides of text inside a term div*/
+    margin-left: 5px; /*Spacing between terms in term palette*/
 
     /* Looks good when cursor points to a term div*/
     cursor: pointer;
@@ -198,9 +234,15 @@
     align-items: center;
 }
 
-.additionOptions {
+.collapsibleOptions {
     width: 527px;
     height: 68px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.additionOptions {
     color: #275D38;
     font-size: 35px;
     font-family: 'Roboto', sans-serif;
@@ -208,8 +250,7 @@
     display: flex;
     align-items: center;
     justify-content: left;
-
-    margin-top: 50px;
+    margin-right: 15px;
 }
 
 .lowerStuff {
@@ -261,14 +302,14 @@
 .indvCatagory {
     /* Background and text color of each category div*/
     background-color: rgb(206, 212, 218);
-    
-    width: 170px;           /* Width of each category div*/
+
+    width: 170px; /* Width of each category div*/
     height: 47px;
-    font-size: 16px;        /* Font of text inside category div*/
+    font-size: 16px; /* Font of text inside category div*/
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
     color: black;
-    padding: 10px;          /*Spacing on all sides of text inside a category div*/
+    padding: 10px; /*Spacing on all sides of text inside a category div*/
     margin-right: 10px;
     margin-bottom: 5px;
 
@@ -285,7 +326,6 @@
     align-items: center;
 
 }
-
 
 .GAWrapper {
     /* Spacing on all sides of inside of term palette*/
@@ -327,13 +367,13 @@
     /* Background and text color of each category div*/
     background-color: rgb(206, 212, 218);
 
-    width: 170px;           /* Width of each category div*/
+    width: 170px; /* Width of each category div*/
     height: 47px;
-    font-size: 16px;        /* Font of text inside category div*/
+    font-size: 16px; /* Font of text inside category div*/
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
     color: black;
-    padding: 10px;          /* Spacing on all sides of text inside a GA div*/
+    padding: 10px; /* Spacing on all sides of text inside a GA div*/
     margin-bottom: 5px;
     margin-right: 10px;
     /* Looks good when cursor points to a GA div*/
@@ -388,10 +428,10 @@
 }
 
 .gradLegendWrapper {
-   /* Spacing on all sides of inside of term palette*/
-   padding: 15px;
-   min-width: 200px;
-   vertical-align: top;
+    /* Spacing on all sides of inside of term palette*/
+    padding: 15px;
+    min-width: 200px;
+    vertical-align: top;
 }
 
 .gradLegendWrapper b {
@@ -421,7 +461,7 @@
     max-width: 420px;
 }
 
-.prerequisite, .corequisite  {
+.prerequisite, .corequisite {
     font-size: 15px;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
