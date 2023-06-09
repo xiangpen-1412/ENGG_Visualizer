@@ -139,7 +139,7 @@
     margin-right: 10px;
 
     display: flex;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .sectionDescription {
@@ -185,7 +185,7 @@
     font-size: 14px;        /* Font of text inside term div*/
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    padding: 10px;          /*Spacing on all sides of text inside a term div*/
+    padding: 10px;          /*Spacing on all sides of text inside term div*/
     margin-left: 5px;       /*Spacing between terms in term palette*/
 
     /* Looks good when cursor points to a term div*/
