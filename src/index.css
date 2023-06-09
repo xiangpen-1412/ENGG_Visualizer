@@ -101,11 +101,11 @@ code {
 .indivCourses {
     /* border: 2px solid black; */
     background-color: rgb(206, 212, 218); /* Background color of each term div*/
-    color: rgb(39, 93, 56); /* Text color of each term div*/
+    color: rgb(0, 0, 0); /* Text color of each term div*/
 
     width: 160px;/* Width of eachterm div*/
     height: 50px;
-    font-size: 18px; /* Font of text inside term div*/
+    font-size: 20px; /* Font of text inside term div*/
     padding: 10px; /*Spacing on all sides of text inside a term div*/
     border-radius: 1px; /* Make the term divs rounded corners*/
     margin-top: 10px;
@@ -125,7 +125,7 @@ code {
 
 .orCaseDiv {
     border: 2px solid rgb(180, 186, 192);
-    width: 160px;
+    width: 155px;
 
     height: auto;
     padding: 10px;
@@ -143,12 +143,12 @@ code {
     background-color: rgb(206, 212, 218);
     /* Text color of each term div*/
 
-    color: rgb(39, 93, 56);
+    color: rgb(0, 0, 0);
     /* Width of eachterm div*/
-    width: 140px;/* Width of eachterm div*/
+    width: 135px;/* Width of eachterm div*/
     height: 45px;
     /* Font of text inside term div*/
-    font-size: 18px;
+    font-size: 20px;
     /*Spacing on all sides of text inside a term div*/
     padding: 10px;
     /* Make the term divs rounded corners*/
@@ -178,7 +178,7 @@ code {
 }
 
 .orText {
-    color: rgb(39, 93, 56);
+    color: rgb(0, 0, 0);
     /* font-family: "Times New Roman", serif; */
     /* font-weight: bold; */
 
@@ -187,7 +187,7 @@ code {
     align-items: center;
 
     margin: 10px 10px 10px 10px;
-    font-size: 15px;
+    font-size: 18px;
 }
 
 .description {
