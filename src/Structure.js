@@ -234,26 +234,20 @@ class Structure extends Component {
     adjustDescriptionPosition = (indexx) => {
 
         const descriptionDiv = document.querySelector('.description');
+        const structureWrapper = document.querySelector('.structureWrapper');
+        let courseDiv = document.getElementById(indexx.toString());
 
-        if (descriptionDiv !== null) {
-            const rect = descriptionDiv.getBoundingClientRect();
-
-            const structureWrapper = document.querySelector('.structureWrapper');
+        if (descriptionDiv !== null && structureWrapper !== null && courseDiv !== null) {
+            const descriptionRect = descriptionDiv.getBoundingClientRect();
             const structureWrapperRect = structureWrapper.getBoundingClientRect();
+            const courseRect = courseDiv.getBoundingClientRect();
 
-            let courseDiv = document.getElementById(indexx.toString());
+            if (descriptionRect.bottom > structureWrapperRect.bottom) {
+                descriptionDiv.style.bottom = `${structureWrapperRect.bottom - courseRect.top - 1200}px`;
+            }
 
-            if (courseDiv !== null) {
-                let courseRect;
-                courseRect = courseDiv.getBoundingClientRect();
-
-                if (rect.bottom > structureWrapperRect.bottom) {
-                    descriptionDiv.style.bottom = `${structureWrapperRect.bottom - courseRect.top - 1200}px`;
-                }
-
-                if (rect.right > structureWrapperRect.right) {
-                    descriptionDiv.style.left = `${structureWrapperRect.right - descriptionDiv.offsetWidth - courseRect.width}px`;
-                }
+            if (descriptionRect.right > structureWrapperRect.right) {
+                descriptionDiv.style.left = `${courseRect.left - descriptionDiv.offsetWidth - 20}px`;
             }
         }
     };

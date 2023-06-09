@@ -17,7 +17,7 @@
     height: 100%;
     /* justify-content: space-evenly; */
 
-    margin-left: 10%;
+    margin-left: 9%;
     margin-right: 10%;
 }
 
@@ -64,6 +64,29 @@
     position: absolute;
 }
 
+.subHeader {
+    display: flex;
+    flex-direction: row;
+    margin-top: 15px;
+    margin-left: 10%;
+    margin-right: 10%;
+
+    align-items: center;
+}
+
+.homeButton {
+    height: 18px;
+    width: 18px;
+}
+
+.path {
+    color: #7B7B7B;
+    margin-left: 10px;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+}
+
 .guideWrapper {
     width : 500px;
     min-height: 500px;
@@ -81,48 +104,12 @@
 }
 
 .pageTitle {
-    margin: 40px 10px 50px 0px;
+    margin: 25px 0px 30px 0px;
     color: rgb(39, 93, 56);
-    font-size: 50px;
+    font-size: 53px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 300;
+    font-weight: 350;
 }
-
-
-
-
-.dropdownsWrapper {
-
-    display: flex;
-    flex-direction: row;
-    overflow: hidden;
-
-    justify-content: space-between;
-}
-
-.planWrapper {
-    /* Spacing on all sides of inside of term palette*/
-    width: 490px;
-    min-height: 200px;
-    margin-right: 10px;
-
-    display: flex;
-    overflow: hidden;
-}
-
-.groupWrapper {
-    /* Spacing on all sides of inside of term palette*/
-    width: 550px;
-    min-height: 200px;
-    margin-right: 10px;
-
-    display: flex;
-    overflow: hidden;
-}
-
-
-
-
 
 .allPlans {
     margin: 10px 10px 10px 0px;
@@ -133,11 +120,6 @@
     font-size: 35px;        /* Font of text inside term div*/
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
-
-    display: flex;
-    overflow: hidden;
-
-    margin-bottom: 30px;
 }
 
 .planPalette {
@@ -180,13 +162,6 @@
 .allGroups {
     margin: 10px 10px 10px 0px;
     display: flex;
-    flex-direction: column;
-}
-
-.groupDropdownWrapper {
-    margin: 20px 10px 10px 0px;
-    display: flex;
-    flex-direction: row;
 }
 
 .courseGroupPalatte {
@@ -234,6 +209,7 @@
     align-items: center;
     justify-content: left;
 
+    margin-top: 50px;
 }
 
 .lowerStuff {
@@ -463,6 +439,39 @@
 
 .corequisiteImage {
     margin-left: 9px;
+}
+
+.footer {
+    background-color: #275d38;
+    height: 140px;
+    display: flex;
+    justify-content: center;
+}
+
+.topBorder {
+    width: 900px;
+    border-top: 2px solid #F5F5F5;
+    margin-top: 50px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+}
+
+.imageDiv {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.footerImage {
+    height: 35px;
+    width: 150px;
+}
+
+.footerTag {
+    color: whitesmoke;
+    font-size: 10px;
+    text-align: right;
 }
 
 .part {

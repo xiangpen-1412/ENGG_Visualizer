@@ -37,6 +37,11 @@ code {
 
     margin-bottom: -15px;
 }
+
+.structureWrapper {
+    min-height: 600px;
+}
+
 .termWrapper {
     display: flex;
     flex-direction: row;

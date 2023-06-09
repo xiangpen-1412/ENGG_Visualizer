@@ -1,11 +1,9 @@
 import React, {Component, useEffect, useState} from 'react';
 import './App.css';
 import './index.css';
-import Dropdown from './Dropdown.js';
 import Structure from './Structure.js';
 import {useLocation, useNavigate} from 'react-router-dom';
 import RESTController from "./controller/RESTController";
-import {value} from "lodash/seq";
 
 
 const PageTitle = () => {
@@ -19,16 +17,8 @@ const PageTitle = () => {
     )
 }
 
-const Header = (props) => {
-
-    const location = useLocation();
-    const navigate = useNavigate();
+const Header = () => {
     const [showGuide, setShowGuide] = useState(false);
-
-    const handleBackButtonClick = () => {
-        props.deletelinemap();
-        navigate("/");
-    };
 
     const handleHelpButtonClick = () => {
         setShowGuide(!showGuide);
@@ -37,9 +27,6 @@ const Header = (props) => {
     return (
         <header className="header">
             <div className="header-content">
-                <button className="backButton" onClick={handleBackButtonClick}>
-                    <a>← Back</a>
-                </button>
                 <div>
                     <a>
                         <img alt="University of Alberta logo" src="uofalogo.png" className="image"/>
@@ -60,6 +47,27 @@ const Header = (props) => {
         </header>
     );
 };
+
+const SubHeader = (props) => {
+
+    const location = useLocation();
+    const {selectedProgram} = location.state;
+    const navigate = useNavigate();
+    const handleBackButtonClick = () => {
+        props.deletelinemap();
+        navigate("/");
+    };
+    return (
+        <div className='subHeader'>
+            <div className='subHeaderContent'>
+                <img alt="Home Button" src="home_button.png" className="homeButton" onClick={handleBackButtonClick}/>
+            </div>
+            <div className='path'>
+                > {selectedProgram} Engineering Plan Visualizer
+            </div>
+        </div>
+    )
+}
 
 const Instructions = () => {
 
@@ -156,10 +164,7 @@ const Plans = (props) => {
                     setSelectedPlan(plan);
                     props.setSelectedProgramPlan(selectedProgram, plan);
                 }}
-                style={{
-                    backgroundColor: isSelected ? "rgb(39, 93, 56)" : "rgb(255, 255, 255)",
-                    color: isSelected ? "rgb(255, 255, 255)" : "rgb(39, 93, 56)"
-                }}
+                style={{backgroundColor: isSelected ? "rgb(39, 93, 56)" : "rgb(255, 255, 255)"}}
             >
                 {plan}
             </div>
@@ -224,48 +229,32 @@ const CourseGroup = (props) => {
     }, [props.planChanged]);
 
     const keyComponent = courseGroupKeys.map((key) => {
-        // const groupComponent = props.courseGroup.get(key).map((group) => {
-        //     const isSelected = selectedButtons.get(key) === group;
-        //     const color = isSelected ? "rgb(39, 93, 56)" : "rgb(255, 255, 255)";
-        //     const textColor = isSelected ? "rgb(255, 255, 255)" : "rgb(39, 93, 56)";
-        //     return (
-        //         <div
-        //             className="indivCourseGroup"
-        //             key={group}
-        //             onClick={() => {
-        //                 const newSelectedButtons = new Map(selectedButtons);
-        //                 newSelectedButtons.set(key, group);
-        //                 setSelectedButtons(newSelectedButtons);
-        //                 // Update the selected course group when a new group is clicked
-        //                 props.setSelectedCourseGroup(group, props.deleteLineMap);
-        //             }}
-        //             style={{
-        //                 backgroundColor: color,
-        //                 color: textColor
-        //             }}
-        //         >
-        //             {group}
-        //         </div>
-        //     );
-        // });
-
-        const defaultGroup = selectedButtons.get(key);
+        const groupComponent = props.courseGroup.get(key).map((group) => {
+            const isSelected = selectedButtons.get(key) === group;
+            const color = isSelected ? "rgb(39, 93, 56)" : "rgb(255, 255, 255)";
+            return (
+                <div
+                    className="indivCourseGroup"
+                    key={group}
+                    onClick={() => {
+                        const newSelectedButtons = new Map(selectedButtons);
+                        newSelectedButtons.set(key, group);
+                        setSelectedButtons(newSelectedButtons);
+                        // Update the selected course group when a new group is clicked
+                        props.setSelectedCourseGroup(group, props.deleteLineMap);
+                    }}
+                    style={{
+                        backgroundColor: color
+                    }}
+                >
+                    {group}
+                </div>
+            );
+        });
         return (
             <div key={key}>
-                {/* <h3>{key}</h3> */}
-                {/* <div className="courseGroupPalatte">{groupComponent}</div> */}
-                <div>
-                    <Dropdown 
-                        placeHolder={defaultGroup}
-                        options={props.courseGroup.get(key)}
-                        onChange={(group) => {
-                            const newSelectedButtons = new Map(selectedButtons);
-                            newSelectedButtons.set(key, group);
-                            setSelectedButtons(newSelectedButtons);
-                            props.setSelectedCourseGroup(group, props.deleteLineMap);
-                        }}
-                    />
-                </div>
+                <h3>{key}</h3>
+                <div className="courseGroupPalatte">{groupComponent}</div>
             </div>
         );
     });
@@ -274,13 +263,7 @@ const CourseGroup = (props) => {
         props.setPlanChanged();
     }
 
-    return (
-        <div className="allGroups">
-            <div className="SelectedPlanDescription">SELECT COURSE GROUPS</div>
-            <div>Select the sub-categories for your plan here. Each numerical group has an option A or B.</div>
-            <div className="groupDropdownWrapper">{keyComponent}</div>
-        </div>
-    );
+    return <div className="allGroups">{keyComponent}</div>;
 };
 
 const GradAttributes = (props) => {
@@ -428,6 +411,25 @@ const RequisiteLegend = () => {
         </div>
     )
 }
+
+const Footer = () => {
+
+    return (
+        <footer className="footer">
+            <div className='topBorder'>
+                <div className='imageDiv'>
+                    <a>
+                        <img alt="University of Alberta logo" src="uofalogo.png" className="footerImage"/>
+                    </a>
+                </div>
+                <div className='footerTag'>
+                    @ 2023 University of Alberta
+                </div>
+            </div>
+        </footer>
+    );
+};
+
 
 class App extends Component {
     constructor(props) {
@@ -921,32 +923,34 @@ class App extends Component {
             <div className='all'>
 
                 <div className='header'>
-                    <Header deletelinemap={this.deleteLineMap}/>
+                    <Header/>
+                </div>
+
+                <div className='subheader'>
+                    <SubHeader deletelinemap={this.deleteLineMap}/>
                 </div>
 
                 <div className='part'>
                     <PageTitle/>
-                    <div className='dropdownsWrapper'>
-                        <div className='planWrapper'>
-                            <Plans setSelectedProgramPlan={this.setSelectedProgramPlan}
-                                isDefault={isDefault}
-                                setIsDefault={this.setIsDefault}
-                                setStructure={this.setStructure}
-                                setContainCourseGroup={this.setContainCourseGroup}
-                            />
-                        </div>
-
-                        {this.state.containCourseGroup && (
-                            <div className='groupWrapper'>
-                                <CourseGroup courseGroup={courseGroup}
-                                            setSelectedCourseGroup={this.setSelectedCourseGroup}
-                                            selectedProgram={selectedProgram}
-                                            deleteLineMap={this.deleteLineMap}
-                                            planChanged={planChanged}
-                                            setPlanChanged={this.setPlanChanged}
-                                />
-                            </div>)}
+                    <div className='planWrapper'>
+                        <Plans setSelectedProgramPlan={this.setSelectedProgramPlan}
+                               isDefault={isDefault}
+                               setIsDefault={this.setIsDefault}
+                               setStructure={this.setStructure}
+                               setContainCourseGroup={this.setContainCourseGroup}
+                        />
                     </div>
+
+                    {this.state.containCourseGroup && (
+                        <div>
+                            <CourseGroup courseGroup={courseGroup}
+                                         setSelectedCourseGroup={this.setSelectedCourseGroup}
+                                         selectedProgram={selectedProgram}
+                                         deleteLineMap={this.deleteLineMap}
+                                         planChanged={planChanged}
+                                         setPlanChanged={this.setPlanChanged}
+                            />
+                        </div>)}
 
                     <div className='additionOptions'>
                         ADDITIONAL OPTIONS
@@ -990,6 +994,9 @@ class App extends Component {
                     </div>
                 </div>
 
+                <div className='footer'>
+                    <Footer/>
+                </div>
 
             </div>
         )
