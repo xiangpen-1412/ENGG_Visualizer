@@ -254,6 +254,7 @@
     align-items: center;
 
     margin-bottom: 30px;
+    cursor: pointer;
 }
 
 .additionOptions {
