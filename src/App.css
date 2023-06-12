@@ -47,41 +47,72 @@
     display: inline-block;
     text-align: center;
     justify-content: center;
-    /* margin-left: 570px; */
-
     white-space: nowrap;
     flex: auto;
-    margin-right: 15%;
+
+    margin-left: -80px;
 }
 
-.questionMark {
-    width: 45px;
-    height: 45px;
-    margin-right: 10px;
+.threeDots {
+    width: 25px;
+    height: 25px;
 
-    float: right;
-    right: 10px;
+    cursor: pointer;
+}
+
+.deleteButton {
+
     position: absolute;
+    top: 2%;
+    right: 3%;
+
+    width: 20px;
+    height: 20px;
+
+    cursor: pointer;
+}
+
+.headerDropDown {
+    position: absolute;
+    width: 7%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: auto;
+    max-height: 150px;
+    margin-left: 89%;
+    margin-top: -10px;
+    background-color: #fff;
+}
+
+.headerDropDownItem {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.headerDropDownItem:hover {
+    background-color: #cccccc;
+    color: #fff;
 }
 
 .subHeader {
     display: flex;
     flex-direction: row;
+    align-items: center;
+
     margin-top: 15px;
     margin-left: 10%;
     margin-right: 10%;
-
-    align-items: center;
 }
 
 .homeButton {
     height: 18px;
     width: 18px;
+
+    cursor: pointer;
 }
 
 .path {
     color: #7B7B7B;
-    margin-left: 10px;
     font-size: 14px;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
@@ -153,7 +184,7 @@
 
 .SelectedPlanDescription {
     color: #275d38;
-    font-size: 35px;        /* Font of text inside term div*/
+    font-size: 35px; /* Font of text inside term div*/
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
 
@@ -180,13 +211,13 @@
     border-radius: 0px;
     border-width: 3px;
 
-    width: 100px;           /* Width of eachterm div*/
+    width: 100px; /* Width of eachterm div*/
     height: 38px;
-    font-size: 14px;        /* Font of text inside term div*/
+    font-size: 14px; /* Font of text inside term div*/
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    padding: 10px;          /*Spacing on all sides of text inside a term div*/
-    margin-left: 5px;       /*Spacing between terms in term palette*/
+    padding: 10px; /*Spacing on all sides of text inside a term div*/
+    margin-left: 5px; /*Spacing between terms in term palette*/
 
     /* Looks good when cursor points to a term div*/
     cursor: pointer;
@@ -229,11 +260,11 @@
     border-radius: 0px;
     border-width: 3px;
 
-    width: 52px;            /* Width of eachterm div*/
+    width: 52px; /* Width of eachterm div*/
     height: 26px;
-    font-size: 14px;        /* Font of text inside term div*/
-    padding: 7px;           /*Spacing on all sides of text inside a term div*/
-    margin-left: 5px;       /*Spacing between terms in term palette*/
+    font-size: 14px; /* Font of text inside term div*/
+    padding: 7px; /*Spacing on all sides of text inside a term div*/
+    margin-left: 5px; /*Spacing between terms in term palette*/
 
     /* Looks good when cursor points to a term div*/
     cursor: pointer;
@@ -315,13 +346,13 @@
     /* Background and text color of each category div*/
     background-color: rgb(206, 212, 218);
 
-    width: 170px;           /* Width of each category div*/
+    width: 170px; /* Width of each category div*/
     height: 47px;
-    font-size: 16px;        /* Font of text inside category div*/
+    font-size: 16px; /* Font of text inside category div*/
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
     color: black;
-    padding: 10px;          /*Spacing on all sides of text inside a category div*/
+    padding: 10px; /*Spacing on all sides of text inside a category div*/
     margin-right: 10px;
     margin-bottom: 5px;
 
@@ -380,13 +411,13 @@
     /* Background and text color of each category div*/
     background-color: rgb(206, 212, 218);
 
-    width: 170px;           /* Width of each category div*/
+    width: 170px; /* Width of each category div*/
     height: 47px;
-    font-size: 16px;        /* Font of text inside category div*/
+    font-size: 16px; /* Font of text inside category div*/
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
     color: black;
-    padding: 10px;          /* Spacing on all sides of text inside a GA div*/
+    padding: 10px; /* Spacing on all sides of text inside a GA div*/
     margin-bottom: 5px;
     margin-right: 10px;
     /* Looks good when cursor points to a GA div*/

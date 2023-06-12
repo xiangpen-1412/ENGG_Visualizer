@@ -110,7 +110,7 @@ code {
 
     width: 160px;/* Width of eachterm div*/
     height: 50px;
-    font-size: 20px; /* Font of text inside term div*/
+    font-size: 18px; /* Font of text inside term div*/
     padding: 10px; /*Spacing on all sides of text inside a term div*/
     border-radius: 1px; /* Make the term divs rounded corners*/
     margin-top: 10px;
@@ -153,7 +153,7 @@ code {
     width: 135px;/* Width of eachterm div*/
     height: 45px;
     /* Font of text inside term div*/
-    font-size: 20px;
+    font-size: 18px;
     /*Spacing on all sides of text inside a term div*/
     padding: 10px;
     /* Make the term divs rounded corners*/

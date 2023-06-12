@@ -5,7 +5,6 @@ import Dropdown from './Dropdown.js';
 import Structure from './Structure.js';
 import {useLocation, useNavigate} from 'react-router-dom';
 import RESTController from "./controller/RESTController";
-import {value} from "lodash/seq";
 
 
 const PageTitle = () => {
@@ -19,74 +18,89 @@ const PageTitle = () => {
     )
 }
 
-const Icon = () => {
+const HomeButtonIcon = () => {
     return (
-        <svg height="20" width="20" viewBox="0 0 20 20">
-            <path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path>
+        <svg className='homeButtonIcon' height="20" width="20" viewBox="0 0 20 20">
+            <path
+                d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                style={{transform: "rotate(270deg)", transformOrigin: "center", fill: "#7B7B7B"}}
+            ></path>
         </svg>
     );
 };
 
-const Header = (props) => {
+const Icon = () => {
+    return (
+        <svg height="20" width="20" viewBox="0 0 20 20">
+            <path
+                d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path>
+        </svg>
+    );
+};
 
-    const location = useLocation();
-    const navigate = useNavigate();
-    const [showGuide, setShowGuide] = useState(false);
+const Header = () => {
+
+    const [showDropDown, setShowDropDown] = useState(false);
+    const [showDescription, setShowDescription] = useState(false);
+
+    const handleThreeDotsClick = () => {
+        setShowDropDown(!showDropDown);
+    }
 
     const handleHelpButtonClick = () => {
-        setShowGuide(!showGuide);
+        setShowDescription(!showDescription);
+        setShowDropDown(false);
     }
+
+    const handleExportClick = () => {
+        setShowDropDown(!showDropDown);
+    }
+
 
     return (
         <header className="header">
             <div className="header-content">
-                <div>
-                    <a>
-                        <img alt="University of Alberta logo" src="uofalogo.png" className="image"/>
-                    </a>
-                </div>
+                <img alt="University of Alberta logo" src="uofalogo.png" className="image"/>
                 <div className="site-title">
                     Engineering Plan Visualizer
                 </div>
-                <img alt="question mark" src="questionMark.png" className="questionMark"
-                     onClick={handleHelpButtonClick}/>
+                <img alt="three dots" src="three-dots.png" className="threeDots"
+                     onClick={handleThreeDotsClick}/>
             </div>
 
-            {showGuide && (
-                <div className="guideWrapper">
-                    <Instructions/>
+            {showDropDown && (
+                <div className='headerDropDown'>
+                    <div
+                        className='headerDropDownItem'
+                        onClick={handleHelpButtonClick}
+                    >
+                        Help
+                    </div>
+                    <div
+                        className='headerDropDownItem'
+                        onClick={handleExportClick}
+                    >
+                        Export
+                    </div>
                 </div>
             )}
+
+            {showDescription && (
+                <div className="guideWrapper">
+                    <Instructions onInstructionClick={handleHelpButtonClick}/>
+                </div>
+            )}
+
         </header>
     );
 };
 
-const SubHeader = (props) => {
-
-    const location = useLocation();
-    const {selectedProgram} = location.state;
-    const navigate = useNavigate();
-    const handleBackButtonClick = () => {
-        props.deletelinemap();
-        navigate("/");
-    };
-    return (
-        <div className='subHeader'>
-            <div className='subHeaderContent'>
-                <img alt="Home Button" src="home_button.png" className="homeButton" onClick={handleBackButtonClick}/>
-            </div>
-            <Icon />
-            <div className='path'>
-                {selectedProgram} Engineering Plan Visualizer
-            </div>
-        </div>
-    )
-}
-
-const Instructions = () => {
+const Instructions = (props) => {
 
     return (
         <div>
+            <img alt="delete button" src="x-mark.png" className="deleteButton"
+                 onClick={props.onInstructionClick}/>
             <h3>Visualizer Instruction</h3>
             <p>Welcome to the University of Alberta's Engineering Program Plan Visualizer.</p>
             <p>This tool is designed to help you navigate the structure of your chosen program plan. </p>
@@ -120,6 +134,27 @@ const Instructions = () => {
                 please do not hesitate to contact us at dnobes@ualberta.ca. </p>
         </div>
     );
+}
+
+
+const SubHeader = (props) => {
+
+    const location = useLocation();
+    const {selectedProgram} = location.state;
+    const navigate = useNavigate();
+    const handleBackButtonClick = () => {
+        props.deletelinemap();
+        navigate("/");
+    };
+    return (
+        <div className='subHeader'>
+            <img alt="Home Button" src="home_button.png" className="homeButton" onClick={handleBackButtonClick}/>
+            <HomeButtonIcon/>
+            <div className='path'>
+                {selectedProgram} Engineering Plan Visualizer
+            </div>
+        </div>
+    )
 }
 
 //Plans has to be a simple component as it contains navigation
@@ -171,7 +206,7 @@ const Plans = (props) => {
             <div className="sectionDescription">Select a plan for your discipline below.</div>
             {/* <div className="planPalette"> */}
             <div>
-                <Dropdown 
+                <Dropdown
                     placeHolder={'Traditional Plan'}
                     options={uniquePlans}
                     onChange={(plan) => {
@@ -232,46 +267,19 @@ const CourseGroup = (props) => {
     }, [props.planChanged]);
 
     const keyComponent = courseGroupKeys.map((key) => {
-        // const groupComponent = props.courseGroup.get(key).map((group) => {
-        //     const isSelected = selectedButtons.get(key) === group;
-        //     const color = isSelected ? "rgb(39, 93, 56)" : "rgb(255, 255, 255)";
-        //     const textColor = isSelected ? "rgb(255, 255, 255)" : "rgb(39, 93, 56)";
-        //     return (
-        //         <div
-        //             className="indivCourseGroup"
-        //             key={group}
-        //             onClick={() => {
-        //                 const newSelectedButtons = new Map(selectedButtons);
-        //                 newSelectedButtons.set(key, group);
-        //                 setSelectedButtons(newSelectedButtons);
-        //                 // Update the selected course group when a new group is clicked
-        //                 props.setSelectedCourseGroup(group, props.deleteLineMap);
-        //             }}
-        //             style={{
-        //                 backgroundColor: color,
-        //                 color: textColor
-        //             }}
-        //         >
-        //             {group}
-        //         </div>
-        //     );
-        // });
-
         const defaultGroup = selectedButtons.get(key);
-            return (
+        return (
             <div key={key}>
-                {/* <h3>{key}</h3> */}
-                {/* <div className="courseGroupPalatte">{groupComponent}</div> */}
                 <div>
-                    <Dropdown 
+                    <Dropdown
                         placeHolder={defaultGroup}
                         options={props.courseGroup.get(key)}
                         onChange={(group) => {
-                        const newSelectedButtons = new Map(selectedButtons);
-                        newSelectedButtons.set(key, group);
-                        setSelectedButtons(newSelectedButtons);
-                        props.setSelectedCourseGroup(group, props.deleteLineMap);
-                    }}
+                            const newSelectedButtons = new Map(selectedButtons);
+                            newSelectedButtons.set(key, group);
+                            setSelectedButtons(newSelectedButtons);
+                            props.setSelectedCourseGroup(group, props.deleteLineMap);
+                        }}
                     />
                 </div>
             </div>
@@ -606,6 +614,7 @@ class App extends Component {
             group4: "",
             lineMap: new Map(),
             isDefault: true,
+            containOptions: true,
         };
 
         this.controller = new RESTController();
@@ -960,7 +969,7 @@ class App extends Component {
 
                     <div className='dropdownsWrapper'>
                         <div className='planWrapper'>
-                            <Plans 
+                            <Plans
                                 setSelectedProgramPlan={this.setSelectedProgramPlan}
                                 isDefault={isDefault}
                                 setIsDefault={this.setIsDefault}
@@ -972,11 +981,11 @@ class App extends Component {
                         {this.state.containCourseGroup && (
                             <div className='groupWrapper'>
                                 <CourseGroup courseGroup={courseGroup}
-                                            setSelectedCourseGroup={this.setSelectedCourseGroup}
-                                            selectedProgram={selectedProgram}
-                                            deleteLineMap={this.deleteLineMap}
-                                            planChanged={planChanged}
-                                            setPlanChanged={this.setPlanChanged}
+                                             setSelectedCourseGroup={this.setSelectedCourseGroup}
+                                             selectedProgram={selectedProgram}
+                                             deleteLineMap={this.deleteLineMap}
+                                             planChanged={planChanged}
+                                             setPlanChanged={this.setPlanChanged}
                                 />
                             </div>)}
                     </div>
@@ -985,7 +994,7 @@ class App extends Component {
                         <div className='additionOptions'>
                             ADDITIONAL OPTIONS
                         </div>
-                        <Icon />
+                        <Icon/>
 
                     </div>
 
