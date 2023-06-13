@@ -608,7 +608,7 @@ class App extends Component {
             selectedProgram: "",
             selectedPlan: "",
             containCourseGroup: false,
-            showOptions: true,
+            showOptions: false,
             planChanged: false,
             group2: "",
             group3: "",
