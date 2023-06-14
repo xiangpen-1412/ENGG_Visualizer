@@ -5,8 +5,6 @@ import Dropdown from './Dropdown.js';
 import Structure from './Structure.js';
 import {useLocation, useNavigate} from 'react-router-dom';
 import RESTController from "./controller/RESTController";
-import {value} from "lodash/seq";
-
 
 const PageTitle = () => {
     const location = useLocation();
@@ -1003,7 +1001,7 @@ class App extends Component {
                             </div>)}
                     </div>
 
-                    <div 
+                    <div
                         className='collapsibleOptions'
                         onClick={ () => {this.toggleOptionsHidden();} }
                     >
