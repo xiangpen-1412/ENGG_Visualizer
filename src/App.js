@@ -5,6 +5,7 @@ import Dropdown from './Dropdown.js';
 import Structure from './Structure.js';
 import {useLocation, useNavigate} from 'react-router-dom';
 import RESTController from "./controller/RESTController";
+import {value} from "lodash/seq";
 
 
 const PageTitle = () => {
@@ -644,15 +645,14 @@ class App extends Component {
         this.setState({ selectedCategory: newSelectedCategory });
     }
 
-    setGroupColorSet = () => {
-
-    }
-
     setCatagoryColor = (event, catagory) => {
 
         let catagoryIndex = 0;
         let duplicateCategory = false;
         const {structure} = this.state;
+
+        // delete the graduate attributes highlights when onclick course category
+        this.setState({selectedAtt : null});
 
         // Create a copy of selectedGroup map
         let groupColorSet = new Map(this.state.groupColorSet);
@@ -763,16 +763,20 @@ class App extends Component {
     setGradAttributeColor = (event, gradAttribute) => {
 
         let attributeIndex = 0;
-        const {structure} = this.state
+        const {structure, groupColorSet} = this.state;
 
+        // delete the course categories highlights when onclick graduate attributes
+        groupColorSet.forEach((key, value) => {
+            groupColorSet.set(value, []);
+        });
+        this.setState({groupColorSet : groupColorSet});
+
+        // if select the same graduate attribute
         if (gradAttribute === this.state.selectedAtt) {
             this.setState({selectedAtt: ""});
             structure.map((term, termIndex) => {
                 term.courses.map((courseMap, courseIndex) => {
                     structure[termIndex].courses[courseIndex].color = '#ced4da';
-                    if (structure[termIndex].courses[courseIndex].border) {
-                        delete structure[termIndex].courses[courseIndex].border;
-                    }
                 })
             })
         } else {
