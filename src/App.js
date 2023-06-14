@@ -5,7 +5,6 @@ import Dropdown from './Dropdown.js';
 import Structure from './Structure.js';
 import {useLocation, useNavigate} from 'react-router-dom';
 import RESTController from "./controller/RESTController";
-import {value} from "lodash/seq";
 
 
 const PageTitle = () => {
@@ -107,8 +106,8 @@ const Instructions = (props) => {
             <p>This tool is designed to help you navigate the structure of your chosen program plan. </p>
             <p>Here is a guide to using the tool:</p>
             <ul>
-                <li><strong>Select plans:</strong>
-                    To see all the courses in a program, choose a plan from the Plan menu at the top. All
+                <li><strong>Select a plan:</strong>
+                    To see all the courses in a program, choose a plan from the Plan dropdown at the top. All
                     courses in 8 or more terms will be displayed below. For Mechanical Engineering, you will
                     need to select a group after selecting a plan.
                 </li>
@@ -117,17 +116,16 @@ const Instructions = (props) => {
                     and credits.
                 </li>
                 <li><strong>Prerequisites and Corequisites:</strong> Left-clicking on a course will display
-                    any prerequisites with yellow arrows and corequisites with red arrows.
+                    any prerequisites with solid arrows and corequisites with dotted arrows.
                 </li>
-                <li><strong>Course Group:</strong> Click on a course in the Course Group Palette to see all
+                <li><strong>Course Group:</strong> Select a group in the Course Group palette to see all
                     the courses that belong to the course group. This is useful for getting an overview of
                     courses with similar content or learning objectives.
                 </li>
                 <li><strong>Graduation Attributes:</strong> Clicking on a graduate attribute in the Graduate
-                    Attributes palette highlights each course in that category. The more red a course, the
-                    more it embodies that attribute. Please refer to the Graduate Attributes legends for
-                    more details. This displays where each learning outcome is met throughout a degree
-                    program.
+                    Attributes palette highlights each course in that category. Please refer to the legend
+                    for details on the color meanings. The coloration displays where each learning outcome is
+                    met throughout the degree program.
                 </li>
             </ul>
             <p>We hope this tool aids your understanding of your chosen engineering program and supports
@@ -137,6 +135,53 @@ const Instructions = (props) => {
     );
 }
 
+const About = () => {
+
+    return (
+        <div className='about'>
+            <h1>About</h1>
+            <h2>Develepoment</h2>
+            <p>
+                The University of Alberta's Engineering Program Plan Visualizer was created under
+                the direction of university professors Dr. David Nobes and Dr. Steven Knudsen.
+                The code was written by Co-op students Xiangpeng
+            </p>
+            <p>This tool is designed to help you navigate the structure of your chosen program plan. </p>
+
+            <p>We hope this tool aids your understanding of your chosen engineering program and supports
+                your academic planning process. If you have any questions or encounter any difficulties,
+                please do not hesitate to contact us at dnobes@ualberta.ca. </p>
+            <h2>Contact</h2>
+            <p>
+                If you have any questions, inquiries or feature requests to do with the Visualizer,
+                please do not hesitate to contact us at dnobes@ualberta.ca.
+            </p>
+        </div>
+    );
+}
+
+const TabHeader = (props) => {
+
+    const tabButtons = props.tabs.map( (tab, index) => {
+        return (
+            <div
+                className='tabButton'
+                onClick={() => props.setTab(index)}
+                style={{
+                    borderBottom: index === props.getTab() ? '2px solid' : 'none',
+                }}
+            >
+                {tab}
+            </div>
+        )
+    });
+
+    return (
+        <div className='tabWrapper'>
+            {tabButtons}
+        </div>
+    )
+}
 
 const SubHeader = (props) => {
 
@@ -170,6 +215,7 @@ const Plans = (props) => {
     const controller = new RESTController();
 
     useEffect(() => {
+        console.log(selectedProgram);
         controller.getPlans({programName: selectedProgram}).then((plans) => {
             setPlanList(plans);
             if (isFirst) {
@@ -222,6 +268,7 @@ const Plans = (props) => {
 }
 
 const CourseGroup = (props) => {
+
     const courseGroupKeys = [...props.courseGroup.keys()];
 
     const [selectedButtons, setSelectedButtons] = useState(
@@ -233,6 +280,7 @@ const CourseGroup = (props) => {
     );
 
     useEffect(() => {
+        console.log("selectedButtons changes");
         courseGroupKeys.forEach((key) => {
             const group = selectedButtons.get(key);
             if (group) {
@@ -244,6 +292,7 @@ const CourseGroup = (props) => {
 
     // Default selection of course groups
     useEffect(() => {
+        console.log("courseGroup changes");
         const newSelectedButtons = new Map(selectedButtons);
         courseGroupKeys.forEach((key) => {
             const groups = props.courseGroup.get(key);
@@ -301,22 +350,24 @@ const CourseGroup = (props) => {
 };
 
 const GradAttributes = (props) => {
+    const [selectedGradAtt, setSelectedGradAtt] = useState(null);
+
     const cells = props.gradAttributeList.map((gradAttribute, index) => {
+        let isSelected = gradAttribute === selectedGradAtt;
+
         return (
             <div
                 key={index}
                 className="indvGradAttribute"
                 onClick={(event) => {
-                    if (gradAttribute === props.selectedGradAtt) {
-                        props.setSelectedGradAtt(null);
+                    if (gradAttribute === selectedGradAtt) {
+                        setSelectedGradAtt(null);
                     } else {
-                        props.setSelectedGradAtt(gradAttribute);
+                        setSelectedGradAtt(gradAttribute);
                     }
-
-                    props.setSelectedCategory(null);
                     props.setGradAttributeColor(event, gradAttribute);
                 }}
-                style={{backgroundColor: props.selectedGradAtt === gradAttribute ? "gold" : "#ced4da"}}
+                style={{backgroundColor: isSelected ? "gold" : "#ced4da"}}
             >
                 {gradAttribute}
             </div>
@@ -340,6 +391,8 @@ const CourseCatagory = (props) => {
     const location = useLocation();
     const {selectedProgram} = location.state;
 
+    const [selectedCategory, setSelectedCategory] = useState([]);
+
     const cells = props.categoryList.map((category, index) => {
         if (selectedProgram === "Computer Engineering") {
             if (index > 9) {
@@ -355,17 +408,24 @@ const CourseCatagory = (props) => {
             }
         }
 
+        const isSelected = selectedCategory.includes(category);
+
         return (
             <div
                 key={index}
                 className="indvCatagory"
                 onClick={(event) => {
-                    props.setSelectedCategory(category);
-                    props.setSelectedGradAtt(null);
+                    if (selectedCategory.includes(category)) {
+                        const newSelectedCategory = selectedCategory.filter(item => item !== category);
+                        setSelectedCategory(newSelectedCategory);
+                    } else {
+                        const newSelectedCategory = selectedCategory.concat(category);
+                        setSelectedCategory(newSelectedCategory);
+                    }
                     props.setCatagoryColor(event, category);
                 }}
 
-                style={{backgroundColor: props.selectedCategory.includes(category) ? category.color : "#ced4da"}}
+                style={{backgroundColor: isSelected ? category.color : "#ced4da"}}
             >
                 {category.name}
             </div>
@@ -384,6 +444,7 @@ const CourseCatagory = (props) => {
         </div>
     );
 };
+
 
 // Legend for graduate attributes
 const GALegend = (props) => {
@@ -592,12 +653,13 @@ class App extends Component {
                 ['Group 3', ["3A", "3B"]],
                 ['Group 4', ["4A", "4B"]]
             ]),
+            tabs: ['Visualizer', 'About'],
             selectedAtt: "",
             groupColorSet: new Map(),
             selectedProgram: "",
             selectedPlan: "",
             containCourseGroup: false,
-            showOptions: true,
+            showOptions: false,
             planChanged: false,
             group2: "",
             group3: "",
@@ -605,8 +667,7 @@ class App extends Component {
             lineMap: new Map(),
             isDefault: true,
             containOptions: true,
-            selectedGradAtt: null,
-            selectedCategory: [],
+            tabIndex: 0,
         };
 
         this.controller = new RESTController();
@@ -626,33 +687,24 @@ class App extends Component {
         }));
     }
 
-    // set the selected grad attribute
-    setSelectedGradAtt = (gradAttribute) => {
-        this.setState({ selectedGradAtt: gradAttribute });
+    setCourseGroupWhenAbout = () => {
+        this.setState({group2: "", group3: "", group4: ""})
     }
 
-    // add a selected category to the selected category list, if selected a duplicate category
-    // then remove it
-    setSelectedCategory = (category) => {
-        let newSelectedCategory = this.state.selectedCategory.includes(category) ?
-            this.state.selectedCategory.filter(item => item !== category) :
-            [...this.state.selectedCategory, category];
-
-        if (category === null) {
-            newSelectedCategory = [];
-        }
-
-        this.setState({ selectedCategory: newSelectedCategory });
+    setTab = (index) => {
+        this.setState({group2 : null, group3 : null, group4 : null});
+        this.setState({tabIndex: index});
     }
+
+    getTab = () => {
+        return this.state.tabIndex;
+    }
+
 
     setCatagoryColor = (event, catagory) => {
-
         let catagoryIndex = 0;
         let duplicateCategory = false;
         const {structure} = this.state;
-
-        // delete the graduate attributes highlights when onclick course category
-        this.setState({selectedAtt : null});
 
         // Create a copy of selectedGroup map
         let groupColorSet = new Map(this.state.groupColorSet);
@@ -763,20 +815,16 @@ class App extends Component {
     setGradAttributeColor = (event, gradAttribute) => {
 
         let attributeIndex = 0;
-        const {structure, groupColorSet} = this.state;
+        const {structure} = this.state
 
-        // delete the course categories highlights when onclick graduate attributes
-        groupColorSet.forEach((key, value) => {
-            groupColorSet.set(value, []);
-        });
-        this.setState({groupColorSet : groupColorSet});
-
-        // if select the same graduate attribute
         if (gradAttribute === this.state.selectedAtt) {
             this.setState({selectedAtt: ""});
             structure.map((term, termIndex) => {
                 term.courses.map((courseMap, courseIndex) => {
                     structure[termIndex].courses[courseIndex].color = '#ced4da';
+                    if (structure[termIndex].courses[courseIndex].border) {
+                        delete structure[termIndex].courses[courseIndex].border;
+                    }
                 })
             })
         } else {
@@ -828,13 +876,25 @@ class App extends Component {
             planName: selectedPlan
         };
 
-        this.controller.getCourseInfo(data).then((courses) => {
-            this.setState({structure: courses});
-        });
+        if (selectedProgram === "Mechanical Engineering") {
+            if (selectedPlan !== "Co-op Plan 3" && selectedPlan.includes("{")) {
+                this.controller.getCourseInfo(data).then((courses) => {
+                    this.setState({ structure: courses });
+                });
 
-        this.controller.getReqMap(data).then((reqMap) => {
-            this.setState({reqMap: reqMap});
-        })
+                this.controller.getReqMap(data).then((reqMap) => {
+                    this.setState({ reqMap: reqMap });
+                });
+            }
+        } else {
+            this.controller.getCourseInfo(data).then((courses) => {
+                this.setState({ structure: courses });
+            });
+
+            this.controller.getReqMap(data).then((reqMap) => {
+                this.setState({ reqMap: reqMap });
+            });
+        }
     }
 
 
@@ -906,11 +966,15 @@ class App extends Component {
             case "Traditional Plan":
                 if (group2 && group3 && group4) {
                     const completePlan = plan + " {" + group2 + " " + group3 + " " + group4 + "}";
+                    console.log("request1 sent");
+                    console.log("complete plan");
+                    console.log(completePlan);
                     this.setStructure(this.state.selectedProgram, completePlan);
                     deleteLineMap();
                 }
                 break;
             case "Alternate Plan":
+                console.log("request1 sent");
                 if (group3 && group4) {
                     const completePlan = plan + " {" + group3 + " " + group4 + "}";
                     this.setStructure(this.state.selectedProgram, completePlan);
@@ -920,6 +984,7 @@ class App extends Component {
             case "Co-op Plan 1":
             case "Co-op Plan 2":
             case "Co-op Plan 4":
+                console.log("request1 sent");
                 if (group3) {
                     const completePlan = plan + " {" + group3 + "}";
                     this.setStructure(this.state.selectedProgram, completePlan);
@@ -960,10 +1025,7 @@ class App extends Component {
             lineMap,
             planChanged,
             reqMap,
-            isDefault,
-            selectedCategory,
-            selectedGradAtt,
-            groupColorSet,
+            isDefault
         } = this.state;
 
         return (
@@ -973,92 +1035,96 @@ class App extends Component {
                     <Header/>
                 </div>
 
+                <div className='tabHeader'>
+                    <TabHeader tabs={this.state.tabs} setTab={this.setTab} getTab={this.getTab}/>
+                </div>
+
                 <div className='subheader'>
                     <SubHeader deletelinemap={this.deleteLineMap}/>
                 </div>
 
-                <div className='part'>
-                    <PageTitle/>
+                {this.state.tabIndex == 0 && (
+                    <div className='part'>
+                        <PageTitle/>
 
-                    <div className='dropdownsWrapper'>
-                        <div className='planWrapper'>
-                            <Plans
-                                setSelectedProgramPlan={this.setSelectedProgramPlan}
-                                isDefault={isDefault}
-                                setIsDefault={this.setIsDefault}
-                                setStructure={this.setStructure}
-                                setContainCourseGroup={this.setContainCourseGroup}
+                        <div className='dropdownsWrapper'>
+                            <div className='planWrapper'>
+                                <Plans
+                                    setSelectedProgramPlan={this.setSelectedProgramPlan}
+                                    isDefault={isDefault}
+                                    setIsDefault={this.setIsDefault}
+                                    setStructure={this.setStructure}
+                                    setContainCourseGroup={this.setContainCourseGroup}
+                                />
+                            </div>
+
+                            {this.state.containCourseGroup && (
+                                <div className='groupWrapper'>
+                                    <CourseGroup courseGroup={courseGroup}
+                                                 setSelectedCourseGroup={this.setSelectedCourseGroup}
+                                                 selectedProgram={selectedProgram}
+                                                 deleteLineMap={this.deleteLineMap}
+                                                 planChanged={planChanged}
+                                                 setPlanChanged={this.setPlanChanged}
+                                    />
+                                </div>)}
+                        </div>
+
+                        <div
+                            className='collapsibleOptions'
+                            onClick={ () => {this.toggleOptionsHidden();} }
+                        >
+                            <div className='additionOptions'>
+                                ADDITIONAL OPTIONS
+                            </div>
+                            <Icon/>
+
+                        </div>
+
+                        {this.state.showOptions && (
+                            <div className="lowerStuff">
+                                <div className='catagoryWrapper'>
+                                    <CourseCatagory categoryList={this.state.categoryList}
+                                                    setCatagoryColor={this.setCatagoryColor}
+                                    />
+
+                                </div>
+
+                                <div className='GAWrapper'>
+                                    <GradAttributes gradAttributeList={this.state.gradAttributeList}
+                                                    setGradAttributeColor={this.setGradAttributeColor}/>
+                                </div>
+
+                                <div className='gradLegendWrapper'>
+                                    <GALegend gaLegendList={this.state.gaLegendList}/>
+                                    <RequisiteLegend/>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className='structureTitle'>COURSES</div>
+                        <div className='structureDescription'> Below are each of the courses in each semester in your
+                            selected plan. Hover over a course to
+                            see it's course description. Click on a course to see it's prerequisites and coreqisites.
+                        </div>
+                        <div className='structureWrapper'>
+                            <Structure structure={structure}
+                                       isToolTipOpen={this.state.isToolTipOpen}
+                                       showToolTip={this.showToolTip}
+                                       hideToolTip={this.hideToolTip}
+                                       selectedPlan={selectedPlan}
+                                       updateLineMap={this.updateLineMap}
+                                       lineMap={lineMap}
+                                       reqMap={reqMap}
                             />
                         </div>
-
-                        {this.state.containCourseGroup && (
-                            <div className='groupWrapper'>
-                                <CourseGroup courseGroup={courseGroup}
-                                             setSelectedCourseGroup={this.setSelectedCourseGroup}
-                                             selectedProgram={selectedProgram}
-                                             deleteLineMap={this.deleteLineMap}
-                                             planChanged={planChanged}
-                                             setPlanChanged={this.setPlanChanged}
-                                />
-                            </div>)}
                     </div>
+                )}
 
-                    <div 
-                        className='collapsibleOptions'
-                        onClick={ () => {this.toggleOptionsHidden();} }
-                    >
-                        <div className='additionOptions'>
-                            ADDITIONAL OPTIONS
-                        </div>
-                        <Icon/>
+                {this.state.tabIndex === 1 && (
+                    <About setCourseGroupWhenAbout={this.setCourseGroupWhenAbout}/>
+                )}
 
-                    </div>
-
-                    {this.state.showOptions && (
-                        <div className="lowerStuff">
-                            <div className='catagoryWrapper'>
-                                <CourseCatagory categoryList={this.state.categoryList}
-                                                setCatagoryColor={this.setCatagoryColor}
-                                                selectedCategory={selectedCategory}
-                                                setSelectedGradAtt={this.setSelectedGradAtt}
-                                                setSelectedCategory={this.setSelectedCategory}
-                                />
-
-                            </div>
-
-                            <div className='GAWrapper'>
-                                <GradAttributes gradAttributeList={this.state.gradAttributeList}
-                                                setGradAttributeColor={this.setGradAttributeColor}
-                                                selectedGradAtt={selectedGradAtt}
-                                                setSelectedGradAtt={this.setSelectedGradAtt}
-                                                setSelectedCategory={this.setSelectedCategory}
-                                />
-                            </div>
-
-                            <div className='gradLegendWrapper'>
-                                <GALegend gaLegendList={this.state.gaLegendList}/>
-                                <RequisiteLegend/>
-                            </div>
-                        </div>
-                    )}
-
-                    <div className='structureTitle'>COURSES</div>
-                    <div className='structureDescription'> Below are each of the courses in each semester in your
-                        selected plan. Hover over a course to
-                        see it's course description. Click on a course to see it's prerequisites and coreqisites.
-                    </div>
-                    <div className='structureWrapper'>
-                        <Structure structure={structure}
-                                   isToolTipOpen={this.state.isToolTipOpen}
-                                   showToolTip={this.showToolTip}
-                                   hideToolTip={this.hideToolTip}
-                                   selectedPlan={selectedPlan}
-                                   updateLineMap={this.updateLineMap}
-                                   lineMap={lineMap}
-                                   reqMap={reqMap}
-                        />
-                    </div>
-                </div>
 
                 <div className='footer'>
                     <Footer/>
