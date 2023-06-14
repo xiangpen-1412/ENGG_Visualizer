@@ -300,24 +300,22 @@ const CourseGroup = (props) => {
 };
 
 const GradAttributes = (props) => {
-    const [selectedGradAtt, setSelectedGradAtt] = useState(null);
-
     const cells = props.gradAttributeList.map((gradAttribute, index) => {
-        let isSelected = gradAttribute === selectedGradAtt;
-
         return (
             <div
                 key={index}
                 className="indvGradAttribute"
                 onClick={(event) => {
-                    if (gradAttribute === selectedGradAtt) {
-                        setSelectedGradAtt(null);
+                    if (gradAttribute === props.selectedGradAtt) {
+                        props.setSelectedGradAtt(null);
                     } else {
-                        setSelectedGradAtt(gradAttribute);
+                        props.setSelectedGradAtt(gradAttribute);
                     }
+
+                    props.setSelectedCategory(null);
                     props.setGradAttributeColor(event, gradAttribute);
                 }}
-                style={{backgroundColor: isSelected ? "gold" : "#ced4da"}}
+                style={{backgroundColor: props.selectedGradAtt === gradAttribute ? "gold" : "#ced4da"}}
             >
                 {gradAttribute}
             </div>
@@ -341,8 +339,6 @@ const CourseCatagory = (props) => {
     const location = useLocation();
     const {selectedProgram} = location.state;
 
-    const [selectedCategory, setSelectedCategory] = useState([]);
-
     const cells = props.categoryList.map((category, index) => {
         if (selectedProgram === "Computer Engineering") {
             if (index > 9) {
@@ -358,24 +354,17 @@ const CourseCatagory = (props) => {
             }
         }
 
-        const isSelected = selectedCategory.includes(category);
-
         return (
             <div
                 key={index}
                 className="indvCatagory"
                 onClick={(event) => {
-                    if (selectedCategory.includes(category)) {
-                        const newSelectedCategory = selectedCategory.filter(item => item !== category);
-                        setSelectedCategory(newSelectedCategory);
-                    } else {
-                        const newSelectedCategory = selectedCategory.concat(category);
-                        setSelectedCategory(newSelectedCategory);
-                    }
+                    props.setSelectedCategory(category);
+                    props.setSelectedGradAtt(null);
                     props.setCatagoryColor(event, category);
                 }}
 
-                style={{backgroundColor: isSelected ? category.color : "#ced4da"}}
+                style={{backgroundColor: props.selectedCategory.includes(category) ? category.color : "#ced4da"}}
             >
                 {category.name}
             </div>
@@ -394,7 +383,6 @@ const CourseCatagory = (props) => {
         </div>
     );
 };
-
 
 // Legend for graduate attributes
 const GALegend = (props) => {
@@ -616,18 +604,12 @@ class App extends Component {
             lineMap: new Map(),
             isDefault: true,
             containOptions: true,
+            selectedGradAtt: null,
+            selectedCategory: [],
         };
 
         this.controller = new RESTController();
     }
-
-    // componentDidMount() {
-    //     window.addEventListener("popstate", this.deleteWhenPopstate);
-    // }
-    //
-    // deleteWhenPopstate = () => {
-    //     this.deleteLineMap();
-    // }
 
     setIsDefault = () => {
         this.setState({isDefault: false});
@@ -643,7 +625,31 @@ class App extends Component {
         }));
     }
 
+    // set the selected grad attribute
+    setSelectedGradAtt = (gradAttribute) => {
+        this.setState({ selectedGradAtt: gradAttribute });
+    }
+
+    // add a selected category to the selected category list, if selected a duplicate category
+    // then remove it
+    setSelectedCategory = (category) => {
+        let newSelectedCategory = this.state.selectedCategory.includes(category) ?
+            this.state.selectedCategory.filter(item => item !== category) :
+            [...this.state.selectedCategory, category];
+
+        if (category === null) {
+            newSelectedCategory = [];
+        }
+
+        this.setState({ selectedCategory: newSelectedCategory });
+    }
+
+    setGroupColorSet = () => {
+
+    }
+
     setCatagoryColor = (event, catagory) => {
+
         let catagoryIndex = 0;
         let duplicateCategory = false;
         const {structure} = this.state;
@@ -950,14 +956,11 @@ class App extends Component {
             lineMap,
             planChanged,
             reqMap,
-            isDefault
+            isDefault,
+            selectedCategory,
+            selectedGradAtt,
+            groupColorSet,
         } = this.state;
-
-        console.log("group2");
-        console.log(this.state.group2);
-
-
-        console.log(this.state.showOptions);
 
         return (
             <div className='all'>
@@ -1012,13 +1015,20 @@ class App extends Component {
                             <div className='catagoryWrapper'>
                                 <CourseCatagory categoryList={this.state.categoryList}
                                                 setCatagoryColor={this.setCatagoryColor}
+                                                selectedCategory={selectedCategory}
+                                                setSelectedGradAtt={this.setSelectedGradAtt}
+                                                setSelectedCategory={this.setSelectedCategory}
                                 />
 
                             </div>
 
                             <div className='GAWrapper'>
                                 <GradAttributes gradAttributeList={this.state.gradAttributeList}
-                                                setGradAttributeColor={this.setGradAttributeColor}/>
+                                                setGradAttributeColor={this.setGradAttributeColor}
+                                                selectedGradAtt={selectedGradAtt}
+                                                setSelectedGradAtt={this.setSelectedGradAtt}
+                                                setSelectedCategory={this.setSelectedCategory}
+                                />
                             </div>
 
                             <div className='gradLegendWrapper'>
