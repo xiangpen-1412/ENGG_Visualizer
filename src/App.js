@@ -139,19 +139,27 @@ const About = () => {
 
     return (
         <div className='about'>
-            <h1>About</h1>
-            <h2>Develepoment</h2>
+            <h1 className='pageTitle'>
+                About
+            </h1>
+            <h2 className='SelectedPlanDescription'>
+                Develepoment
+            </h2>
             <p>
-                The University of Alberta's Engineering Program Plan Visualizer was created under
-                the direction of university professors Dr. David Nobes and Dr. Steven Knudsen.
-                The code was written by Co-op students Xiangpeng
+                The University of Alberta's Engineering Program Plan Visualizer was created under 
+                the direction of university professors Dr. David Nobes and Dr. Steven Knudsen. 
+                The code was written by Co-op students Xiangpeng Ji, Noah Batiuk and Fahrin Bushra.
             </p>
-            <p>This tool is designed to help you navigate the structure of your chosen program plan. </p>
-
-            <p>We hope this tool aids your understanding of your chosen engineering program and supports
-                your academic planning process. If you have any questions or encounter any difficulties,
-                please do not hesitate to contact us at dnobes@ualberta.ca. </p>
-            <h2>Contact</h2>
+            <p>
+                This tool is designed to help you navigate the structure of your chosen program plan. 
+            </p>
+            <p>
+                We hope this tool aids your understanding of your chosen engineering program and supports
+                your academic planning process. 
+            </p>
+            <h2 className='SelectedPlanDescription'>
+                Contact
+            </h2>
             <p>
                 If you have any questions, inquiries or feature requests to do with the Visualizer,
                 please do not hesitate to contact us at dnobes@ualberta.ca.
