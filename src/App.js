@@ -106,8 +106,8 @@ const Instructions = (props) => {
             <p>This tool is designed to help you navigate the structure of your chosen program plan. </p>
             <p>Here is a guide to using the tool:</p>
             <ul>
-                <li><strong>Select plans:</strong>
-                    To see all the courses in a program, choose a plan from the Plan menu at the top. All
+                <li><strong>Select a plan:</strong>
+                    To see all the courses in a program, choose a plan from the Plan dropdown at the top. All
                     courses in 8 or more terms will be displayed below. For Mechanical Engineering, you will
                     need to select a group after selecting a plan.
                 </li>
@@ -116,22 +116,46 @@ const Instructions = (props) => {
                     and credits.
                 </li>
                 <li><strong>Prerequisites and Corequisites:</strong> Left-clicking on a course will display
-                    any prerequisites with yellow arrows and corequisites with red arrows.
+                    any prerequisites with solid arrows and corequisites with dotted arrows.
                 </li>
-                <li><strong>Course Group:</strong> Click on a course in the Course Group Palette to see all
+                <li><strong>Course Group:</strong> Select a group in the Course Group palette to see all
                     the courses that belong to the course group. This is useful for getting an overview of
                     courses with similar content or learning objectives.
                 </li>
                 <li><strong>Graduation Attributes:</strong> Clicking on a graduate attribute in the Graduate
-                    Attributes palette highlights each course in that category. The more red a course, the
-                    more it embodies that attribute. Please refer to the Graduate Attributes legends for
-                    more details. This displays where each learning outcome is met throughout a degree
-                    program.
+                    Attributes palette highlights each course in that category. Please refer to the legend
+                    for details on the color meanings. The coloration displays where each learning outcome is 
+                    met throughout the degree program.
                 </li>
             </ul>
             <p>We hope this tool aids your understanding of your chosen engineering program and supports
                 your academic planning process. If you have any questions or encounter any difficulties,
                 please do not hesitate to contact us at dnobes@ualberta.ca. </p>
+        </div>
+    );
+}
+
+const About = (props) => {
+
+    return (
+        <div className='about'>
+            <h1>About</h1>
+            <h2>Develepoment</h2>
+            <p>
+                The University of Alberta's Engineering Program Plan Visualizer was created under 
+                the direction of university professors Dr. David Nobes and Dr. Steven Knudsen. 
+                The code was written by Co-op students Xiangpeng 
+            </p>
+            <p>This tool is designed to help you navigate the structure of your chosen program plan. </p>
+
+            <p>We hope this tool aids your understanding of your chosen engineering program and supports
+                your academic planning process. If you have any questions or encounter any difficulties,
+                please do not hesitate to contact us at dnobes@ualberta.ca. </p>
+            <h2>Contact</h2>
+            <p>
+                If you have any questions, inquiries or feature requests to do with the Visualizer,
+                please do not hesitate to contact us at dnobes@ualberta.ca. 
+            </p>
         </div>
     );
 }
@@ -1083,6 +1107,10 @@ class App extends Component {
                             />
                         </div>
                     </div>
+                )}
+
+                {this.state.tabIndex == 1 && (
+                    <About/>
                 )}
 
 

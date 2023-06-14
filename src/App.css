@@ -168,6 +168,12 @@
     font-weight: 350;
 }
 
+.about {
+    font-family: 'Roboto', sans-serif;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
 
 .dropdownsWrapper {
 
