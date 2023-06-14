@@ -141,7 +141,13 @@ const TabHeader = (props) => {
     const tabButtons = props.tabs.map( (tab, index) => {
 
         return (
-            <div className='tabButton' onClick={() => props.setTab(index)}>
+            <div 
+                className='tabButton' onClick={() => props.setTab(index)}
+                style={{
+                    borderBottom: index == props.getTab() ? '2px solid' : 'none',
+                }}
+                
+            >
                 {tab}
             </div>
         )
@@ -668,6 +674,10 @@ class App extends Component {
         console.log("index" + index);
     }
 
+    getTab = () => {
+        return this.state.tabIndex;
+    }
+
 
     setCatagoryColor = (event, catagory) => {
         let catagoryIndex = 0;
@@ -990,7 +1000,7 @@ class App extends Component {
                 </div>
 
                 <div className='tabHeader'>
-                    <TabHeader tabs={this.state.tabs} setTab={this.setTab}/>
+                    <TabHeader tabs={this.state.tabs} setTab={this.setTab} getTab={this.getTab}/>
                 </div>
 
                 <div className='subheader'>

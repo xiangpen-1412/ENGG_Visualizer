@@ -94,6 +94,31 @@
     color: #fff;
 }
 
+.tabHeader {
+    box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.2);
+
+    vertical-align: middle;
+    position: relative;
+    height: 35px;
+}
+
+.tabWrapper {
+    display: flex;
+    flex-direction: row;
+
+    margin-right: 10%;
+    margin-left: 10%;
+    margin-top: 15px;
+    vertical-align: middle;
+}
+
+.tabButton {
+    margin-right: 30px;
+    padding-bottom: 4px; 
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+
 .subHeader {
     display: flex;
     flex-direction: row;
