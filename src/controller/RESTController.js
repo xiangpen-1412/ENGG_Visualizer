@@ -30,9 +30,6 @@ class RESTController extends Component {
 
     getCourseInfo = (data) => {
 
-        console.log("data sent");
-        console.log(data);
-
         return axios
             .post(`/nobes/timetable/visualizer/getInfo`, data, this.config)
             .then(response => {
@@ -53,6 +50,7 @@ class RESTController extends Component {
                             corequisites: course.coReqs,
                             category: course.group.map(Number),
                             orCase: course.orCase,
+                            courseGroup: course.courseGroup,
                         }));
 
                         courses.push({

@@ -101,28 +101,28 @@ const Instructions = (props) => {
         <div>
             <img alt="delete button" src="x-mark.png" className="deleteButton"
                  onClick={props.onInstructionClick}/>
-            <h3>Visualizer Instruction</h3>
+            <a>Visualizer Instruction</a>
             <p>Welcome to the University of Alberta's Engineering Program Plan Visualizer.</p>
             <p>This tool is designed to help you navigate the structure of your chosen program plan. </p>
             <p>Here is a guide to using the tool:</p>
             <ul>
-                <li><strong>Select a plan:</strong>
+                <li><b>Select a plan:</b>
                     To see all the courses in a program, choose a plan from the Plan dropdown at the top. All
                     courses in 8 or more terms will be displayed below. For Mechanical Engineering, you will
                     need to select a group after selecting a plan.
                 </li>
-                <li><strong>Course Description:</strong> By hovering over a course in the terms below, you
+                <li><b>Course Description:</b> By hovering over a course in the terms below, you
                     can view its course description. This provides details about the course content, hours
                     and credits.
                 </li>
-                <li><strong>Prerequisites and Corequisites:</strong> Left-clicking on a course will display
+                <li><b>Prerequisites and Corequisites:</b> Left-clicking on a course will display
                     any prerequisites with solid arrows and corequisites with dotted arrows.
                 </li>
-                <li><strong>Course Group:</strong> Select a group in the Course Group palette to see all
+                <li><b>Course Group:</b> Select a group in the Course Group palette to see all
                     the courses that belong to the course group. This is useful for getting an overview of
                     courses with similar content or learning objectives.
                 </li>
-                <li><strong>Graduation Attributes:</strong> Clicking on a graduate attribute in the Graduate
+                <li><b>Graduation Attributes:</b> Clicking on a graduate attribute in the Graduate
                     Attributes palette highlights each course in that category. Please refer to the legend
                     for details on the color meanings. The coloration displays where each learning outcome is
                     met throughout the degree program.
@@ -143,7 +143,7 @@ const About = () => {
                 About
             </h1>
             <h2 className='SelectedPlanDescription'>
-                Develepoment
+                Development
             </h2>
             <p>
                 The University of Alberta's Engineering Program Plan Visualizer was created under 
@@ -493,6 +493,22 @@ const RequisiteLegend = () => {
     )
 }
 
+const CourseGroupButton = (props) => {
+    const location = useLocation();
+    const {selectedProgram} = location.state;
+    const [onClick, setOnClick] = useState(false);
+
+    if (selectedProgram === "Mechanical Engineering") {
+        return (
+            <div className='groupButton'
+                 onClick={props.handleCourseGroupOnClick}
+            >Group</div>
+        )
+    } else {
+        return null;
+    }
+}
+
 const Footer = () => {
 
     return (
@@ -668,6 +684,7 @@ class App extends Component {
             tabIndex: 0,
             selectedGradAtt: null,
             selectedCategory: [],
+            courseGroupOnClick: false,
         };
 
         this.controller = new RESTController();
@@ -685,6 +702,10 @@ class App extends Component {
         this.setState(prevState => ({
             showOptions: !prevState.showOptions
         }));
+    }
+
+    handleCourseGroupOnClick = () => {
+        this.setState({courseGroupOnClick : !this.state.courseGroupOnClick});
     }
 
     setCourseGroupWhenAbout = () => {
@@ -1054,6 +1075,7 @@ class App extends Component {
             isDefault,
             selectedCategory,
             selectedGradAtt,
+            courseGroupOnClick,
         } = this.state;
 
         return (
@@ -1071,7 +1093,7 @@ class App extends Component {
                     <SubHeader deletelinemap={this.deleteLineMap}/>
                 </div>
 
-                {this.state.tabIndex == 0 && (
+                {this.state.tabIndex === 0 && (
                     <div className='part'>
                         <PageTitle/>
 
@@ -1138,10 +1160,18 @@ class App extends Component {
                         )}
 
                         <div className='structureTitle'>COURSES</div>
-                        <div className='structureDescription'> Below are each of the courses in each semester in your
-                            selected plan. Hover over a course to
-                            see it's course description. Click on a course to see it's prerequisites and coreqisites.
+
+                        <div className='structureDescriptionWrapper'>
+                            <div className='structureDescription'> Below are each of the courses in each semester in your
+                                selected plan. Hover over a course to
+                                see it's course description. Click on a course to see it's prerequisites and coreqisites.
+                            </div>
+
+                            <div className='structureGroupButton'>
+                                <CourseGroupButton handleCourseGroupOnClick={this.handleCourseGroupOnClick}/>
+                            </div>
                         </div>
+
                         <div className='structureWrapper'>
                             <Structure structure={structure}
                                        isToolTipOpen={this.state.isToolTipOpen}
@@ -1151,6 +1181,7 @@ class App extends Component {
                                        updateLineMap={this.updateLineMap}
                                        lineMap={lineMap}
                                        reqMap={reqMap}
+                                       courseGroupOnClick={courseGroupOnClick}
                             />
                         </div>
                     </div>

@@ -90,6 +90,8 @@
     margin-left: 89%;
     margin-top: -10px;
     background-color: #fff;
+
+    z-index: 9999;
 }
 
 .headerDropDownItem {
@@ -159,13 +161,27 @@
     margin-top: 10px;
     padding: 20px;
 
+    font-family: 'Roboto', sans-serif;
+    font-weight: 350;
 
+    border-radius: 6px;
     right: 10px;
     position: absolute;
     z-index: 9999;
 
     background-color: white;
     opacity: 1;
+}
+
+.guideWrapper b {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+
+.guideWrapper a {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
 }
 
 .pageTitle {

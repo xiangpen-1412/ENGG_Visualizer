@@ -27,6 +27,32 @@ code {
     justify-content: left;
 }
 
+.structureDescriptionWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.groupButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: #275d38 solid 2px;
+    text-align: center;
+    width: 80px;
+    height: 40px;
+    cursor: pointer;
+
+    font-size: 17px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color: #464646;
+
+    border-radius: 8px;
+}
+
 .structureDescription {
     color: #464646;
     height: 30px;
@@ -108,10 +134,9 @@ code {
     background-color: rgb(206, 212, 218); /* Background color of each term div*/
     color: rgb(0, 0, 0); /* Text color of each term div*/
 
-    width: 160px;/* Width of eachterm div*/
-    height: 50px;
+    width: 180px;/* Width of eachterm div*/
+    height: 70px;
     font-size: 18px; /* Font of text inside term div*/
-    padding: 10px; /*Spacing on all sides of text inside a term div*/
     border-radius: 1px; /* Make the term divs rounded corners*/
     margin-top: 10px;
     margin-bottom: 20px; /*Spacing between terms in term palette*/
@@ -119,6 +144,20 @@ code {
     text-align: center;
 
     /* Center text both horizontally and vertically */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.courseName {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.courseGroup {
+    color: black;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -150,12 +189,10 @@ code {
 
     color: rgb(0, 0, 0);
     /* Width of eachterm div*/
-    width: 135px;/* Width of eachterm div*/
-    height: 45px;
+    width: 155px;/* Width of eachterm div*/
+    height: 65px;
     /* Font of text inside term div*/
     font-size: 18px;
-    /*Spacing on all sides of text inside a term div*/
-    padding: 10px;
     /* Make the term divs rounded corners*/
     /* border-radius: 5px; */
     /* Looks good when cursor points to a term div*/
@@ -167,7 +204,7 @@ code {
     display: flex;
     justify-content: center;
     align-items: center;
-
+    flex-direction: column;
 }
 
 .orCircle {

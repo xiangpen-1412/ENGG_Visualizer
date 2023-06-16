@@ -276,6 +276,27 @@ class Structure extends Component {
             }
         }
 
+        let courseGroupBackGroundColor;
+
+        if (courseItem.courseGroup) {
+            const group = courseItem.courseGroup.match(/\d+/)[0];
+            console.log(group);
+            switch (group) {
+                case "2":
+                    courseGroupBackGroundColor = '#FFD700';
+                    break;
+                case "3":
+                    courseGroupBackGroundColor = '#90EE90';
+                    break;
+                case "4":
+                    courseGroupBackGroundColor = '#EE82EE';
+                    break;
+                default:
+                    courseGroupBackGroundColor = null;
+            }
+        }
+
+
         return (
             <div>
                 <div className={className}
@@ -283,15 +304,19 @@ class Structure extends Component {
                      key={index}
                      ref={(el) => this.divRefs[index] = el}
                      onClick={() => this.handleOnClick(coursesList, index, this.props.updateLineMap, this.props.lineMap, this.props.reqMap)}
-                     style={{
-                         background: backgroundColor,
-                         border: courseItem.border ? courseItem.border : 'none',
-                     }}
+                     style={{background: backgroundColor}}
                      onMouseEnter={() => this.handleMouseEnter(index)}
                      onMouseLeave={() => this.handleMouseLeave(index)}
                      onMouseDown={() => this.handleMouseLeave(index)}
                 >
-                    {name}
+                    <div className="courseName" style={{height: '50%', width: '100%'}}>
+                        {name.includes('(') ? name.replace(/\(.*?\)/g, '') : name}
+                    </div>
+                    {this.props.courseGroupOnClick && courseItem.courseGroup &&
+                        <div className="courseGroup" style={{backgroundColor : courseGroupBackGroundColor, height: '50%', width: '100%'}}>
+                            {courseItem.courseGroup}
+                        </div>
+                    }
                 </div>
                 {this.state.showDescriptions[index] &&
                     <div className="description">
