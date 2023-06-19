@@ -517,14 +517,14 @@
     display: flex;
     align-items: center;
 
-    margin-top: 30px;
+    margin-top: 15px;
 }
 
 .gaLegend {
-    font-size: 32px;
+    font-size: 28px;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    color: #275D38
+    color: #275D38;
 }
 
 .gradAttributeLegend {

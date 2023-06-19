@@ -39,7 +39,7 @@ code {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: #275d38 solid 2px;
+    border: #275d38 solid 3px;
     text-align: center;
     width: 80px;
     height: 40px;
@@ -48,9 +48,7 @@ code {
     font-size: 17px;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
-    color: #464646;
-
-    border-radius: 8px;
+    color: #000000;
 }
 
 .structureDescription {
