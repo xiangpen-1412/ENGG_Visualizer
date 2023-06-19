@@ -146,16 +146,16 @@ const About = () => {
                 Development
             </h2>
             <p>
-                The University of Alberta's Engineering Program Plan Visualizer was created under 
-                the direction of university professors Dr. David Nobes and Dr. Steven Knudsen. 
+                The University of Alberta's Engineering Program Plan Visualizer was created under
+                the direction of university professors Dr. David Nobes and Dr. Steven Knudsen.
                 The code was written by Co-op students Xiangpeng Ji, Noah Batiuk and Fahrin Bushra.
             </p>
             <p>
-                This tool is designed to help you navigate the structure of your chosen program plan. 
+                This tool is designed to help you navigate the structure of your chosen program plan.
             </p>
             <p>
                 We hope this tool aids your understanding of your chosen engineering program and supports
-                your academic planning process. 
+                your academic planning process.
             </p>
             <h2 className='SelectedPlanDescription'>
                 Contact
@@ -170,11 +170,18 @@ const About = () => {
 
 const TabHeader = (props) => {
 
-    const tabButtons = props.tabs.map( (tab, index) => {
+    const tabButtons = props.tabs.map((tab, index) => {
         return (
             <div
                 className='tabButton'
-                onClick={() => props.setTab(index)}
+                onClick={() => {
+                    props.setTab(index);
+                    props.deleteLineMap();
+                    props.setSelectedCategory(null);
+                    props.setSelectedGradAtt(null);
+                    props.deleteGradAtts();
+                    props.deleteCourseCategory();
+                }}
                 style={{
                     borderBottom: index === props.getTab() ? '2px solid' : 'none',
                 }}
@@ -443,7 +450,6 @@ const CourseCatagory = (props) => {
 };
 
 
-
 // Legend for graduate attributes
 const GALegend = (props) => {
 
@@ -704,7 +710,7 @@ class App extends Component {
     }
 
     handleCourseGroupOnClick = () => {
-        this.setState({courseGroupOnClick : !this.state.courseGroupOnClick});
+        this.setState({courseGroupOnClick: !this.state.courseGroupOnClick});
     }
 
     setCourseGroupWhenAbout = () => {
@@ -712,7 +718,7 @@ class App extends Component {
     }
 
     setTab = (index) => {
-        this.setState({group2 : null, group3 : null, group4 : null});
+        this.setState({group2: null, group3: null, group4: null});
         this.setState({tabIndex: index});
     }
 
@@ -722,7 +728,7 @@ class App extends Component {
 
     // set the selected grad attribute
     setSelectedGradAtt = (gradAttribute) => {
-        this.setState({ selectedGradAtt: gradAttribute });
+        this.setState({selectedGradAtt: gradAttribute});
     }
 
     // add a selected category to the selected category list, if selected a duplicate category
@@ -736,9 +742,21 @@ class App extends Component {
             newSelectedCategory = [];
         }
 
-        this.setState({ selectedCategory: newSelectedCategory });
+        this.setState({selectedCategory: newSelectedCategory});
     }
 
+    deleteCourseCategory = () => {
+        let groupColorSet = this.state.groupColorSet;
+
+        groupColorSet.forEach((key, value) => {
+            groupColorSet.set(value, []);
+        });
+
+        this.setState({groupColorSet: groupColorSet});
+    }
+    deleteGradAtts = () => {
+        this.setState({selectedAtt: null});
+    }
 
     setCatagoryColor = (event, catagory) => {
 
@@ -747,7 +765,7 @@ class App extends Component {
         const {structure} = this.state;
 
         // delete the graduate attributes highlights when onclick course category
-        this.setState({selectedAtt : null});
+        this.deleteGradAtts();
 
         // Create a copy of selectedGroup map
         let groupColorSet = new Map(this.state.groupColorSet);
@@ -858,13 +876,10 @@ class App extends Component {
     setGradAttributeColor = (event, gradAttribute) => {
 
         let attributeIndex = 0;
-        const {structure, groupColorSet} = this.state;
+        const {structure} = this.state;
 
         // delete the course categories highlights when onclick graduate attributes
-        groupColorSet.forEach((key, value) => {
-            groupColorSet.set(value, []);
-        });
-        this.setState({groupColorSet : groupColorSet});
+        this.deleteCourseCategory();
 
         // if select the same graduate attribute
         if (gradAttribute === this.state.selectedAtt) {
@@ -925,20 +940,20 @@ class App extends Component {
         if (selectedProgram === "Mechanical Engineering") {
             if (selectedPlan !== "Co-op Plan 3" && selectedPlan.includes("{")) {
                 this.controller.getCourseInfo(data).then((courses) => {
-                    this.setState({ structure: courses });
+                    this.setState({structure: courses});
                 });
 
                 this.controller.getReqMap(data).then((reqMap) => {
-                    this.setState({ reqMap: reqMap });
+                    this.setState({reqMap: reqMap});
                 });
             }
         } else {
             this.controller.getCourseInfo(data).then((courses) => {
-                this.setState({ structure: courses });
+                this.setState({structure: courses});
             });
 
             this.controller.getReqMap(data).then((reqMap) => {
-                this.setState({ reqMap: reqMap });
+                this.setState({reqMap: reqMap});
             });
         }
     }
@@ -1085,7 +1100,15 @@ class App extends Component {
                 </div>
 
                 <div className='tabHeader'>
-                    <TabHeader tabs={this.state.tabs} setTab={this.setTab} getTab={this.getTab}/>
+                    <TabHeader tabs={this.state.tabs}
+                               setTab={this.setTab}
+                               getTab={this.getTab}
+                               deleteLineMap={this.deleteLineMap}
+                               setSelectedGradAtt={this.setSelectedGradAtt}
+                               setSelectedCategory={this.setSelectedCategory}
+                               deleteCourseCategory={this.deleteCourseCategory}
+                               deleteGradAtts={this.deleteGradAtts}
+                    />
                 </div>
 
                 <div className='subheader'>
@@ -1121,7 +1144,9 @@ class App extends Component {
 
                         <div
                             className='collapsibleOptions'
-                            onClick={ () => {this.toggleOptionsHidden();} }
+                            onClick={() => {
+                                this.toggleOptionsHidden();
+                            }}
                         >
                             <div className='additionOptions'>
                                 ADDITIONAL OPTIONS
@@ -1161,9 +1186,11 @@ class App extends Component {
                         <div className='structureTitle'>COURSES</div>
 
                         <div className='structureDescriptionWrapper'>
-                            <div className='structureDescription'> Below are each of the courses in each semester in your
+                            <div className='structureDescription'> Below are each of the courses in each semester in
+                                your
                                 selected plan. Hover over a course to
-                                see it's course description. Click on a course to see it's prerequisites and coreqisites.
+                                see it's course description. Click on a course to see it's prerequisites and
+                                coreqisites.
                             </div>
 
                             <div className='structureGroupButton'>
