@@ -698,6 +698,19 @@ class App extends Component {
         this.setState({containCourseGroup: true});
     }
 
+    /**
+     *
+     * Loop through and redraw the leader lines when a scroll occurs in the termWrapper box
+     *
+     */
+    redrawLeaderlines = () => {
+        Array.from(this.state.lineMap.entries()).map((course) => {
+            course[1].map((line) => {
+                line.position();
+            });
+        });
+    }
+
     toggleOptionsHidden = () => {
         this.setState(prevState => ({
             showOptions: !prevState.showOptions
@@ -1061,6 +1074,10 @@ class App extends Component {
 
     setPlanChanged = () => {
         this.setState({planChanged: false});
+    }
+
+    componentDidUpdate(lineMap) {
+        this.redrawLeaderlines(lineMap);
     }
 
     render() {
