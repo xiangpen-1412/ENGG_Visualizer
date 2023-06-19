@@ -6,6 +6,9 @@ class RESTController extends Component {
     constructor(props) {
         super(props);
 
+        // online server url
+        this.springbootUrl = "http://3.98.140.210:1412";
+
         this.baseURL = "/nobes/timetable/calendar";
 
         this.config = {
@@ -18,7 +21,7 @@ class RESTController extends Component {
     getPlans = (data) => {
 
         return axios
-            .post(`${this.baseURL}/getPlans`, data.programName, this.config)
+            .post(`${this.springbootUrl}${this.baseURL}/getPlans`, data.programName, this.config)
             .then(response => {
                 const jsonMap = JSON.stringify(response.data.obj);
                 const progMap = JSON.parse(jsonMap);
@@ -32,7 +35,7 @@ class RESTController extends Component {
     getCourseInfo = (data) => {
 
         return axios
-            .post(`/nobes/timetable/visualizer/getInfo`, data, this.config)
+            .post(`${this.springbootUrl}/nobes/timetable/visualizer/getInfo`, data, this.config)
             .then(response => {
                 const courseMap = response.data.obj;
                 const courses = [];
@@ -75,7 +78,7 @@ class RESTController extends Component {
         console.log(data);
 
         return axios
-            .post(`/nobes/timetable/visualizer/getReqMap`, data, this.config)
+            .post(`${this.springbootUrl}/nobes/timetable/visualizer/getReqMap`, data, this.config)
             .then(response => {
                 return response.data.obj;
             }).catch(error => {
@@ -85,5 +88,4 @@ class RESTController extends Component {
 }
 
 export default RESTController;
-
 
