@@ -496,7 +496,6 @@ const RequisiteLegend = () => {
 const CourseGroupButton = (props) => {
     const location = useLocation();
     const {selectedProgram} = location.state;
-    const [onClick, setOnClick] = useState(false);
 
     if (selectedProgram === "Mechanical Engineering") {
         return (
