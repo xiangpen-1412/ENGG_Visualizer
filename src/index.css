@@ -135,7 +135,7 @@ code {
 
     width: 180px;/* Width of eachterm div*/
     height: 70px;
-    font-size: 18px; /* Font of text inside term div*/
+    font-size: 20px; /* Font of text inside term div*/
     border-radius: 1px; /* Make the term divs rounded corners*/
     margin-top: 10px;
     margin-bottom: 20px; /*Spacing between terms in term palette*/
