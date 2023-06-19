@@ -5,6 +5,7 @@ class RESTController extends Component {
 
     constructor(props) {
         super(props);
+
         this.baseURL = "/nobes/timetable/calendar";
 
         this.config = {
