@@ -207,13 +207,38 @@ const SubHeader = (props) => {
         props.deletelinemap();
         navigate("/");
     };
+
+    const visualizerDiv = (
+        <div className='path'>
+            {selectedProgram} Engineering Plan Visualizer
+        </div>
+    );
+
+    const about = (
+        <div className='path'>
+            About
+        </div>
+    )
+
+    let path;
+
+    switch (props.tabIndex) {
+        case 0:
+            path = visualizerDiv;
+            break;
+        case 1:
+            path = about;
+            break;
+        default:
+            path = null;
+            break;
+    }
+
     return (
         <div className='subHeader'>
             <img alt="Home Button" src="home_button.png" className="homeButton" onClick={handleBackButtonClick}/>
             <HomeButtonIcon/>
-            <div className='path'>
-                {selectedProgram} Engineering Plan Visualizer
-            </div>
+            {path}
         </div>
     )
 }
@@ -224,7 +249,6 @@ const Plans = (props) => {
     const location = useLocation();
     const {selectedProgram} = location.state;
     const [planList, setPlanList] = useState([]);
-    const [selectedPlan, setSelectedPlan] = useState(null);
     const [isFirst, setIsFirst] = useState(true);
 
     const controller = new RESTController();
@@ -238,10 +262,8 @@ const Plans = (props) => {
                 if (selectedProgram === "Mechanical Engineering") {
                     props.setStructure(selectedProgram, plans[0].replace(/\{[^)]*\}/g, "").trimEnd().trimStart());
                     props.setContainCourseGroup();
-                    setSelectedPlan(plans[0].replace(/\{[^)]*\}/g, "").trimEnd().trimStart());
                 } else {
                     props.setStructure(selectedProgram, plans[0]);
-                    setSelectedPlan(plans[0]);
                 }
             }
         });
@@ -271,7 +293,6 @@ const Plans = (props) => {
                     placeHolder={'Traditional Plan'}
                     options={uniquePlans}
                     onChange={(plan) => {
-                        setSelectedPlan(plan);
                         props.setSelectedProgramPlan(selectedProgram, plan);
                     }}
                     width={250}
@@ -1041,7 +1062,8 @@ class App extends Component {
                     deleteLineMap();
                 }
                 break;
-            case "Alternate Plan":;
+            case "Alternate Plan":
+                ;
                 if (group3 && group4) {
                     const completePlan = plan + " {" + group3 + " " + group4 + "}";
                     this.setStructure(this.state.selectedProgram, completePlan);
@@ -1099,6 +1121,7 @@ class App extends Component {
             selectedCategory,
             selectedGradAtt,
             courseGroupOnClick,
+            tabIndex,
         } = this.state;
 
         return (
@@ -1121,7 +1144,10 @@ class App extends Component {
                 </div>
 
                 <div className='subheader'>
-                    <SubHeader deletelinemap={this.deleteLineMap}/>
+                    <SubHeader
+                        deletelinemap={this.deleteLineMap}
+                        tabIndex={tabIndex}
+                    />
                 </div>
 
                 {this.state.tabIndex === 0 && (
