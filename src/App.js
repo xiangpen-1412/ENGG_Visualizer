@@ -279,6 +279,8 @@ const Plans = (props) => {
         return plan;
     })
 
+    const defaultPlan = plans[0];
+
     // Remove duplicate plan names
     const uniquePlans = [...new Set(plans)];
 
@@ -290,7 +292,7 @@ const Plans = (props) => {
             {/* <div className="planPalette"> */}
             <div>
                 <Dropdown
-                    placeHolder={'Traditional Plan'}
+                    placeHolder={defaultPlan}
                     options={uniquePlans}
                     onChange={(plan) => {
                         props.setSelectedProgramPlan(selectedProgram, plan);
@@ -965,7 +967,7 @@ class App extends Component {
 
         const data = {
             programName: selectedProgram,
-            planName: selectedPlan
+            planName: selectedPlan,
         };
 
         if (selectedProgram === "Mechanical Engineering") {
