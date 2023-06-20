@@ -256,6 +256,8 @@ class Structure extends Component {
      * */
     renderCourseDiv = (coursesList, index, courseItem, name, orCase) => {
 
+        const testName = name;
+
         const className = (orCase) ? 'indivOrCourse' : 'indivCourses';
 
         let backgroundColor;
@@ -294,6 +296,7 @@ class Structure extends Component {
             }
         }
 
+        name = name.includes('(') ? name.replace(/\(.*?\)/g, '') : name;
 
         return (
             <div>
@@ -308,7 +311,7 @@ class Structure extends Component {
                      onMouseDown={() => this.handleMouseLeave(index)}
                 >
                     <div className="courseName" style={{height: '50%', width: '100%'}}>
-                        {name.includes('(') ? name.replace(/\(.*?\)/g, '') : name}
+                        {name}
                     </div>
                     {this.props.courseGroupOnClick && courseItem.courseGroup &&
                         <div className="courseGroup" style={{backgroundColor : courseGroupBackGroundColor, height: '50%', width: '100%'}}>
@@ -380,11 +383,9 @@ class Structure extends Component {
                 }
 
                 if (contains) {
-                    orCaseList = orCaseList.map((orCase) => {
-                        if (orCase !== courseItem.name) {
-                            return orCase;
-                        }
-                    })
+                    orCaseList = orCaseList.filter((orCase) => {
+                        return orCase !== courseItem.name;
+                    });
 
                     if (orCaseList.length === 1) {
                         orCaseList = [];
@@ -400,6 +401,8 @@ class Structure extends Component {
                      * */
                     orCaseList.push(courseItem.name);
                     orCaseList.push(courseItem.orCase);
+
+                    console.log(orCaseList);
 
                     while (index < termColumn.courses.length) {
 

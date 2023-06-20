@@ -692,20 +692,6 @@ class App extends Component {
         this.controller = new RESTController();
     }
 
-    componentDidMount() {
-        window.addEventListener('beforeunload', this.handleBeforeUnload);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('beforeunload', this.handleBeforeUnload);
-    }
-
-    handleBeforeUnload = (event) => {
-        event.preventDefault();
-        event.returnValue = '';
-        console.log('Refresh detected');
-    };
-
     setIsDefault = () => {
         this.setState({isDefault: false});
     }
