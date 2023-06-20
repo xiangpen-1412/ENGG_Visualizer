@@ -230,7 +230,6 @@ const Plans = (props) => {
     const controller = new RESTController();
 
     useEffect(() => {
-        console.log(selectedProgram);
         controller.getPlans({programName: selectedProgram}).then((plans) => {
             setPlanList(plans);
             if (isFirst) {
@@ -295,7 +294,6 @@ const CourseGroup = (props) => {
     );
 
     useEffect(() => {
-        console.log("selectedButtons changes");
         courseGroupKeys.forEach((key) => {
             const group = selectedButtons.get(key);
             if (group) {
@@ -307,7 +305,6 @@ const CourseGroup = (props) => {
 
     // Default selection of course groups
     useEffect(() => {
-        console.log("courseGroup changes");
         const newSelectedButtons = new Map(selectedButtons);
         courseGroupKeys.forEach((key) => {
             const groups = props.courseGroup.get(key);
@@ -695,6 +692,20 @@ class App extends Component {
         this.controller = new RESTController();
     }
 
+    componentDidMount() {
+        window.addEventListener('beforeunload', this.handleBeforeUnload);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('beforeunload', this.handleBeforeUnload);
+    }
+
+    handleBeforeUnload = (event) => {
+        event.preventDefault();
+        event.returnValue = '';
+        console.log('Refresh detected');
+    };
+
     setIsDefault = () => {
         this.setState({isDefault: false});
     }
@@ -1040,15 +1051,11 @@ class App extends Component {
             case "Traditional Plan":
                 if (group2 && group3 && group4) {
                     const completePlan = plan + " {" + group2 + " " + group3 + " " + group4 + "}";
-                    console.log("request1 sent");
-                    console.log("complete plan");
-                    console.log(completePlan);
                     this.setStructure(this.state.selectedProgram, completePlan);
                     deleteLineMap();
                 }
                 break;
-            case "Alternate Plan":
-                console.log("request1 sent");
+            case "Alternate Plan":;
                 if (group3 && group4) {
                     const completePlan = plan + " {" + group3 + " " + group4 + "}";
                     this.setStructure(this.state.selectedProgram, completePlan);
@@ -1058,7 +1065,6 @@ class App extends Component {
             case "Co-op Plan 1":
             case "Co-op Plan 2":
             case "Co-op Plan 4":
-                console.log("request1 sent");
                 if (group3) {
                     const completePlan = plan + " {" + group3 + "}";
                     this.setStructure(this.state.selectedProgram, completePlan);

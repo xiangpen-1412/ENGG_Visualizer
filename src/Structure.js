@@ -17,7 +17,6 @@ class Structure extends Component {
         };
 
         this.courseList = [];
-        this.orCaseList = [];
         this.divRefs = [];
     }
 
@@ -280,7 +279,6 @@ class Structure extends Component {
 
         if (courseItem.courseGroup) {
             const group = courseItem.courseGroup.match(/\d+/)[0];
-            console.log(group);
             switch (group) {
                 case "2":
                     courseGroupBackGroundColor = '#FFD700';
@@ -354,7 +352,8 @@ class Structure extends Component {
             })
         ));
 
-        this.courseList = [];
+        let orCaseList = [];
+        let courseList = [];
 
         const term = structure.map((termColumn, termIndex) => {
             const courseDivs = termColumn.courses.map((courseItem, index) => {
@@ -376,19 +375,19 @@ class Structure extends Component {
                 const courseIndex = index;
 
                 let contains;
-                if (this.orCaseList) {
-                    contains = this.orCaseList.some((orCaseCourse) => courseItem.name.includes(orCaseCourse));
+                if (orCaseList) {
+                    contains = orCaseList.some((orCaseCourse) => courseItem.name.includes(orCaseCourse));
                 }
 
                 if (contains) {
-                    this.orCaseList = this.orCaseList.map((orCase) => {
+                    orCaseList = orCaseList.map((orCase) => {
                         if (orCase !== courseItem.name) {
                             return orCase;
                         }
                     })
 
-                    if (this.orCaseList.length === 1) {
-                        this.orCaseList = null;
+                    if (orCaseList.length === 1) {
+                        orCaseList = [];
                     }
 
                     return null;
@@ -399,7 +398,6 @@ class Structure extends Component {
                     /**
                      * get the or course list
                      * */
-                    let orCaseList = [];
                     orCaseList.push(courseItem.name);
                     orCaseList.push(courseItem.orCase);
 
@@ -416,15 +414,14 @@ class Structure extends Component {
                         }
                     }
 
-                    this.orCaseList = orCaseList;
 
                     /**
                      * iterate the orCaseList to create all the or case element
                      * */
                     const orCase = orCaseList.map((orCaseCourse, index) => {
 
-                        let orCaseIndex = this.courseList.length;
-                        this.courseList.push(orCaseCourse);
+                        let orCaseIndex = courseList.length;
+                        courseList.push(orCaseCourse);
 
                         const orCaseCourseInfo = structure[termIndex].courses[courseIndex + index];
 
@@ -448,8 +445,8 @@ class Structure extends Component {
                     )
                 } else {
 
-                    let indexx = this.courseList.length;
-                    this.courseList.push(courseItem.name);
+                    let indexx = courseList.length;
+                    courseList.push(courseItem.name);
 
                     return this.renderCourseDiv(coursesList, indexx, courseItem, name, false);
                 }
