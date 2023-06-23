@@ -1,0 +1,30 @@
+.pageTitleScheduler {
+    margin: 25px 0px 40px 0px;
+    color: rgb(39, 93, 56);
+    font-size: 53px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 350;
+}
+
+.sectionSchedulerDescription {
+
+}
+
+.planTube {
+    font-size: 17px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+
+    width: 254px;
+    height: 70px;
+    border: 1px solid #CED4DA;
+    border-radius: 4px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.planTubeText {
+    margin-left: 10px;
+}

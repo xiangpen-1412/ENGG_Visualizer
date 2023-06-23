@@ -19,7 +19,7 @@ const Program = (props) => {
                             {
                                 state: {
                                     selectedProgram: program,
-                                    replace: false
+                                    replace: false,
                                 }
                             }
                         )
@@ -111,7 +111,6 @@ class Home extends Component {
                 </div>
             </div>
         )
-
     }
 }
 

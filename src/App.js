@@ -5,29 +5,8 @@ import Dropdown from './Dropdown.js';
 import Structure from './Structure.js';
 import {useLocation, useNavigate} from 'react-router-dom';
 import RESTController from "./controller/RESTController";
+import Scheduler from "./Scheduler"
 
-
-const PageTitle = () => {
-    const location = useLocation();
-    const {selectedProgram} = location.state;
-
-    return (
-        <div className='pageTitle'>
-            {selectedProgram}
-        </div>
-    )
-}
-
-const HomeButtonIcon = () => {
-    return (
-        <svg className='homeButtonIcon' height="20" width="20" viewBox="0 0 20 20">
-            <path
-                d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
-                style={{transform: "rotate(270deg)", transformOrigin: "center", fill: "#7B7B7B"}}
-            ></path>
-        </svg>
-    );
-};
 
 const Icon = () => {
     return (
@@ -62,7 +41,7 @@ const Header = () => {
             <div className="header-content">
                 <img alt="University of Alberta logo" src="uofalogo.png" className="image"/>
                 <div className="site-title">
-                    Engineering Plan Visualizer
+                    Engineering Task Manager
                 </div>
                 <img alt="three dots" src="three-dots.png" className="threeDots"
                      onClick={handleThreeDotsClick}/>
@@ -208,11 +187,23 @@ const SubHeader = (props) => {
         navigate("/");
     };
 
-    const visualizerDiv = (
+    const introDiv = (
         <div className='path'>
-            {selectedProgram} Engineering Plan Visualizer
+            {selectedProgram}
         </div>
     );
+
+    const visualizerDiv = (
+        <div className='path'>
+            Visualizer
+        </div>
+    )
+
+    const schedulerDiv = (
+        <div className='path'>
+            Scheduler
+        </div>
+    )
 
     const about = (
         <div className='path'>
@@ -222,11 +213,22 @@ const SubHeader = (props) => {
 
     let path;
 
+    const homeButtonIcon = (
+        <svg className='homeButtonIcon' height="20" width="20" viewBox="0 0 20 20">
+            <path
+                d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"
+                style={{transform: "rotate(270deg)", transformOrigin: "center", fill: "#7B7B7B"}}
+            ></path>
+        </svg>);
+
     switch (props.tabIndex) {
         case 0:
-            path = visualizerDiv;
+            path = [introDiv, homeButtonIcon, visualizerDiv];
             break;
         case 1:
+            path = [introDiv, homeButtonIcon, schedulerDiv];
+            break;
+        case 2:
             path = about;
             break;
         default:
@@ -237,11 +239,23 @@ const SubHeader = (props) => {
     return (
         <div className='subHeader'>
             <img alt="Home Button" src="home_button.png" className="homeButton" onClick={handleBackButtonClick}/>
-            <HomeButtonIcon/>
+            {homeButtonIcon}
             {path}
         </div>
     )
 }
+
+const PageTitle = () => {
+    const location = useLocation();
+    const {selectedProgram} = location.state;
+
+    return (
+        <div className='pageTitle'>
+            {selectedProgram} Visualizer
+        </div>
+    )
+}
+
 
 //Plans has to be a simple component as it contains navigation
 const Plans = (props) => {
@@ -289,7 +303,6 @@ const Plans = (props) => {
         <div className="allPlans">
             <div className="SelectedPlanDescription">SELECT A PLAN</div>
             <div className="sectionDescription">Select a plan for your discipline below.</div>
-            {/* <div className="planPalette"> */}
             <div>
                 <Dropdown
                     placeHolder={defaultPlan}
@@ -378,7 +391,9 @@ const CourseGroup = (props) => {
     return (
         <div className="allGroups">
             <div className="SelectedPlanDescription">SELECT COURSE GROUPS</div>
-            <div>Select the sub-categories for your plan here. Each numerical group has an option A or B.</div>
+            <div style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 400 }}>
+                Select the sub-categories for your plan here. Each numerical group has an option A or B.
+            </div>
             <div className="groupDropdownWrapper">{keyComponent}</div>
         </div>
     );
@@ -692,7 +707,7 @@ class App extends Component {
                 ['Group 3', ["3A", "3B"]],
                 ['Group 4', ["4A", "4B"]]
             ]),
-            tabs: ['Visualizer', 'About'],
+            tabs: ['Visualizer', 'Scheduler', 'About'],
             selectedAtt: "",
             groupColorSet: new Map(),
             selectedProgram: "",
@@ -713,6 +728,13 @@ class App extends Component {
         };
 
         this.controller = new RESTController();
+    }
+
+    // delete everything in the app page
+    componentWillUnmount() {
+        this.deleteLineMap();
+        this.deleteGradAtts();
+        this.deleteCourseCategory();
     }
 
     setIsDefault = () => {
@@ -1065,7 +1087,6 @@ class App extends Component {
                 }
                 break;
             case "Alternate Plan":
-                ;
                 if (group3 && group4) {
                     const completePlan = plan + " {" + group3 + " " + group4 + "}";
                     this.setStructure(this.state.selectedProgram, completePlan);
@@ -1124,6 +1145,9 @@ class App extends Component {
             selectedGradAtt,
             courseGroupOnClick,
             tabIndex,
+            group2,
+            group3,
+            group4,
         } = this.state;
 
         return (
@@ -1251,6 +1275,18 @@ class App extends Component {
                 )}
 
                 {this.state.tabIndex === 1 && (
+                    <div className='scheduler'>
+                        <Scheduler
+                            selectedProgram={selectedProgram}
+                            selectedPlan={selectedPlan}
+                            group2={group2}
+                            group3={group3}
+                            group4={group4}
+                        />
+                    </div>
+                )}
+
+                {this.state.tabIndex === 2 && (
                     <About setCourseGroupWhenAbout={this.setCourseGroupWhenAbout}/>
                 )}
 

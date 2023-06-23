@@ -256,8 +256,6 @@ class Structure extends Component {
      * */
     renderCourseDiv = (coursesList, index, courseItem, name, orCase) => {
 
-        const testName = name;
-
         const className = (orCase) ? 'indivOrCourse' : 'indivCourses';
 
         let backgroundColor;
@@ -314,7 +312,8 @@ class Structure extends Component {
                         {name}
                     </div>
                     {this.props.courseGroupOnClick && courseItem.courseGroup &&
-                        <div className="courseGroup" style={{backgroundColor : courseGroupBackGroundColor, height: '50%', width: '100%'}}>
+                        <div className="courseGroup"
+                             style={{backgroundColor: courseGroupBackGroundColor, height: '50%', width: '100%'}}>
                             {courseItem.courseGroup}
                         </div>
                     }
@@ -402,8 +401,6 @@ class Structure extends Component {
                     orCaseList.push(courseItem.name);
                     orCaseList.push(courseItem.orCase);
 
-                    console.log(orCaseList);
-
                     while (index < termColumn.courses.length) {
 
                         if (termColumn.courses[index + 1].orCase) {
@@ -469,13 +466,13 @@ class Structure extends Component {
         })
 
         return (
-            <p>
+            <div className='outerStructureWrapper'>
                 <div className="termWrapper"
                      onScroll={() => this.handleScroll(lineMap)}
                 >
                     {term}
                 </div>
-            </p>
+            </div>
         )
     }
 }

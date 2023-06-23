@@ -67,6 +67,11 @@ code {
     min-height: 600px;
 }
 
+.outerStructureWrapper {
+    position: relative;
+    overflow: hidden;
+}
+
 .termWrapper {
     display: flex;
     flex-direction: row;
