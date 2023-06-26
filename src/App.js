@@ -17,7 +17,7 @@ const Icon = () => {
     );
 };
 
-const Header = () => {
+const Header = (props) => {
 
     const [showDropDown, setShowDropDown] = useState(false);
     const [showDescription, setShowDescription] = useState(false);
@@ -35,6 +35,15 @@ const Header = () => {
         setShowDropDown(!showDropDown);
     }
 
+    // set dynamic dropDown menu width
+    const headerDropDownMargin = {
+        marginLeft: `${parseFloat(props.width)* 0.9}%`,
+    };
+
+    const headerInstructionMargin = {
+        marginLeft: `${parseFloat(props.width)* 0.7}%`,
+    }
+
 
     return (
         <header className="header">
@@ -48,7 +57,7 @@ const Header = () => {
             </div>
 
             {showDropDown && (
-                <div className='headerDropDown'>
+                <div className='headerDropDown' style={headerDropDownMargin}>
                     <div
                         className='headerDropDownItem'
                         onClick={handleHelpButtonClick}
@@ -65,7 +74,7 @@ const Header = () => {
             )}
 
             {showDescription && (
-                <div className="guideWrapper">
+                <div className="guideWrapper" style={headerInstructionMargin}>
                     <Instructions onInstructionClick={handleHelpButtonClick}/>
                 </div>
             )}
@@ -150,9 +159,12 @@ const About = () => {
 const TabHeader = (props) => {
 
     const tabButtons = props.tabs.map((tab, index) => {
+
+        const className = index === 0 ? 'tabButton1' : 'tabButton';
+
         return (
             <div
-                className='tabButton'
+                className={className}
                 onClick={() => {
                     props.setTab(index);
                     props.deleteLineMap();
@@ -298,6 +310,7 @@ const Plans = (props) => {
     // Remove duplicate plan names
     const uniquePlans = [...new Set(plans)];
 
+
     // Return component with all the discipline's plans
     return (
         <div className="allPlans">
@@ -391,7 +404,7 @@ const CourseGroup = (props) => {
     return (
         <div className="allGroups">
             <div className="SelectedPlanDescription">SELECT COURSE GROUPS</div>
-            <div style={{ fontFamily: 'Roboto, sans-serif', fontWeight: 400 }}>
+            <div style={{fontFamily: 'Roboto, sans-serif', fontWeight: 400}}>
                 Select the sub-categories for your plan here. Each numerical group has an option A or B.
             </div>
             <div className="groupDropdownWrapper">{keyComponent}</div>
@@ -725,6 +738,7 @@ class App extends Component {
             selectedGradAtt: null,
             selectedCategory: [],
             courseGroupOnClick: false,
+            termNumber: 0,
         };
 
         this.controller = new RESTController();
@@ -784,6 +798,10 @@ class App extends Component {
     // set the selected grad attribute
     setSelectedGradAtt = (gradAttribute) => {
         this.setState({selectedGradAtt: gradAttribute});
+    }
+
+    setTermNumber = (termNum) => {
+        this.setState({termNumber: termNum});
     }
 
     // add a selected category to the selected category list, if selected a duplicate category
@@ -992,10 +1010,15 @@ class App extends Component {
             planName: selectedPlan,
         };
 
+        let termNumber;
+
         if (selectedProgram === "Mechanical Engineering") {
             if (selectedPlan !== "Co-op Plan 3" && selectedPlan.includes("{")) {
                 this.controller.getCourseInfo(data).then((courses) => {
-                    this.setState({structure: courses});
+                    if (courses !== null || undefined) {
+                        termNumber = Object.keys(courses).length;
+                    }
+                    this.setState({structure: courses, termNumber: termNumber});
                 });
 
                 this.controller.getReqMap(data).then((reqMap) => {
@@ -1004,7 +1027,10 @@ class App extends Component {
             }
         } else {
             this.controller.getCourseInfo(data).then((courses) => {
-                this.setState({structure: courses});
+                if (courses !== null || undefined) {
+                    termNumber = Object.keys(courses).length;
+                }
+                this.setState({structure: courses, termNumber: termNumber});
             });
 
             this.controller.getReqMap(data).then((reqMap) => {
@@ -1148,19 +1174,26 @@ class App extends Component {
             group2,
             group3,
             group4,
+            termNumber,
         } = this.state;
+
+        const widthPx = (termNumber * 255 + 200) * 100 / 1850;
+        const width = termNumber > 0 ? `${widthPx}%` : '100%';
 
         return (
             <div className='all'>
 
-                <div className='header'>
-                    <Header/>
+                <div className='header' style={{width}}>
+                    <Header termNumber={termNumber}
+                            width={width}
+                    />
                 </div>
 
-                <div className='tabHeader'>
+                <div className='tabHeader' style={{width}}>
                     <TabHeader tabs={this.state.tabs}
                                setTab={this.setTab}
                                getTab={this.getTab}
+                               termNumber={termNumber}
                                deleteLineMap={this.deleteLineMap}
                                setSelectedGradAtt={this.setSelectedGradAtt}
                                setSelectedCategory={this.setSelectedCategory}
@@ -1177,85 +1210,88 @@ class App extends Component {
                 </div>
 
                 {this.state.tabIndex === 0 && (
-                    <div className='part'>
-                        <PageTitle/>
+                    <div>
+                        <div className='part'>
+                            <PageTitle/>
 
-                        <div className='dropdownsWrapper'>
-                            <div className='planWrapper'>
-                                <Plans
-                                    setSelectedProgramPlan={this.setSelectedProgramPlan}
-                                    isDefault={isDefault}
-                                    setIsDefault={this.setIsDefault}
-                                    setStructure={this.setStructure}
-                                    setContainCourseGroup={this.setContainCourseGroup}
-                                />
-                            </div>
-
-                            {this.state.containCourseGroup && (
-                                <div className='groupWrapper'>
-                                    <CourseGroup courseGroup={courseGroup}
-                                                 setSelectedCourseGroup={this.setSelectedCourseGroup}
-                                                 selectedProgram={selectedProgram}
-                                                 deleteLineMap={this.deleteLineMap}
-                                                 planChanged={planChanged}
-                                                 setPlanChanged={this.setPlanChanged}
-                                    />
-                                </div>)}
-                        </div>
-
-                        <div
-                            className='collapsibleOptions'
-                            onClick={() => {
-                                this.toggleOptionsHidden();
-                            }}
-                        >
-                            <div className='additionOptions'>
-                                ADDITIONAL OPTIONS
-                            </div>
-                            <Icon/>
-
-                        </div>
-
-                        {this.state.showOptions && (
-                            <div className="lowerStuff">
-                                <div className='catagoryWrapper'>
-                                    <CourseCatagory categoryList={this.state.categoryList}
-                                                    setCatagoryColor={this.setCatagoryColor}
-                                                    selectedCategory={selectedCategory}
-                                                    setSelectedGradAtt={this.setSelectedGradAtt}
-                                                    setSelectedCategory={this.setSelectedCategory}
-                                    />
-
-                                </div>
-
-                                <div className='GAWrapper'>
-                                    <GradAttributes gradAttributeList={this.state.gradAttributeList}
-                                                    setGradAttributeColor={this.setGradAttributeColor}
-                                                    selectedGradAtt={selectedGradAtt}
-                                                    setSelectedGradAtt={this.setSelectedGradAtt}
-                                                    setSelectedCategory={this.setSelectedCategory}
+                            <div className='dropdownsWrapper'>
+                                <div className='planWrapper'>
+                                    <Plans
+                                        setSelectedProgramPlan={this.setSelectedProgramPlan}
+                                        isDefault={isDefault}
+                                        setIsDefault={this.setIsDefault}
+                                        setStructure={this.setStructure}
+                                        setContainCourseGroup={this.setContainCourseGroup}
+                                        setTermNumber={this.setTermNumber}
                                     />
                                 </div>
 
-                                <div className='gradLegendWrapper'>
-                                    <GALegend gaLegendList={this.state.gaLegendList}/>
-                                    <RequisiteLegend/>
+                                {this.state.containCourseGroup && (
+                                    <div className='groupWrapper'>
+                                        <CourseGroup courseGroup={courseGroup}
+                                                     setSelectedCourseGroup={this.setSelectedCourseGroup}
+                                                     selectedProgram={selectedProgram}
+                                                     deleteLineMap={this.deleteLineMap}
+                                                     planChanged={planChanged}
+                                                     setPlanChanged={this.setPlanChanged}
+                                        />
+                                    </div>)}
+                            </div>
+
+                            <div
+                                className='collapsibleOptions'
+                                onClick={() => {
+                                    this.toggleOptionsHidden();
+                                }}
+                            >
+                                <div className='additionOptions'>
+                                    ADDITIONAL OPTIONS
                                 </div>
-                            </div>
-                        )}
+                                <Icon/>
 
-                        <div className='structureTitle'>COURSES</div>
-
-                        <div className='structureDescriptionWrapper'>
-                            <div className='structureDescription'> Below are each of the courses in each semester in
-                                your
-                                selected plan. Hover over a course to
-                                see it's course description. Click on a course to see it's prerequisites and
-                                coreqisites.
                             </div>
 
-                            <div className='structureGroupButton'>
-                                <CourseGroupButton handleCourseGroupOnClick={this.handleCourseGroupOnClick}/>
+                            {this.state.showOptions && (
+                                <div className="lowerStuff">
+                                    <div className='catagoryWrapper'>
+                                        <CourseCatagory categoryList={this.state.categoryList}
+                                                        setCatagoryColor={this.setCatagoryColor}
+                                                        selectedCategory={selectedCategory}
+                                                        setSelectedGradAtt={this.setSelectedGradAtt}
+                                                        setSelectedCategory={this.setSelectedCategory}
+                                        />
+
+                                    </div>
+
+                                    <div className='GAWrapper'>
+                                        <GradAttributes gradAttributeList={this.state.gradAttributeList}
+                                                        setGradAttributeColor={this.setGradAttributeColor}
+                                                        selectedGradAtt={selectedGradAtt}
+                                                        setSelectedGradAtt={this.setSelectedGradAtt}
+                                                        setSelectedCategory={this.setSelectedCategory}
+                                        />
+                                    </div>
+
+                                    <div className='gradLegendWrapper'>
+                                        <GALegend gaLegendList={this.state.gaLegendList}/>
+                                        <RequisiteLegend/>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className='structureTitle'>COURSES</div>
+
+                            <div className='structureDescriptionWrapper'>
+                                <div className='structureDescription'> Below are each of the courses in each semester in
+                                    your
+                                    selected plan. Hover over a course to
+                                    see it's course description. Click on a course to see it's prerequisites and
+                                    coreqisites.
+                                </div>
+
+                                <div className='structureGroupButton'>
+                                    <CourseGroupButton handleCourseGroupOnClick={this.handleCourseGroupOnClick}/>
+                                </div>
                             </div>
                         </div>
 
@@ -1290,8 +1326,7 @@ class App extends Component {
                     <About setCourseGroupWhenAbout={this.setCourseGroupWhenAbout}/>
                 )}
 
-
-                <div className='footer'>
+                <div className='footer' style={{width}}>
                     <Footer/>
                 </div>
 

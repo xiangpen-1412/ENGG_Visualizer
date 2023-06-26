@@ -17,7 +17,10 @@ const Plan = (props) => {
         </div>
     );
 
-    const courseGroupString = props.group2 + " " + props.group3 + " " + props.group4;
+    let courseGroupString;
+    if (props.group2 && props.group3 && props.group4 !== null) {
+        courseGroupString = props.group2 + " " + props.group3 + " " + props.group4;
+    }
 
     const courseGroup = (
         <div className="planTubeText">

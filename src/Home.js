@@ -96,7 +96,7 @@ class Home extends Component {
                 </div>
 
                 <div className="frontPageTextWrapper">
-                    <h1>Engineering Visualizer </h1>
+                    <h1>Engineering Task Manager</h1>
                 </div>
 
 

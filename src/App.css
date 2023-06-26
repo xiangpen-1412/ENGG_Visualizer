@@ -9,7 +9,6 @@
 .all {
     position: relative;
     min-height: 100vh;
-
     display: flex;
     flex-direction: column;
 }
@@ -25,8 +24,8 @@
     height: 100%;
     /* justify-content: space-evenly; */
 
-    margin-left: 9%;
-    margin-right: 10%;
+    margin-left: 163px;
+    margin-right: 7%;
 }
 
 .backButton {
@@ -87,7 +86,6 @@
     border-radius: 5px;
     overflow: auto;
     max-height: 150px;
-    margin-left: 89%;
     margin-top: -10px;
     background-color: #fff;
 
@@ -116,15 +114,23 @@
     flex-direction: row;
 
     margin-right: 10%;
-    margin-left: 10%;
     margin-top: 15px;
     margin-bottom: 10px;
     vertical-align: middle;
 }
 
-.tabButton {
+.tabButton{
     margin-right: 30px;
     padding-bottom: 4px; 
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.tabButton1 {
+    margin-left: 185px;
+    margin-right: 30px;
+    padding-bottom: 4px;
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
     cursor: pointer;
@@ -136,11 +142,11 @@
     align-items: center;
 
     margin-top: 15px;
-    margin-left: 10%;
     margin-right: 10%;
 }
 
 .homeButton {
+    margin-left: 185px;
     height: 18px;
     width: 18px;
 
@@ -165,7 +171,6 @@
     font-weight: 350;
 
     border-radius: 6px;
-    right: 10px;
     position: absolute;
     z-index: 9999;
 
@@ -201,12 +206,9 @@
 
 
 .dropdownsWrapper {
-
     display: flex;
     flex-direction: row;
     overflow: visible;
-
-    justify-content: space-between;
     margin-bottom: 25px;
 }
 
@@ -214,7 +216,7 @@
     /* Spacing on all sides of inside of term palette*/
     width: 490px;
     min-height: 200px;
-    margin-right: 10px;
+    margin-right: 620px;
 
     display: flex;
     overflow: visible;
@@ -224,7 +226,6 @@
     /* Spacing on all sides of inside of term palette*/
     width: 550px;
     min-height: 200px;
-    margin-right: 10px;
 
     display: flex;
     overflow: visible;
@@ -368,7 +369,6 @@
 
     justify-content: flex-start;
 
-    width: 100%;
     height: 100%;
     overflow: auto;
 }
@@ -640,7 +640,8 @@
 }
 
 .part {
-    margin-left: 10%;
+    width: 1480px;
+    margin-left: 185px;
     margin-right: 10%;
 }
 

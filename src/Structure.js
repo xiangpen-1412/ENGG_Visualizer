@@ -467,9 +467,7 @@ class Structure extends Component {
 
         return (
             <div className='outerStructureWrapper'>
-                <div className="termWrapper"
-                     onScroll={() => this.handleScroll(lineMap)}
-                >
+                <div className="termWrapper">
                     {term}
                 </div>
             </div>
