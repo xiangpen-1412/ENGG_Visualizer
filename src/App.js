@@ -1178,7 +1178,11 @@ class App extends Component {
         } = this.state;
 
         const widthPx = (termNumber * 255 + 200) * 100 / 1850;
-        const width = termNumber > 0 ? `${widthPx}%` : '100%';
+        let width = termNumber > 0 ? `${widthPx}%` : '100%';
+
+        if (tabIndex !== 0) {
+            width = '100%';
+        }
 
         return (
             <div className='all'>
