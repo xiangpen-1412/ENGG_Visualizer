@@ -277,12 +277,15 @@ const Plans = (props) => {
     const [planList, setPlanList] = useState([]);
     const [isFirst, setIsFirst] = useState(true);
 
+    console.log(props.selectedPlan);
+
     const controller = new RESTController();
 
+    // set the default plan
     useEffect(() => {
         controller.getPlans({programName: selectedProgram}).then((plans) => {
             setPlanList(plans);
-            if (isFirst) {
+            if (isFirst && !props.tabClick) {
                 setIsFirst(false);
 
                 if (selectedProgram === "Mechanical Engineering") {
@@ -324,6 +327,7 @@ const Plans = (props) => {
                         props.setSelectedProgramPlan(selectedProgram, plan);
                     }}
                     width={250}
+                    selectedPlan={props.selectedPlan}
                 />
             </div>
         </div>
@@ -739,6 +743,7 @@ class App extends Component {
             selectedCategory: [],
             courseGroupOnClick: false,
             termNumber: 0,
+            tabClick: false,
         };
 
         this.controller = new RESTController();
@@ -789,6 +794,7 @@ class App extends Component {
     setTab = (index) => {
         this.setState({group2: null, group3: null, group4: null});
         this.setState({tabIndex: index});
+        this.setState({tabClick: true});
     }
 
     getTab = () => {
@@ -1175,6 +1181,7 @@ class App extends Component {
             group3,
             group4,
             termNumber,
+            tabClick,
         } = this.state;
 
         const widthPx = (termNumber * 255 + 200) * 100 / 1850;
@@ -1227,6 +1234,8 @@ class App extends Component {
                                         setStructure={this.setStructure}
                                         setContainCourseGroup={this.setContainCourseGroup}
                                         setTermNumber={this.setTermNumber}
+                                        selectedPlan={selectedPlan}
+                                        tabClick={tabClick}
                                     />
                                 </div>
 

@@ -15,9 +15,8 @@ const Icon = () => {
     );
 };
 
-const Dropdown = ({ placeHolder, options, onChange, width }) => {
+const Dropdown = ({ placeHolder, options, onChange, width, selectedPlan }) => {
     const [showMenu, setShowMenu] = useState(false);
-    const [selectedValue, setSelectedValue] = useState(null);
     const inputRef = useRef();
 
     useEffect(() => {
@@ -38,23 +37,22 @@ const Dropdown = ({ placeHolder, options, onChange, width }) => {
     };
 
     const getDisplay = () => {
-        if (selectedValue) {
-            return selectedValue;
+        if (selectedPlan) {
+            return selectedPlan;
         }
         return placeHolder;
     };
 
     const onItemClick = (option) => {
-        setSelectedValue(option);
         onChange(option);
     };
 
     const isSelected = (option) => {
-        if (!selectedValue) {
+        if (!selectedPlan) {
             return false;
         }
 
-        return selectedValue === option;
+        return selectedPlan === option;
     }
 
     return (

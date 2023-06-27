@@ -164,11 +164,11 @@ class Structure extends Component {
 
         if (type) {
             line = new LeaderLine(startRef, endRef, {
-                color: 'black',
+                color: '#f8c006',
             });
         } else {
             line = new LeaderLine(startRef, endRef, {
-                color: 'black',
+                color: '#000080',
                 dash: {},
             })
         }

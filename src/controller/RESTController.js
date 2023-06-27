@@ -81,4 +81,3 @@ class RESTController extends Component {
 }
 
 export default RESTController;
-
