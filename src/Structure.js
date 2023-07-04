@@ -13,28 +13,32 @@ class Structure extends Component {
         this.state = {
             selectedCourse: "",
             showDescriptions: {},
-            shouldAdjustPosition: false,
         };
 
+        this.stickyDescriptionIndex = null;
         this.courseList = [];
         this.divRefs = [];
     }
 
-    componentDidMount() {
-        window.addEventListener('scroll', this.handleWindowScroll);
-    }
+    // componentDidMount() {
+    //     window.addEventListener('scroll', this.handleWindowScroll);
+    // }
 
-    handleWindowScroll = () => {
-
-        if (this.state.showDescriptions !== {}) {
-            const updatedShowDescriptions = Object.keys(this.state.showDescriptions).reduce((acc, key) => {
-                acc[key] = false;
-                return acc;
-            }, {});
-
-            this.setState({showDescriptions: updatedShowDescriptions});
-        }
-    }
+    // handleWindowScroll = () => {
+    //
+    //     if (this.state.showDescriptions !== {}) {
+    //         const updatedShowDescriptions = Object.keys(this.state.showDescriptions).reduce((acc, key) => {
+    //             acc[key] = false;
+    //             return acc;
+    //         }, {});
+    //
+    //         if (this.stickyDescriptionIndex !== null) {
+    //             updatedShowDescriptions[this.stickyDescriptionIndex] = true;
+    //         }
+    //
+    //         this.setState({showDescriptions: updatedShowDescriptions});
+    //     }
+    // }
 
     /**
      * show the prerequisite and corequisite of a course by lines when click detected
@@ -195,58 +199,75 @@ class Structure extends Component {
                 line.position();
             });
         });
+
+        console.log("render function is called");
     }
 
-    handleMouseEnter = (indexx) => {
-
-        /**
-         * only one course description can be poped up at a time
-         * */
+    handleMouseEnter = (index) => {
         const updatedShowDescriptions = Object.keys(this.state.showDescriptions).reduce((acc, key) => {
             acc[key] = false;
             return acc;
         }, {});
 
-        updatedShowDescriptions[indexx] = true;
+        updatedShowDescriptions[index] = true;
 
-        this.setState(
-            {
-                showDescriptions: updatedShowDescriptions,
-                shouldAdjustPosition: true,
-            },
-            () => {
-                if (this.state.shouldAdjustPosition) {
-                    this.adjustDescriptionPosition(indexx);
-                    this.setState({shouldAdjustPosition: false});
-                }
-            }
-        );
+        this.setState({
+            showDescriptions: updatedShowDescriptions,
+        }, () => {
+            this.adjustDescriptionPosition(index);
+        });
+
+        if (this.state.showDescriptions[index] === false) {
+            this.stickyDescriptionIndex = null;
+        }
     }
 
-    handleMouseLeave = (indexx) => {
-        this.setState({showDescriptions: {...this.state.showDescriptions, [indexx]: false}});
+    handleMouseLeave = (index) => {
+
+        if (index !== this.stickyDescriptionIndex) {
+            this.setState({showDescriptions: {...this.state.showDescriptions, [index]: false}});
+        }
+    }
+
+    /**
+     * handle right click
+     * */
+    handleRightClick = (index, event) => {
+        event.preventDefault();
+
+        if (index === this.stickyDescriptionIndex) {
+            this.stickyDescriptionIndex = null;
+            this.setState({showDescriptions: {...this.state.showDescriptions, [index]: false}});
+        } else {
+            this.stickyDescriptionIndex = index;
+            this.setState({showDescriptions: {...this.state.showDescriptions, [index]: true}}, () => {
+                this.adjustDescriptionPosition(index);
+            });
+        }
     }
 
     /**
      * relocate the out of bound description
      * */
-    adjustDescriptionPosition = (indexx) => {
+    adjustDescriptionPosition = (index) => {
 
         const descriptionDiv = document.querySelector('.description');
-        const structureWrapper = document.querySelector('.structureWrapper');
-        let courseDiv = document.getElementById(indexx.toString());
+        const headerDiV = document.querySelector('.header');
+        const courseDiv = document.getElementById(index.toString());
 
-        if (descriptionDiv !== null && structureWrapper !== null && courseDiv !== null) {
+        if (descriptionDiv !== null && headerDiV !== null) {
             const descriptionRect = descriptionDiv.getBoundingClientRect();
-            const structureWrapperRect = structureWrapper.getBoundingClientRect();
+            const headerRect = headerDiV.getBoundingClientRect();
             const courseRect = courseDiv.getBoundingClientRect();
 
-            if (descriptionRect.bottom > structureWrapperRect.bottom) {
-                descriptionDiv.style.bottom = `${structureWrapperRect.bottom - courseRect.top - 1200}px`;
-            }
+            console.log(descriptionRect.right);
+            console.log(headerRect.right);
+            console.log(courseRect.right);
 
-            if (descriptionRect.right > structureWrapperRect.right) {
-                descriptionDiv.style.left = `${courseRect.left - descriptionDiv.offsetWidth - 20}px`;
+            console.log(courseDiv.style.right);
+            if (descriptionRect.right > headerRect.right) {
+                const newLeftPosition = courseRect.right - descriptionRect.width + window.scrollX;
+                descriptionDiv.style.left = newLeftPosition + "px";
             }
         }
     };
@@ -296,6 +317,22 @@ class Structure extends Component {
 
         name = name.includes('(') ? name.replace(/\(.*?\)/g, '') : name;
 
+        // url part
+        let courseLink;
+
+        const regex = /\d/;
+        if (regex.test(name)) {
+            let parts = name.match(/([a-zA-Z\s]+)(\d+)/);
+
+            let letterPart = parts[1].trim().replace(/\s/g, '_').toLowerCase();
+            let numberPart = parts[2];
+
+            courseLink = `https://apps.ualberta.ca/catalogue/course/${letterPart}/${numberPart}`;
+        } else {
+            courseLink = 'https://calendar.ualberta.ca/preview_program.php?catoid=39&poid=47347';
+        }
+
+
         return (
             <div>
                 <div className={className}
@@ -303,6 +340,7 @@ class Structure extends Component {
                      key={index}
                      ref={(el) => this.divRefs[index] = el}
                      onClick={() => this.handleOnClick(coursesList, index, this.props.updateLineMap, this.props.lineMap, this.props.reqMap)}
+                     onContextMenu={(e) => this.handleRightClick(index, e)}
                      style={{background: backgroundColor}}
                      onMouseEnter={() => this.handleMouseEnter(index)}
                      onMouseLeave={() => this.handleMouseLeave(index)}
@@ -321,7 +359,9 @@ class Structure extends Component {
                 {this.state.showDescriptions[index] &&
                     <div className="description">
                         <div className='extendedName'>
-                            <a>{courseItem.extendedName}</a>
+                            <a href={courseLink} target="_blank" rel="noopener noreferrer">
+                                {courseItem.extendedName}
+                            </a>
                         </div>
                         <br/>
                         <div className='descriptionDetails'>

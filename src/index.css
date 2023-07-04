@@ -122,8 +122,8 @@ code {
     color: rgb(0, 0, 0); /* Text color of each term div*/
 
     width: 180px;/* Width of eachterm div*/
-    height: 70px;
-    font-size: 20px; /* Font of text inside term div*/
+    height: 75px;
+    font-size: 18px; /* Font of text inside term div*/
     border-radius: 1px; /* Make the term divs rounded corners*/
     margin-top: 10px;
     margin-bottom: 20px; /*Spacing between terms in term palette*/
@@ -179,7 +179,7 @@ code {
     width: 155px;/* Width of eachterm div*/
     height: 65px;
     /* Font of text inside term div*/
-    font-size: 20px;
+    font-size: 18px;
     /* Make the term divs rounded corners*/
     /* border-radius: 5px; */
     /* Looks good when cursor points to a term div*/

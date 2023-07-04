@@ -37,11 +37,11 @@ const Header = (props) => {
 
     // set dynamic dropDown menu width
     const headerDropDownMargin = {
-        marginLeft: `${parseFloat(props.width)* 0.9}%`,
+        marginLeft: `${parseFloat(props.width) * 0.9}%`,
     };
 
     const headerInstructionMargin = {
-        marginLeft: `${parseFloat(props.width)* 0.7}%`,
+        marginLeft: `${parseFloat(props.width) * 0.75}%`,
     }
 
 
@@ -277,8 +277,6 @@ const Plans = (props) => {
     const [planList, setPlanList] = useState([]);
     const [isFirst, setIsFirst] = useState(true);
 
-    console.log(props.selectedPlan);
-
     const controller = new RESTController();
 
     // set the default plan
@@ -290,7 +288,6 @@ const Plans = (props) => {
 
                 if (selectedProgram === "Mechanical Engineering") {
                     props.setStructure(selectedProgram, plans[0].replace(/\{[^)]*\}/g, "").trimEnd().trimStart());
-                    props.setContainCourseGroup();
                 } else {
                     props.setStructure(selectedProgram, plans[0]);
                 }
@@ -325,9 +322,11 @@ const Plans = (props) => {
                     options={uniquePlans}
                     onChange={(plan) => {
                         props.setSelectedProgramPlan(selectedProgram, plan);
+                        setIsFirst(false);
                     }}
                     width={250}
-                    selectedPlan={props.selectedPlan}
+                    plan={props.selectedPlan}
+                    type={'plan'}
                 />
             </div>
         </div>
@@ -336,74 +335,85 @@ const Plans = (props) => {
 
 const CourseGroup = (props) => {
 
+    /*
+    *  props.courseGroup: new Map([['Group 2', ["2A", "2B"]],
+    *                              ['Group 3', ["3A", "3B"]],
+    *                              ['Group 4', ["4A", "4B"]]]),
+    * */
+
+    // get the keys of course group like ["group2", "group3", "group4"]
     const courseGroupKeys = [...props.courseGroup.keys()];
 
-    const [selectedButtons, setSelectedButtons] = useState(
-        new Map(
-            courseGroupKeys
-                .filter((key) => ["group2", "group3", "group4"].includes(key))
-                .map((key) => [key, null])
-        )
-    );
+    const [planName, setPlanName] = useState(props.selectedPlan);
 
+    if (props.planChanged) {
+        props.setPlanChanged(false);
+    }
+
+    // set the default course group of each plan in Mechanical Engineering
     useEffect(() => {
-        courseGroupKeys.forEach((key) => {
-            const group = selectedButtons.get(key);
-            if (group) {
-                props.setSelectedCourseGroup(group, props.deleteLineMap);
-            }
-        });
-    }, [selectedButtons]);
 
+        // prevent duplicate render
+        if (!props.selectedPlan.includes("{")) {
+            let completePlanName = props.selectedPlan;
+            completePlanName = completePlanName + " {";
 
-    // Default selection of course groups
-    useEffect(() => {
-        const newSelectedButtons = new Map(selectedButtons);
-        courseGroupKeys.forEach((key) => {
-            const groups = props.courseGroup.get(key);
-            const defaultGroup = groups.find(group => group.toLowerCase().endsWith('a'));
-            if (defaultGroup) {
-                newSelectedButtons.set(key, defaultGroup);
-                props.setSelectedCourseGroup(defaultGroup, props.deleteLineMap);
-            }
-        });
-        setSelectedButtons(newSelectedButtons);
-    }, [props.courseGroup]);
+            const nullMap = new Map();
 
-    // Reset all selectedGroups when selected plan changed
-    useEffect(() => {
-        if (props.planChanged) {
-            const newSelectedButtons = new Map(selectedButtons);
-            courseGroupKeys.forEach((key) => {
-                newSelectedButtons.set(key, null);
-            });
-            setSelectedButtons(newSelectedButtons);
+            courseGroupKeys.forEach((key, index) => {
+                const defaultGroup = props.courseGroup.get(key)[0];
+                nullMap.set(key, defaultGroup);
+                completePlanName += defaultGroup;
+
+                if (index !== courseGroupKeys.length - 1) {
+                    completePlanName += " ";
+                }
+            })
+
+            completePlanName.trim();
+            completePlanName += "}";
+
+            setPlanName(completePlanName);
+            props.setStructure(props.selectedProgram, completePlanName);
+            props.setSelectedCourseGroupButtons(nullMap);
         }
-    }, [props.planChanged]);
+    }, [props.planChanged])
 
-    const keyComponent = courseGroupKeys.map((key) => {
-        const defaultGroup = selectedButtons.get(key);
+    const keyComponent = courseGroupKeys.map((key, index) => {
+        const defaultGroup = props.courseGroup.get(key)[0];
         return (
             <div key={key}>
                 <div>
                     <Dropdown
+                        index={index}
                         placeHolder={defaultGroup}
                         options={props.courseGroup.get(key)}
                         onChange={(group) => {
-                            const newSelectedButtons = new Map(selectedButtons);
+
+                            // delete the old leaderlines
+                            props.deleteLineMap();
+
+                            let newSelectedButtons = new Map(props.selectedCourseGroupButtons);
                             newSelectedButtons.set(key, group);
-                            setSelectedButtons(newSelectedButtons);
-                            props.setSelectedCourseGroup(group, props.deleteLineMap);
+
+                            let groups = planName.substring(planName.indexOf("{") + 1, planName.indexOf("}"));
+                            const groupNum = group[0];
+                            const newGroups = groups.replace(groups.substring(groups.indexOf(groupNum), groups.indexOf(groupNum) + 2), group);
+
+                            const newPlanName = planName.replace(groups, newGroups);
+
+                            setPlanName(newPlanName);
+                            props.setStructure(props.selectedProgram, newPlanName);
+                            props.setSelectedCourseGroupButtons(newSelectedButtons);
                         }}
+                        plan={props.selectedPlan}
+                        type={'courseGroup'}
+                        planChanged={props.planChanged}
                     />
                 </div>
             </div>
         );
     });
-
-    if (props.planChanged) {
-        props.setPlanChanged();
-    }
 
     return (
         <div className="allGroups">
@@ -729,12 +739,8 @@ class App extends Component {
             groupColorSet: new Map(),
             selectedProgram: "",
             selectedPlan: "",
-            containCourseGroup: false,
             showOptions: false,
-            planChanged: false,
-            group2: "",
-            group3: "",
-            group4: "",
+            planChanged: true,
             lineMap: new Map(),
             isDefault: true,
             containOptions: true,
@@ -744,6 +750,7 @@ class App extends Component {
             courseGroupOnClick: false,
             termNumber: 0,
             tabClick: false,
+            selectedCourseGroupButtons: new Map(),
         };
 
         this.controller = new RESTController();
@@ -760,8 +767,8 @@ class App extends Component {
         this.setState({isDefault: false});
     }
 
-    setContainCourseGroup = () => {
-        this.setState({containCourseGroup: true});
+    setContainCourseGroup = (isContained) => {
+        this.setState({containCourseGroup: isContained});
     }
 
     /**
@@ -787,8 +794,8 @@ class App extends Component {
         this.setState({courseGroupOnClick: !this.state.courseGroupOnClick});
     }
 
-    setCourseGroupWhenAbout = () => {
-        this.setState({group2: "", group3: "", group4: ""})
+    setSelectedPlan = (plan) => {
+        this.setState({selectedPlan: plan});
     }
 
     setTab = (index) => {
@@ -995,20 +1002,19 @@ class App extends Component {
         this.setState({group2: "", group3: "", group4: ""});
 
         const haveCourseGroupOption = selectedProgram === "Mechanical Engineering" && !selectedPlan.includes("Co-op Plan 3");
-        this.setState({containCourseGroup: haveCourseGroupOption}, () => {
-            if (this.state.containCourseGroup) {
-                this.setCourseGroup(selectedPlan);
-            } else {
-                this.setStructure(selectedProgram, selectedPlan);
-            }
-        });
+        if (haveCourseGroupOption) {
+            this.setState({containCourseGroup : true});
+            this.setCourseGroup(selectedPlan);
+        } else {
+            this.setStructure(selectedProgram, selectedPlan);
+        }
     }
 
     setStructure = (selectedProgram, selectedPlan) => {
 
         this.setState({
             selectedProgram: selectedProgram,
-            selectedPlan: selectedProgram === "Mechanical Engineering" ? selectedPlan.replace(/\{[^)]*\}/g, "").trimEnd().trimStart() : selectedPlan
+            selectedPlan: selectedPlan,
         });
 
         const data = {
@@ -1018,8 +1024,9 @@ class App extends Component {
 
         let termNumber;
 
-        if (selectedProgram === "Mechanical Engineering") {
-            if (selectedPlan !== "Co-op Plan 3" && selectedPlan.includes("{")) {
+        if (selectedProgram === "Mechanical Engineering" && !selectedPlan.includes("Co-op Plan 3")) {
+            this.setContainCourseGroup(true);
+            if (selectedPlan.includes("{")) {
                 this.controller.getCourseInfo(data).then((courses) => {
                     if (courses !== null || undefined) {
                         termNumber = Object.keys(courses).length;
@@ -1032,6 +1039,7 @@ class App extends Component {
                 });
             }
         } else {
+            this.setContainCourseGroup(false);
             this.controller.getCourseInfo(data).then((courses) => {
                 if (courses !== null || undefined) {
                     termNumber = Object.keys(courses).length;
@@ -1044,7 +1052,6 @@ class App extends Component {
             });
         }
     }
-
 
     setCourseGroup = (selectedPlan) => {
 
@@ -1082,63 +1089,6 @@ class App extends Component {
 
     }
 
-    setSelectedCourseGroup = (group, deleteLineMap) => {
-        const groupNumber = group.toString().charAt(0);
-
-        let group2, group3, group4;
-
-        switch (groupNumber) {
-            case "2":
-                this.setState({group2: group});
-                group2 = group;
-                group3 = this.state.group3;
-                group4 = this.state.group4;
-                break;
-            case "3":
-                this.setState({group3: group});
-                group3 = group;
-                group2 = this.state.group2;
-                group4 = this.state.group4;
-                break;
-            case "4":
-                this.setState({group4: group});
-                group4 = group;
-                group2 = this.state.group2;
-                group3 = this.state.group3;
-                break;
-        }
-
-        const plan = this.state.selectedPlan;
-
-        switch (plan) {
-            case "Traditional Plan":
-                if (group2 && group3 && group4) {
-                    const completePlan = plan + " {" + group2 + " " + group3 + " " + group4 + "}";
-                    this.setStructure(this.state.selectedProgram, completePlan);
-                    deleteLineMap();
-                }
-                break;
-            case "Alternate Plan":
-                if (group3 && group4) {
-                    const completePlan = plan + " {" + group3 + " " + group4 + "}";
-                    this.setStructure(this.state.selectedProgram, completePlan);
-                    deleteLineMap();
-                }
-                break;
-            case "Co-op Plan 1":
-            case "Co-op Plan 2":
-            case "Co-op Plan 4":
-                if (group3) {
-                    const completePlan = plan + " {" + group3 + "}";
-                    this.setStructure(this.state.selectedProgram, completePlan);
-                    deleteLineMap();
-                }
-                break;
-        }
-
-        this.setState({previousSelectedPlan: this.state.selectedPlan});
-    }
-
     updateLineMap = (update) => {
         this.setState({lineMap: update})
     }
@@ -1155,8 +1105,8 @@ class App extends Component {
         this.setState({lineMap: new Map()});
     }
 
-    setPlanChanged = () => {
-        this.setState({planChanged: false});
+    setPlanChanged = (isChanged) => {
+        this.setState({planChanged: isChanged});
     }
 
     componentDidUpdate(lineMap) {
@@ -1177,11 +1127,9 @@ class App extends Component {
             selectedGradAtt,
             courseGroupOnClick,
             tabIndex,
-            group2,
-            group3,
-            group4,
             termNumber,
             tabClick,
+            selectedCourseGroupButtons,
         } = this.state;
 
         const widthPx = (termNumber * 255 + 200) * 100 / 1850;
@@ -1236,17 +1184,23 @@ class App extends Component {
                                         setTermNumber={this.setTermNumber}
                                         selectedPlan={selectedPlan}
                                         tabClick={tabClick}
+                                        setPlanChanged={this.setPlanChanged}
+                                        planChanged={planChanged}
                                     />
                                 </div>
 
                                 {this.state.containCourseGroup && (
                                     <div className='groupWrapper'>
                                         <CourseGroup courseGroup={courseGroup}
-                                                     setSelectedCourseGroup={this.setSelectedCourseGroup}
                                                      selectedProgram={selectedProgram}
+                                                     selectedPlan={selectedPlan}
                                                      deleteLineMap={this.deleteLineMap}
                                                      planChanged={planChanged}
                                                      setPlanChanged={this.setPlanChanged}
+                                                     selectedCourseGroupButtons={selectedCourseGroupButtons}
+                                                     setSelectedCourseGroupButtons={(newCourseGroupButtons) => this.setState({selectedCourseGroupButtons: newCourseGroupButtons})}
+                                                     setStructure={this.setStructure}
+                                                     setSelectedPlan={this.setSelectedPlan}
                                         />
                                     </div>)}
                             </div>
@@ -1328,15 +1282,12 @@ class App extends Component {
                         <Scheduler
                             selectedProgram={selectedProgram}
                             selectedPlan={selectedPlan}
-                            group2={group2}
-                            group3={group3}
-                            group4={group4}
                         />
                     </div>
                 )}
 
                 {this.state.tabIndex === 2 && (
-                    <About setCourseGroupWhenAbout={this.setCourseGroupWhenAbout}/>
+                    <About />
                 )}
 
                 <div className='footer' style={{width}}>
