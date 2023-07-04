@@ -43,7 +43,6 @@ const Dropdown = ({placeHolder, options, onChange, width, plan, type, planChange
             if (!plan) return placeHolder;
             else return plan.replace(/\{[^)]*\}/g, "").trimEnd().trimStart();
         } else if (type === 'courseGroup') {
-            console.log(plan);
             if (planChanged) {
                 return placeHolder;
             } else {

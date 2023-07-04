@@ -1132,23 +1132,25 @@ class App extends Component {
             selectedCourseGroupButtons,
         } = this.state;
 
-        const widthPx = (termNumber * 255 + 200) * 100 / 1850;
-        let width = termNumber > 0 ? `${widthPx}%` : '100%';
+        const widthPx = termNumber * 255 + 200;
+        let width = termNumber > 0 ? `${widthPx}px` : '100%';
 
         if (tabIndex !== 0) {
             width = '100%';
         }
 
+        const minWidth = '100%';
+
         return (
             <div className='all'>
 
-                <div className='header' style={{width}}>
+                <div className='header' style={{width, minWidth}}>
                     <Header termNumber={termNumber}
                             width={width}
                     />
                 </div>
 
-                <div className='tabHeader' style={{width}}>
+                <div className='tabHeader' style={{width, minWidth}}>
                     <TabHeader tabs={this.state.tabs}
                                setTab={this.setTab}
                                getTab={this.getTab}
@@ -1290,7 +1292,7 @@ class App extends Component {
                     <About />
                 )}
 
-                <div className='footer' style={{width}}>
+                <div className='footer' style={{width, minWidth}}>
                     <Footer/>
                 </div>
 
