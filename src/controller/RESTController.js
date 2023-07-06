@@ -6,6 +6,9 @@ class RESTController extends Component {
     constructor(props) {
         super(props);
 
+        // online server url
+        this.springbootUrl = "http://129.128.215.39:1412";
+
         this.schedulerBaseURL = "/nobes/timetable/calendar";
 
         this.visualizerBaseURL = "/nobes/timetable/visualizer";

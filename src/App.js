@@ -994,7 +994,6 @@ class App extends Component {
         this.deleteLineMap();
 
         this.setState({selectedProgram: selectedProgram, selectedPlan: selectedPlan, structure: [], planChanged: true});
-        this.setState({group2: "", group3: "", group4: ""});
 
         const haveCourseGroupOption = selectedProgram === "Mechanical Engineering" && !selectedPlan.includes("Co-op Plan 3");
         if (haveCourseGroupOption) {
@@ -1006,6 +1005,11 @@ class App extends Component {
     }
 
     setStructure = (selectedProgram, selectedPlan) => {
+
+        this.deleteCourseCategory();
+        this.deleteGradAtts();
+        this.setSelectedCategory(null);
+        this.setSelectedGradAtt(null);
 
         this.setState({
             selectedProgram: selectedProgram,
