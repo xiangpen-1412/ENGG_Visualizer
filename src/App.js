@@ -730,7 +730,7 @@ class App extends Component {
                 ['Group 3', ["3A", "3B"]],
                 ['Group 4', ["4A", "4B"]]
             ]),
-            tabs: ['Visualizer', 'Scheduler', 'About'],
+            tabs: ['Visualizer', 'About'],
             selectedAtt: "",
             groupColorSet: new Map(),
             selectedProgram: "",
@@ -1278,16 +1278,16 @@ class App extends Component {
                     </div>
                 )}
 
-                {this.state.tabIndex === 1 && (
-                    <div className='scheduler'>
-                        <Scheduler
-                            selectedProgram={selectedProgram}
-                            selectedPlan={selectedPlan}
-                        />
-                    </div>
-                )}
+                {/*{this.state.tabIndex === 1 && (*/}
+                {/*    <div className='scheduler'>*/}
+                {/*        <Scheduler*/}
+                {/*            selectedProgram={selectedProgram}*/}
+                {/*            selectedPlan={selectedPlan}*/}
+                {/*        />*/}
+                {/*    </div>*/}
+                {/*)}*/}
 
-                {this.state.tabIndex === 2 && (
+                {this.state.tabIndex === 1 && (
                     <About />
                 )}
 
