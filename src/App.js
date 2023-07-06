@@ -37,11 +37,11 @@ const Header = (props) => {
 
     // set dynamic dropDown menu width
     const headerDropDownMargin = {
-        marginLeft: `${parseFloat(props.width) * 0.9}%`,
+        marginLeft: `${parseFloat(props.width) * 0.92}px`,
     };
 
     const headerInstructionMargin = {
-        marginLeft: `${parseFloat(props.width) * 0.75}%`,
+        marginLeft: `${parseFloat(props.width) * 0.75}px`,
     }
 
 
@@ -168,10 +168,6 @@ const TabHeader = (props) => {
                 onClick={() => {
                     props.setTab(index);
                     props.deleteLineMap();
-                    props.setSelectedCategory(null);
-                    props.setSelectedGradAtt(null);
-                    props.deleteGradAtts();
-                    props.deleteCourseCategory();
                 }}
                 style={{
                     borderBottom: index === props.getTab() ? '2px solid' : 'none',
@@ -799,7 +795,6 @@ class App extends Component {
     }
 
     setTab = (index) => {
-        this.setState({group2: null, group3: null, group4: null});
         this.setState({tabIndex: index});
         this.setState({tabClick: true});
     }

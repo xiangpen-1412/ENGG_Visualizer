@@ -6,10 +6,6 @@
     font-weight: 350;
 }
 
-.sectionSchedulerDescription {
-
-}
-
 .planTube {
     font-size: 17px;
     font-family: 'Roboto', sans-serif;
@@ -23,8 +19,23 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    margin-bottom: 60px;
 }
 
-.planTubeText {
-    margin-left: 10px;
+.planText {
+    font-size: 17px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+.courseGroupText {
+    font-size: 17px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+
+    margin-left: 20px;
 }

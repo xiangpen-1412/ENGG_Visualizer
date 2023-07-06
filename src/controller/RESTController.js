@@ -6,7 +6,9 @@ class RESTController extends Component {
     constructor(props) {
         super(props);
 
-        this.baseURL = "/nobes/timetable/calendar";
+        this.schedulerBaseURL = "/nobes/timetable/calendar";
+
+        this.visualizerBaseURL = "/nobes/timetable/visualizer";
 
         this.config = {
             headers: {
@@ -15,10 +17,13 @@ class RESTController extends Component {
         }
     }
 
+    /**
+     * Visualizer API
+     * */
     getPlans = (data) => {
 
         return axios
-            .post(`${this.baseURL}/getPlans`, data.programName, this.config)
+            .post(`${this.schedulerBaseURL}/getPlans`, data.programName, this.config)
             .then(response => {
                 const jsonMap = JSON.stringify(response.data.obj);
                 const progMap = JSON.parse(jsonMap);
@@ -29,10 +34,13 @@ class RESTController extends Component {
             });
     }
 
+    /**
+     * Visualizer API
+     * */
     getCourseInfo = (data) => {
 
         return axios
-            .post(`/nobes/timetable/visualizer/getInfo`, data, this.config)
+            .post(`${this.visualizerBaseURL}/getInfo`, data, this.config)
             .then(response => {
                 const courseMap = response.data.obj;
                 const courses = [];
@@ -69,15 +77,33 @@ class RESTController extends Component {
             });
     }
 
+    /**
+     * Visualizer API
+     * */
     getReqMap = (data) => {
         return axios
-            .post(`/nobes/timetable/visualizer/getReqMap`, data, this.config)
+            .post(`${this.visualizerBaseURL}/getReqMap`, data, this.config)
             .then(response => {
                 return response.data.obj;
             }).catch(error => {
                 console.error('getLec: Error fetching data:', error);
             });
     }
+
+    /**
+     * Scheduler API
+     * */
+    getTerms = (data) => {
+        return axios
+            .post(`${this.schedulerBaseURL}/getPlans`, data.programName, this.config)
+            .then(response => {
+                const progMap = response.data.obj;
+                return progMap[data.planName];
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    };
 }
 
 export default RESTController;

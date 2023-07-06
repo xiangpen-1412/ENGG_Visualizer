@@ -383,7 +383,7 @@ class Structure extends Component {
 
     render() {
 
-        const {structure, lineMap} = this.props;
+        const {structure} = this.props;
 
         let cloneStructure = cloneDeep(structure);
 
