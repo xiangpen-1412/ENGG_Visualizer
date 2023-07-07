@@ -595,13 +595,6 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            termList: [
-                "Fall Term 1",
-                "Winter Term 2",
-                "Fall Term 3",
-                "Winter Term 4",
-            ],
-
             gradAttributeList: [
                 "Knowledge Base for Engineering",
                 "Problem Analysis",
@@ -747,6 +740,11 @@ class App extends Component {
             termNumber: 0,
             tabClick: false,
             selectedCourseGroupButtons: new Map(),
+
+            // states for scheduler
+            dropDownClick: [true, true, true],
+            termList: [],
+            selectedTerm: "",
         };
 
         this.controller = new RESTController();
@@ -997,7 +995,7 @@ class App extends Component {
 
         const haveCourseGroupOption = selectedProgram === "Mechanical Engineering" && !selectedPlan.includes("Co-op Plan 3");
         if (haveCourseGroupOption) {
-            this.setState({containCourseGroup : true});
+            this.setState({containCourseGroup: true});
             this.setCourseGroup(selectedPlan);
         } else {
             this.setStructure(selectedProgram, selectedPlan);
@@ -1010,6 +1008,7 @@ class App extends Component {
         this.deleteGradAtts();
         this.setSelectedCategory(null);
         this.setSelectedGradAtt(null);
+        this.setSelectedTerm("");
 
         this.setState({
             selectedProgram: selectedProgram,
@@ -1112,8 +1111,29 @@ class App extends Component {
         this.redrawLeaderlines(lineMap);
     }
 
+
+    // setState method for the scheduler
+    setDropDownClick = (index) => {
+        const newDropDownClick = this.state.dropDownClick.map((value, i) => {
+            if (i === index) {
+                return !value;
+            } else return value;
+        });
+
+        this.setState({dropDownClick: newDropDownClick});
+    }
+
+    setTermList = (termList) => {
+        this.setState({termList: termList});
+    }
+
+    setSelectedTerm = (term) => {
+        this.setState({selectedTerm: term});
+    }
+
     render() {
         const {
+            // state that will be used in visualizer
             structure,
             courseGroup,
             selectedProgram,
@@ -1129,6 +1149,11 @@ class App extends Component {
             termNumber,
             tabClick,
             selectedCourseGroupButtons,
+
+            // state that will be used in scheduler
+            dropDownClick,
+            termList,
+            selectedTerm,
         } = this.state;
 
         const widthPx = termNumber * 255 + 200;
@@ -1286,12 +1311,18 @@ class App extends Component {
                         <Scheduler
                             selectedProgram={selectedProgram}
                             selectedPlan={selectedPlan}
+                            dropDownClick={dropDownClick}
+                            termList={termList}
+                            selectedTerm={selectedTerm}
+                            setDropDownClick={this.setDropDownClick}
+                            setSelectedTerm={this.setSelectedTerm}
+                            setTermList={this.setTermList}
                         />
                     </div>
                 )}
 
                 {this.state.tabIndex === 2 && (
-                    <About />
+                    <About/>
                 )}
 
                 <div className='footer' style={{width, minWidth}}>

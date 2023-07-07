@@ -240,11 +240,6 @@ class Structure extends Component {
             const headerRect = headerDiV.getBoundingClientRect();
             const courseRect = courseDiv.getBoundingClientRect();
 
-            console.log(descriptionRect.right);
-            console.log(headerRect.right);
-            console.log(courseRect.right);
-
-            console.log(courseDiv.style.right);
             if (descriptionRect.right > headerRect.right) {
                 const newLeftPosition = courseRect.right - descriptionRect.width + window.scrollX;
                 descriptionDiv.style.left = newLeftPosition + "px";

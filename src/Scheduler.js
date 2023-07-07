@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {Component, useEffect} from "react";
 import './Scheduler.css'
 import {useLocation} from "react-router-dom";
 import RESTController from "./controller/RESTController";
@@ -58,16 +58,7 @@ const Plan = (props) => {
     )
 }
 
-const PlaceCourse = (props) => {
-
-    const restController = new RESTController();
-    const program = props.selectedProgram;
-
-    // useEffect(() => {
-    //     restController.getTerms({programName: program, planName: props.selectedPlan}).then((terms) => {
-    //
-    //     })
-    // }, [props.selectedPlan])
+const PlaceCourse = () => {
 
     return (
         <div>
@@ -79,15 +70,141 @@ const PlaceCourse = (props) => {
     )
 }
 
-const Courses = () => {
+const Terms = (props) => {
+    const restController = new RESTController();
+    const program = props.selectedProgram;
+    const plan = props.selectedPlan;
+
+    // set the term list and default selected term
+    useEffect(() => {
+
+        if (program !== "Mechanical Engineering" || plan.includes("{")) {
+            restController.getTerms({programName: program, planName: props.selectedPlan}).then((terms) => {
+                props.setTermList(terms);
+
+                // set the default term
+                if (props.selectedTerm === "") {
+                    props.setSelectedTerm(terms[0]);
+                }
+            })
+        }
+    }, [props.selectedPlan]);
+
+    const terms = props.termList.map((term) => {
+
+        const isSelected = props.selectedTerm === term;
+        const className = isSelected ? 'selectedIndivTerm' : 'indivTerm';
+
+        return (
+            <div
+                className={className}
+                onClick={() => props.setSelectedTerm(term)}
+            >
+                {term}
+            </div>
+        );
+    })
+
     return (
-        <div className='coursePalette'>
-            <div className='coursePaletteTitle'>
-                Courses
+        <div className='termTube'>
+            {terms}
+        </div>
+    )
+}
+
+const DropDownSign = (props) => {
+
+    const addSign = (
+        <img alt="plus" src="plus.png" className="plus"/>
+    )
+
+    const minusSign = (
+        <img alt="minus" src="minus-sign.png" className="minus"/>
+    )
+
+    if (props.isDropDown) {
+        return addSign;
+    } else {
+        return minusSign;
+    }
+}
+
+const Courses = (props) => {
+
+    const isDropDown = props.dropDownClick[0];
+
+    const onSignClick = () => {
+        props.setDropDownClick(0);
+    }
+
+    return (
+        <div>
+            <div className='coursePalette'>
+                <div className='coursePaletteTitle'>
+                    Courses
+                </div>
+                <div className='coursePaletteDropDownButton' onClick={onSignClick}>
+                    <DropDownSign isDropDown={isDropDown}/>
+                </div>
             </div>
-            <div className='coursePaletteDropDownButton'>
-                +
+            {!isDropDown && (
+                <div className='coursesInfo'>
+                    Course One
+                </div>
+            )}
+        </div>
+    )
+}
+
+const Seminars = (props) => {
+
+    const isDropDown = props.dropDownClick[1];
+
+    const onSignClick = () => {
+        props.setDropDownClick(1);
+    }
+
+    return (
+        <div>
+            <div className='seminarsPalette'>
+                <div className='seminarsPaletteTitle'>
+                    Seminars
+                </div>
+                <div className='seminarsPaletteDropDownButton' onClick={onSignClick}>
+                    <DropDownSign isDropDown={isDropDown}/>
+                </div>
             </div>
+            {!isDropDown && (
+                <div className='coursesInfo'>
+                    Course One
+                </div>
+            )}
+        </div>
+    )
+}
+const Labs = (props) => {
+
+    const isDropDown = props.dropDownClick[2];
+
+    const onSignClick = () => {
+        props.setDropDownClick(2);
+    }
+
+    return (
+        <div>
+            <div className={`labsPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
+                <div className='labsPaletteTitle'>
+                    Labs
+                </div>
+                <div className='labsPaletteDropDownButton' onClick={onSignClick}>
+                    <DropDownSign isDropDown={isDropDown}/>
+                </div>
+            </div>
+            {!isDropDown && (
+                <div className='coursesInfoBottom'>
+                    Course One
+                </div>
+            )}
         </div>
     )
 }
@@ -128,7 +245,15 @@ class Scheduler extends Component {
 
     render() {
 
-        const {selectedProgram, selectedPlan} = this.props;
+        const {
+            selectedProgram,
+            selectedPlan,
+            termList,
+            selectedTerm,
+            dropDownClick
+        } = this.props;
+
+        console.log(selectedTerm);
 
         return (
             <div>
@@ -141,11 +266,21 @@ class Scheduler extends Component {
                     selectedProgram={selectedProgram}
                     selectedPlan={selectedPlan}
                 />
+                <div>
+                    <Terms
+                        selectedProgram={selectedProgram}
+                        selectedPlan={selectedPlan}
+                        termList={termList}
+                        setTermList={this.props.setTermList}
+                        selectedTerm={selectedTerm}
+                        setSelectedTerm={this.props.setSelectedTerm}
+                    />
+                </div>
                 <div className='mainTable'>
                     <div className='timeTableOptions'>
-                        <Courses />
-                        {/*<Seminars />*/}
-                        {/*<Labs />*/}
+                        <Courses dropDownClick={dropDownClick} setDropDownClick={this.props.setDropDownClick}/>
+                        <Seminars dropDownClick={dropDownClick} setDropDownClick={this.props.setDropDownClick}/>
+                        <Labs dropDownClick={dropDownClick} setDropDownClick={this.props.setDropDownClick}/>
                         {/*<Choose for me />*/}
                     </div>
                     <div className='timeTableTable'>
