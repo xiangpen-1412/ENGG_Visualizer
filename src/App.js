@@ -561,7 +561,7 @@ const CourseGroupButton = (props) => {
     const location = useLocation();
     const {selectedProgram} = location.state;
 
-    if (selectedProgram === "Mechanical Engineering") {
+    if (selectedProgram === "Mechanical Engineering" && !props.selectedPlan.includes("Biomedical")) {
         return (
             <div className='groupButton'
                  onClick={props.handleCourseGroupOnClick}
@@ -730,7 +730,7 @@ class App extends Component {
                 ['Group 3', ["3A", "3B"]],
                 ['Group 4', ["4A", "4B"]]
             ]),
-            tabs: ['Visualizer', 'About'],
+            tabs: ['Visualizer', 'Scheduler', 'About'],
             selectedAtt: "",
             groupColorSet: new Map(),
             selectedProgram: "",
@@ -1258,7 +1258,10 @@ class App extends Component {
                                 </div>
 
                                 <div className='structureGroupButton'>
-                                    <CourseGroupButton handleCourseGroupOnClick={this.handleCourseGroupOnClick}/>
+                                    <CourseGroupButton
+                                        handleCourseGroupOnClick={this.handleCourseGroupOnClick}
+                                        selectedPlan={selectedPlan}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -1278,16 +1281,16 @@ class App extends Component {
                     </div>
                 )}
 
-                {/*{this.state.tabIndex === 1 && (*/}
-                {/*    <div className='scheduler'>*/}
-                {/*        <Scheduler*/}
-                {/*            selectedProgram={selectedProgram}*/}
-                {/*            selectedPlan={selectedPlan}*/}
-                {/*        />*/}
-                {/*    </div>*/}
-                {/*)}*/}
-
                 {this.state.tabIndex === 1 && (
+                    <div className='scheduler'>
+                        <Scheduler
+                            selectedProgram={selectedProgram}
+                            selectedPlan={selectedPlan}
+                        />
+                    </div>
+                )}
+
+                {this.state.tabIndex === 2 && (
                     <About />
                 )}
 

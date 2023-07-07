@@ -1,7 +1,8 @@
-import React, {Component, useEffect} from "react";
+import React, {Component} from "react";
 import './Scheduler.css'
 import {useLocation} from "react-router-dom";
 import RESTController from "./controller/RESTController";
+
 const PageTitle = (props) => {
 
     return (
@@ -48,7 +49,8 @@ const Plan = (props) => {
     return (
         <div>
             <div className="SelectedPlanDescription">SELECTED PLAN</div>
-            <div className="sectionDescription">Return to the visualizer to select different plans and course groups.</div>
+            <div className="sectionDescription">Return to the visualizer to select different plans and course groups.
+            </div>
             <div className="planTube">
                 {planTube}
             </div>
@@ -61,49 +63,68 @@ const PlaceCourse = (props) => {
     const restController = new RESTController();
     const program = props.selectedProgram;
 
-    useEffect(() => {
-        restController.getTerms({programName: program, planName: props.selectedPlan}).then((terms) => {
-            console.log(terms);
-        })
-    }, [props.selectedPlan])
+    // useEffect(() => {
+    //     restController.getTerms({programName: program, planName: props.selectedPlan}).then((terms) => {
+    //
+    //     })
+    // }, [props.selectedPlan])
 
     return (
         <div>
             <div className='SelectedPlanDescription'>PLACE COURSE</div>
-            <div className='sectionDescription'>Once you've selected a term, drag and drop courses from left-hand course palette onto the schedule</div>
+            <div className='sectionDescription'>Once you've selected a term, drag and drop courses from left-hand course
+                palette onto the schedule
+            </div>
         </div>
     )
 }
 
+const Courses = () => {
+    return (
+        <div className='coursePalette'>
+            <div className='coursePaletteTitle'>
+                Courses
+            </div>
+            <div className='coursePaletteDropDownButton'>
+                +
+            </div>
+        </div>
+    )
+}
+
+
+// timetable component
 const Timetable = () => {
     const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
     const timeSlots = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
 
     return (
-        <table>
-            <thead>
-            <tr>
-                <th></th>
-                {weekDays.map(day => (
-                    <td className="headerCell" key={day}>{day}</td>
-                ))}
-            </tr>
-            </thead>
-            <tbody>
-            {timeSlots.map(timeSlot => (
-                <tr key={timeSlot}>
-                    <td className="cell">{timeSlot}</td>
+        <table className='timeTable'>
+            <div className='tableWrapper'>
+                <thead>
+                <tr>
+                    <th className='headerTimeCell'></th>
                     {weekDays.map(day => (
-                        <td key={day} className="cell">{/* Add your event data here */}</td>
+                        <td className="headerCell" key={day}>{day}</td>
                     ))}
                 </tr>
-            ))}
-            </tbody>
+                </thead>
+                <tbody>
+                {timeSlots.map(timeSlot => (
+                    <tr key={timeSlot}>
+                        <td className="timeCell">{timeSlot}</td>
+                        {weekDays.map(day => (
+                            <td key={day} className="cell"></td>
+                        ))}
+                    </tr>
+                ))}
+                </tbody>
+            </div>
         </table>
     );
 };
 
-class Scheduler extends Component{
+class Scheduler extends Component {
 
     render() {
 
@@ -120,7 +141,17 @@ class Scheduler extends Component{
                     selectedProgram={selectedProgram}
                     selectedPlan={selectedPlan}
                 />
-                <Timetable/>
+                <div className='mainTable'>
+                    <div className='timeTableOptions'>
+                        <Courses />
+                        {/*<Seminars />*/}
+                        {/*<Labs />*/}
+                        {/*<Choose for me />*/}
+                    </div>
+                    <div className='timeTableTable'>
+                        <Timetable/>
+                    </div>
+                </div>
             </div>
         )
     }
