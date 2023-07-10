@@ -35,16 +35,6 @@ const Header = (props) => {
         setShowDropDown(!showDropDown);
     }
 
-    // set dynamic dropDown menu width
-    const headerDropDownMargin = {
-        marginLeft: `${parseFloat(props.width) * 0.92}px`,
-    };
-
-    const headerInstructionMargin = {
-        marginLeft: `${parseFloat(props.width) * 0.75}px`,
-    }
-
-
     return (
         <header className="header">
             <div className="header-content">
@@ -57,7 +47,7 @@ const Header = (props) => {
             </div>
 
             {showDropDown && (
-                <div className='headerDropDown' style={headerDropDownMargin}>
+                <div className='headerDropDown'>
                     <div
                         className='headerDropDownItem'
                         onClick={handleHelpButtonClick}
@@ -74,7 +64,7 @@ const Header = (props) => {
             )}
 
             {showDescription && (
-                <div className="guideWrapper" style={headerInstructionMargin}>
+                <div className="guideWrapper">
                     <Instructions onInstructionClick={handleHelpButtonClick}/>
                 </div>
             )}
@@ -100,20 +90,21 @@ const Instructions = (props) => {
                     need to select a group after selecting a plan.
                 </li>
                 <li><b>Course Description:</b> By hovering over a course in the terms below, you
-                    can view its course description. This provides details about the course content, hours
-                    and credits.
+                    can view its course description. Right-click on the course to keep the description open.
+                    The descirption provides details about the course content, hours and credits.
                 </li>
                 <li><b>Prerequisites and Corequisites:</b> Left-clicking on a course will display
-                    any prerequisites with solid arrows and corequisites with dotted arrows.
+                    prerequisites and postrequisites with solid blue arrows, and corequisites with dotted 
+                    yellow arrows.
                 </li>
-                <li><b>Course Group:</b> Select a group in the Course Group palette to see all
-                    the courses that belong to the course group. This is useful for getting an overview of
+                <li><b>Course Categories:</b> Select a category in the Course Category Palette to see all
+                    the courses that belong to the course category. This is useful for getting an overview of
                     courses with similar content or learning objectives.
                 </li>
                 <li><b>Graduation Attributes:</b> Clicking on a graduate attribute in the Graduate
-                    Attributes palette highlights each course in that category. Please refer to the legend
-                    for details on the color meanings. The coloration displays where each learning outcome is
-                    met throughout the degree program.
+                    Attributes Palette highlights each course that contains that attribute. Please refer to 
+                    the legend for details on the color meanings. The coloration displays where each learning 
+                    outcome is met throughout the degree program.
                 </li>
             </ul>
             <p>We hope this tool aids your understanding of your chosen engineering program and supports
@@ -1175,13 +1166,7 @@ class App extends Component {
             semInfo,
         } = this.state;
 
-        const widthPx = termNumber * 255 + 200;
-        let width = termNumber > 0 ? `${widthPx}px` : '100%';
-
-        if (tabIndex !== 0) {
-            width = '100%';
-        }
-
+        let width = '100%';
         const minWidth = '100%';
 
         return (
