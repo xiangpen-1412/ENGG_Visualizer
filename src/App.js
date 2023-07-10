@@ -745,6 +745,9 @@ class App extends Component {
             dropDownClick: [true, true, true],
             termList: [],
             selectedTerm: "",
+            lecInfo: new Map(),
+            labInfo: new Map(),
+            semInfo: new Map(),
         };
 
         this.controller = new RESTController();
@@ -1131,6 +1134,19 @@ class App extends Component {
         this.setState({selectedTerm: term});
     }
 
+    setLecInfo = (lecInfo) => {
+        this.setState({lecInfo: lecInfo});
+    }
+
+    setLabInfo = (labInfo) => {
+        this.setState({labInfo: labInfo});
+    }
+
+    setSemInfo = (semInfo) => {
+        this.setState({semInfo: semInfo});
+    }
+
+
     render() {
         const {
             // state that will be used in visualizer
@@ -1154,6 +1170,9 @@ class App extends Component {
             dropDownClick,
             termList,
             selectedTerm,
+            lecInfo,
+            labInfo,
+            semInfo,
         } = this.state;
 
         const widthPx = termNumber * 255 + 200;
@@ -1317,6 +1336,12 @@ class App extends Component {
                             setDropDownClick={this.setDropDownClick}
                             setSelectedTerm={this.setSelectedTerm}
                             setTermList={this.setTermList}
+                            lecInfo={lecInfo}
+                            labInfo={labInfo}
+                            semInfo={semInfo}
+                            setLecInfo={this.setLecInfo}
+                            setLabInfo={this.setLabInfo}
+                            setSemInfo={this.setSemInfo}
                         />
                     </div>
                 )}
