@@ -35,16 +35,6 @@ const Header = (props) => {
         setShowDropDown(!showDropDown);
     }
 
-    // set dynamic dropDown menu width
-    const headerDropDownMargin = {
-        marginLeft: `${parseFloat(props.width) * 0.92}px`,
-    };
-
-    const headerInstructionMargin = {
-        marginLeft: `${parseFloat(props.width) * 0.75}px`,
-    }
-
-
     return (
         <header className="header">
             <div className="header-content">
@@ -57,7 +47,7 @@ const Header = (props) => {
             </div>
 
             {showDropDown && (
-                <div className='headerDropDown' style={headerDropDownMargin}>
+                <div className='headerDropDown'>
                     <div
                         className='headerDropDownItem'
                         onClick={handleHelpButtonClick}
@@ -74,7 +64,7 @@ const Header = (props) => {
             )}
 
             {showDescription && (
-                <div className="guideWrapper" style={headerInstructionMargin}>
+                <div className="guideWrapper">
                     <Instructions onInstructionClick={handleHelpButtonClick}/>
                 </div>
             )}
@@ -1157,13 +1147,7 @@ class App extends Component {
             selectedTerm,
         } = this.state;
 
-        const widthPx = termNumber * 255 + 200;
-        let width = termNumber > 0 ? `${widthPx}px` : '100%';
-
-        if (tabIndex !== 0) {
-            width = '100%';
-        }
-
+        let width = '100%';
         const minWidth = '100%';
 
         return (

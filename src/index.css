@@ -61,15 +61,19 @@ code {
 }
 
 .structureWrapper {
-    margin-left: 120px;
     margin-top: 40px;
-    margin-bottom: 150px;
     min-height: 600px;
 }
 
 .termWrapper {
     display: flex;
     flex-direction: row;
+
+    overflow-x: auto;
+
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-bottom: 40px;
 }
 
 .term {

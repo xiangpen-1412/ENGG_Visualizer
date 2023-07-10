@@ -90,6 +90,7 @@
     background-color: #fff;
 
     z-index: 9999;
+    margin-left: 90%;
 }
 
 .headerDropDownItem {
@@ -176,6 +177,8 @@
 
     background-color: white;
     opacity: 1;
+
+    margin-left: 60%;
 }
 
 .guideWrapper b {

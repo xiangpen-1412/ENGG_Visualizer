@@ -358,7 +358,7 @@ class Structure extends Component {
 
     render() {
 
-        const {structure} = this.props;
+        const {structure, lineMap} = this.props;
 
         let cloneStructure = cloneDeep(structure);
 
@@ -482,7 +482,9 @@ class Structure extends Component {
 
         return (
             <div className='outerStructureWrapper'>
-                <div className="termWrapper">
+                <div className="termWrapper"
+                    onScroll={() => this.handleScroll(lineMap)}
+                >
                     {term}
                 </div>
             </div>
