@@ -227,11 +227,11 @@ code {
 }
 
 .description {
-    background-color: beige;
+    background-color: #edf2f5;
     color: black;
     width: 700px;
     min-height:50px;
-    border: 2px solid black;
+    border: 1px solid black;
     position: absolute;
     z-index: 30000;
     border-radius: 6px;
