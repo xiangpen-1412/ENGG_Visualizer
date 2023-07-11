@@ -105,7 +105,6 @@ const Terms = (props) => {
 
             restController.getLabs(data).then((labs) => {
                 props.setLabInfo(labs);
-                console.log(labs);
             });
 
             restController.getSems(data).then((sems) => {
@@ -209,22 +208,34 @@ const Labs = (props) => {
         props.setDropDownClick(2);
     }
 
+
     useEffect(() => {
         if (props.labInfo && props.labInfo.length > 0) {
             const labs = props.labInfo.map((lab) => {
                 return lab.name;
             })
             setLabTab(labs);
+        } else {
+            setLabTab(null);
         }
     }, [props.labInfo]);
 
-    const labs = labTab.map((lab) => {
-        return (
-            <div className='indivLab'>
-                {lab}
+    let labs;
+    if (labTab !== null) {
+        labs = labTab.map((lab) => {
+            return (
+                <div className='indivLab'>
+                    {lab}
+                </div>
+            )
+        })
+    } else {
+        labs = (
+            <div className='empty'>
+                No Labs
             </div>
         )
-    })
+    }
 
     return (
         <div>
@@ -261,16 +272,27 @@ const Seminars = (props) => {
                 }
             )
             setSeminarTab(seminars);
+        } else {
+            setSeminarTab(null);
         }
     }, [props.semInfo]);
 
-    const seminars = seminarTab.map((seminar) => {
-        return (
-            <div className='indivSeminar'>
-                {seminar}
+    let seminars;
+    if (seminarTab !== null) {
+        seminars = seminarTab.map((seminar) => {
+            return (
+                <div className='indivSeminar'>
+                    {seminar}
+                </div>
+            )
+        })
+    } else {
+        seminars = (
+            <div className='empty'>
+                No Seminars
             </div>
         )
-    })
+    }
 
     return (
         <div>
