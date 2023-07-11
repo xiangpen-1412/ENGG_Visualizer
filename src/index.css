@@ -5,6 +5,9 @@ body {
     sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 code {
@@ -71,7 +74,7 @@ code {
 
     overflow-x: auto;
 
-    padding-left: 185px;;
+    padding-left: 185px;
     padding-right: 10%;
     padding-bottom: 40px;
 }
