@@ -1,4 +1,4 @@
-import React, {Component, useEffect} from "react";
+import React, {Component, useEffect, useState} from "react";
 import './Scheduler.css'
 import {useLocation} from "react-router-dom";
 import RESTController from "./controller/RESTController";
@@ -105,6 +105,7 @@ const Terms = (props) => {
 
             restController.getLabs(data).then((labs) => {
                 props.setLabInfo(labs);
+                console.log(labs);
             });
 
             restController.getSems(data).then((sems) => {
@@ -154,23 +155,37 @@ const DropDownSign = (props) => {
 
 const Lecs = (props) => {
 
-    const isDropDown = props.dropDownClick[0];
+    const [lectureTab, setLectureTab] = useState([]);
 
-    const data = {
-        programName: props.selectedProgram,
-        planName: props.planName,
-        termName: props.termName,
-    }
+    const isDropDown = props.dropDownClick[0];
 
     const onSignClick = () => {
         props.setDropDownClick(0);
     }
 
+    useEffect(() => {
+        if (props.lecInfo && props.lecInfo.length > 0) {
+            const lectures = props.lecInfo.map((lecture) => {
+                    return lecture.name;
+                }
+            )
+            setLectureTab(lectures);
+        }
+    }, [props.lecInfo]);
+
+    const lectures = lectureTab.map((lecture) => {
+        return (
+            <div className='indivLecture'>
+                {lecture}
+            </div>
+        )
+    })
+
     return (
         <div>
             <div className='coursePalette'>
                 <div className='coursePaletteTitle'>
-                    Lecs
+                    Lectures
                 </div>
                 <div className='coursePaletteDropDownButton' onClick={onSignClick}>
                     <DropDownSign isDropDown={isDropDown}/>
@@ -178,34 +193,7 @@ const Lecs = (props) => {
             </div>
             {!isDropDown && (
                 <div className='coursesInfo'>
-                    course one
-                </div>
-            )}
-        </div>
-    )
-}
-
-const Seminars = (props) => {
-
-    const isDropDown = props.dropDownClick[1];
-
-    const onSignClick = () => {
-        props.setDropDownClick(1);
-    }
-
-    return (
-        <div>
-            <div className='seminarsPalette'>
-                <div className='seminarsPaletteTitle'>
-                    Seminars
-                </div>
-                <div className='seminarsPaletteDropDownButton' onClick={onSignClick}>
-                    <DropDownSign isDropDown={isDropDown}/>
-                </div>
-            </div>
-            {!isDropDown && (
-                <div className='coursesInfo'>
-                    Course One
+                    {lectures}
                 </div>
             )}
         </div>
@@ -213,15 +201,34 @@ const Seminars = (props) => {
 }
 const Labs = (props) => {
 
+    const [labTab, setLabTab] = useState([]);
+
     const isDropDown = props.dropDownClick[2];
 
     const onSignClick = () => {
         props.setDropDownClick(2);
     }
 
+    useEffect(() => {
+        if (props.labInfo && props.labInfo.length > 0) {
+            const labs = props.labInfo.map((lab) => {
+                return lab.name;
+            })
+            setLabTab(labs);
+        }
+    }, [props.labInfo]);
+
+    const labs = labTab.map((lab) => {
+        return (
+            <div className='indivLab'>
+                {lab}
+            </div>
+        )
+    })
+
     return (
         <div>
-            <div className={`labsPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
+            <div className='labsPalette'>
                 <div className='labsPaletteTitle'>
                     Labs
                 </div>
@@ -230,14 +237,59 @@ const Labs = (props) => {
                 </div>
             </div>
             {!isDropDown && (
-                <div className='coursesInfoBottom'>
-                    Courses
+                <div className='coursesInfo'>
+                    {labs}
                 </div>
             )}
         </div>
     )
 }
+const Seminars = (props) => {
 
+    const [seminarTab, setSeminarTab] = useState([]);
+
+    const isDropDown = props.dropDownClick[1];
+
+    const onSignClick = () => {
+        props.setDropDownClick(1);
+    }
+
+    useEffect(() => {
+        if (props.semInfo && props.semInfo.length > 0) {
+            const seminars = props.semInfo.map((seminar) => {
+                    return seminar.name;
+                }
+            )
+            setSeminarTab(seminars);
+        }
+    }, [props.semInfo]);
+
+    const seminars = seminarTab.map((seminar) => {
+        return (
+            <div className='indivSeminar'>
+                {seminar}
+            </div>
+        )
+    })
+
+    return (
+        <div>
+            <div className={`seminarsPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
+                <div className='seminarsPaletteTitle'>
+                    Seminars
+                </div>
+                <div className='seminarsPaletteDropDownButton' onClick={onSignClick}>
+                    <DropDownSign isDropDown={isDropDown}/>
+                </div>
+            </div>
+            {!isDropDown && (
+                <div className='coursesInfoBottom'>
+                    {seminars}
+                </div>
+            )}
+        </div>
+    )
+}
 
 // timetable component
 const Timetable = () => {
@@ -280,6 +332,9 @@ class Scheduler extends Component {
             termList,
             selectedTerm,
             dropDownClick,
+            lecInfo,
+            labInfo,
+            semInfo,
         } = this.props;
 
         return (
@@ -304,6 +359,7 @@ class Scheduler extends Component {
                         setLecInfo={this.props.setLecInfo}
                         setSemInfo={this.props.setSemInfo}
                         setLabInfo={this.props.setLabInfo}
+
                     />
                 </div>
                 <div className='mainTable'>
@@ -314,13 +370,7 @@ class Scheduler extends Component {
                             selectedProgram={selectedProgram}
                             selectedPlan={selectedPlan}
                             selectedTerm={selectedTerm}
-                        />
-                        <Seminars
-                            dropDownClick={dropDownClick}
-                            setDropDownClick={this.props.setDropDownClick}
-                            selectedProgram={selectedProgram}
-                            selectedPlan={selectedPlan}
-                            selectedTerm={selectedTerm}
+                            lecInfo={lecInfo}
                         />
                         <Labs
                             dropDownClick={dropDownClick}
@@ -328,6 +378,15 @@ class Scheduler extends Component {
                             selectedProgram={selectedProgram}
                             selectedPlan={selectedPlan}
                             selectedTerm={selectedTerm}
+                            labInfo={labInfo}
+                        />
+                        <Seminars
+                            dropDownClick={dropDownClick}
+                            setDropDownClick={this.props.setDropDownClick}
+                            selectedProgram={selectedProgram}
+                            selectedPlan={selectedPlan}
+                            selectedTerm={selectedTerm}
+                            semInfo={semInfo}
                         />
                         {/*<Choose for me />*/}
                     </div>
@@ -337,6 +396,7 @@ class Scheduler extends Component {
                 </div>
             </div>
         )
+
     }
 }
 

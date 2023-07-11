@@ -6,6 +6,7 @@ import Structure from './Structure.js';
 import {useLocation, useNavigate} from 'react-router-dom';
 import RESTController from "./controller/RESTController";
 import Scheduler from "./Scheduler"
+import './Scheduler.css'
 
 
 const Icon = () => {
@@ -94,7 +95,7 @@ const Instructions = (props) => {
                     The descirption provides details about the course content, hours and credits.
                 </li>
                 <li><b>Prerequisites and Corequisites:</b> Left-clicking on a course will display
-                    prerequisites and postrequisites with solid blue arrows, and corequisites with dotted 
+                    prerequisites and postrequisites with solid blue arrows, and corequisites with dotted
                     yellow arrows.
                 </li>
                 <li><b>Course Categories:</b> Select a category in the Course Category Palette to see all
@@ -102,8 +103,8 @@ const Instructions = (props) => {
                     courses with similar content or learning objectives.
                 </li>
                 <li><b>Graduation Attributes:</b> Clicking on a graduate attribute in the Graduate
-                    Attributes Palette highlights each course that contains that attribute. Please refer to 
-                    the legend for details on the color meanings. The coloration displays where each learning 
+                    Attributes Palette highlights each course that contains that attribute. Please refer to
+                    the legend for details on the color meanings. The coloration displays where each learning
                     outcome is met throughout the degree program.
                 </li>
             </ul>
@@ -581,6 +582,12 @@ const Footer = () => {
     );
 };
 
+const Spinner = () => (
+    <div className="spinner">
+        <div className="double-bounce1"></div>
+        <div className="double-bounce2"></div>
+    </div>
+);
 
 class App extends Component {
     constructor(props) {
@@ -736,9 +743,9 @@ class App extends Component {
             dropDownClick: [true, true, true],
             termList: [],
             selectedTerm: "",
-            lecInfo: new Map(),
-            labInfo: new Map(),
-            semInfo: new Map(),
+            lecInfo: [],
+            labInfo: [],
+            semInfo: [],
         };
 
         this.controller = new RESTController();

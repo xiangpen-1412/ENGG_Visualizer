@@ -162,7 +162,6 @@ class RESTController extends Component {
                 return lecs;
             })
             .catch(error => {
-                console.log(newdata);
                 console.error('getLec: Error fetching data:', error);
             });
     }
@@ -192,7 +191,6 @@ class RESTController extends Component {
                         const options = labMap[course].map((option) => {
 
                             const duration = this.updateTime(option);
-                            console.log(duration);
 
                             return {
                                 section: option.section,
@@ -262,7 +260,6 @@ class RESTController extends Component {
                 return sems;
             })
             .catch(error => {
-                console.log(newdata);
                 console.error('getSem: Error fetching data:', error);
             });
     }
