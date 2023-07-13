@@ -746,6 +746,11 @@ class App extends Component {
             lecInfo: [],
             labInfo: [],
             semInfo: [],
+            lectureTab: [],
+            labTab: [],
+            seminarTab: [],
+
+            highLightCells: Array.from({length: 26}, () => Array.from({length: 5}, () => [null, false, null])),
         };
 
         this.controller = new RESTController();
@@ -1144,6 +1149,22 @@ class App extends Component {
         this.setState({semInfo: semInfo});
     }
 
+    setLectureTab = (lectureTab) => {
+        this.setState({lectureTab: lectureTab});
+    }
+
+    setLabTab = (labTab) => {
+        this.setState({labTab: labTab});
+    }
+
+    setSeminarTab = (seminarTab) => {
+        this.setState({seminarTab: seminarTab});
+    }
+
+    setHighLightCells = (newCells) => {
+        this.setState({highLightCells: newCells});
+    }
+
 
     render() {
         const {
@@ -1171,6 +1192,10 @@ class App extends Component {
             lecInfo,
             labInfo,
             semInfo,
+            lectureTab,
+            labTab,
+            seminarTab,
+            highLightCells
         } = this.state;
 
         let width = '100%';
@@ -1334,6 +1359,14 @@ class App extends Component {
                             setLecInfo={this.setLecInfo}
                             setLabInfo={this.setLabInfo}
                             setSemInfo={this.setSemInfo}
+                            lectureTab={lectureTab}
+                            labTab={labTab}
+                            seminarTab={seminarTab}
+                            setLectureTab={this.setLectureTab}
+                            setLabTab={this.setLabTab}
+                            setSeminarTab={this.setSeminarTab}
+                            highLightCells={highLightCells}
+                            setHighLightCells={this.setHighLightCells}
                         />
                     </div>
                 )}

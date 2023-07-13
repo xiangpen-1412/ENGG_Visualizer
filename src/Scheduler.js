@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useState} from "react";
+import React, {Component, useEffect} from "react";
 import './Scheduler.css'
 import {useLocation} from "react-router-dom";
 import RESTController from "./controller/RESTController";
@@ -154,8 +154,6 @@ const DropDownSign = (props) => {
 
 const Lecs = (props) => {
 
-    const [lectureTab, setLectureTab] = useState([]);
-
     const isDropDown = props.dropDownClick[0];
 
     const onSignClick = () => {
@@ -168,17 +166,38 @@ const Lecs = (props) => {
                     return lecture.name;
                 }
             )
-            setLectureTab(lectures);
+            props.setLectureTab(lectures);
+        } else {
+            props.setLectureTab(null);
         }
     }, [props.lecInfo]);
 
-    const lectures = lectureTab.map((lecture) => {
-        return (
-            <div className='indivLecture'>
-                {lecture}
+    let lectures;
+    if (props.lectureTab !== null) {
+        lectures = props.lectureTab.map((lecture) => {
+
+            const lectureInfo = props.lecInfo.find(lectureInfo => lectureInfo.name === lecture);
+            const option = lectureInfo.options;
+
+            return (
+                <div
+                    className='indivLecture'
+                    draggable={true}
+                    onDragStart={() => {
+                        props.handleDragStart(option)
+                    }}
+                >
+                    {lecture}
+                </div>
+            )
+        })
+    } else {
+        lectures = (
+            <div className='empty'>
+                No Lectures
             </div>
         )
-    })
+    }
 
     return (
         <div>
@@ -200,8 +219,6 @@ const Lecs = (props) => {
 }
 const Labs = (props) => {
 
-    const [labTab, setLabTab] = useState([]);
-
     const isDropDown = props.dropDownClick[2];
 
     const onSignClick = () => {
@@ -214,15 +231,15 @@ const Labs = (props) => {
             const labs = props.labInfo.map((lab) => {
                 return lab.name;
             })
-            setLabTab(labs);
+            props.setLabTab(labs);
         } else {
-            setLabTab(null);
+            props.setLabTab(null);
         }
     }, [props.labInfo]);
 
     let labs;
-    if (labTab !== null) {
-        labs = labTab.map((lab) => {
+    if (props.labTab !== null) {
+        labs = props.labTab.map((lab) => {
             return (
                 <div className='indivLab'>
                     {lab}
@@ -257,8 +274,6 @@ const Labs = (props) => {
 }
 const Seminars = (props) => {
 
-    const [seminarTab, setSeminarTab] = useState([]);
-
     const isDropDown = props.dropDownClick[1];
 
     const onSignClick = () => {
@@ -271,15 +286,15 @@ const Seminars = (props) => {
                     return seminar.name;
                 }
             )
-            setSeminarTab(seminars);
+            props.setSeminarTab(seminars);
         } else {
-            setSeminarTab(null);
+            props.setSeminarTab(null);
         }
     }, [props.semInfo]);
 
     let seminars;
-    if (seminarTab !== null) {
-        seminars = seminarTab.map((seminar) => {
+    if (props.seminarTab !== null) {
+        seminars = props.seminarTab.map((seminar) => {
             return (
                 <div className='indivSeminar'>
                     {seminar}
@@ -313,10 +328,9 @@ const Seminars = (props) => {
     )
 }
 
-// timetable component
-const Timetable = () => {
+const Timetable = (props) => {
     const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-    const timeSlots = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
+    const timeSlots = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30'];
 
     return (
         <table className='timeTable'>
@@ -330,14 +344,27 @@ const Timetable = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {timeSlots.map(timeSlot => (
-                    <tr key={timeSlot}>
-                        <td className="timeCell">{timeSlot}</td>
-                        {weekDays.map(day => (
-                            <td key={day} className="cell"></td>
-                        ))}
-                    </tr>
-                ))}
+                {timeSlots.map((timeSlot, hourIndex) => {
+
+                    return (
+                        <tr key={hourIndex.toString()}>
+                            {hourIndex % 2 === 0 && <td rowSpan="2" className="timeCell">{timeSlot}</td>}
+                            {weekDays.map((day, dayIndex) => {
+                                const color = props.highLightCells[hourIndex][dayIndex];
+                                const backgroundColor = color ? color : null;
+                                const className = hourIndex % 2 === 0 ? 'topCell' : 'bottomCell';
+                                return (
+                                    <td
+                                        key={day}
+                                        className={className}
+                                        style={{backgroundColor: backgroundColor}}
+                                    >
+                                    </td>
+                                );
+                            })}
+                        </tr>
+                    );
+                })}
                 </tbody>
             </div>
         </table>
@@ -345,6 +372,85 @@ const Timetable = () => {
 };
 
 class Scheduler extends Component {
+    dataProcess = (date) => {
+
+        // column number
+        let colNum;
+        switch (date) {
+            case 'MON':
+                colNum = 0;
+                break;
+            case 'TUE':
+                colNum = 1;
+                break;
+            case 'WED':
+                colNum = 2;
+                break;
+            case 'THU':
+                colNum = 3;
+                break;
+            case 'FRI':
+                colNum = 4;
+                break;
+            default:
+                colNum = 5;
+                break;
+        }
+
+        return colNum;
+    }
+
+    // calculate the cell row and column index
+    timeProcess = (time, type) => {
+
+        // row number
+        let hour = time.split(':')[0];
+        let minute = time.split(':')[1];
+
+        if (hour.charAt(0) === '0') {
+            hour = hour.substring(1);
+        }
+
+        let hourInInt;
+        if (minute !== "00") {
+            hourInInt = parseInt(hour, 10) + 0.5;
+        } else {
+            hourInInt = parseInt(hour, 10);
+        }
+
+        return type === 'start' ? (hourInInt - 8) * 2 : (hourInInt - 8) * 2 - 1;
+    }
+
+    handleDragStart = (options) => {
+
+        const newHighlightedCells = this.props.highLightCells.map(row => [...row]);
+
+        const restController = new RESTController();
+
+        options.map((option) => {
+            const durations = option.times;
+            const color = restController.generateRandomColor();
+
+            durations.map((duration) => {
+                const date = duration.split('_')[0];
+                const time = duration.split('_')[1];
+
+                const startTime = time.split('-')[0].length === 4 ? '0' + time.split('-')[0] : time.split('-')[0];
+                const endTime = time.split('-')[1].length === 4 ? '0' + time.split('-')[1] : time.split('-')[1];
+
+                const colNum = this.dataProcess(date);
+                const startRowNumber = this.timeProcess(startTime, 'start');
+                const endRowNumber = this.timeProcess(endTime, 'end');
+
+                for (let i = startRowNumber; i <= endRowNumber; i++) {
+                    newHighlightedCells[i][colNum] = color;
+                }
+
+            })
+        })
+
+        this.props.setHighLightCells(newHighlightedCells);
+    }
 
     render() {
 
@@ -357,6 +463,10 @@ class Scheduler extends Component {
             lecInfo,
             labInfo,
             semInfo,
+            lectureTab,
+            labTab,
+            seminarTab,
+            highLightCells,
         } = this.props;
 
         return (
@@ -381,7 +491,6 @@ class Scheduler extends Component {
                         setLecInfo={this.props.setLecInfo}
                         setSemInfo={this.props.setSemInfo}
                         setLabInfo={this.props.setLabInfo}
-
                     />
                 </div>
                 <div className='mainTable'>
@@ -393,6 +502,9 @@ class Scheduler extends Component {
                             selectedPlan={selectedPlan}
                             selectedTerm={selectedTerm}
                             lecInfo={lecInfo}
+                            lectureTab={lectureTab}
+                            setLectureTab={this.props.setLectureTab}
+                            handleDragStart={this.handleDragStart}
                         />
                         <Labs
                             dropDownClick={dropDownClick}
@@ -401,6 +513,9 @@ class Scheduler extends Component {
                             selectedPlan={selectedPlan}
                             selectedTerm={selectedTerm}
                             labInfo={labInfo}
+                            labTab={labTab}
+                            setLabTab={this.props.setLabTab}
+                            handleDragStart={this.handleDragStart}
                         />
                         <Seminars
                             dropDownClick={dropDownClick}
@@ -409,11 +524,14 @@ class Scheduler extends Component {
                             selectedPlan={selectedPlan}
                             selectedTerm={selectedTerm}
                             semInfo={semInfo}
+                            seminarTab={seminarTab}
+                            setSeminarTab={this.props.setSeminarTab}
+                            handleDragStart={this.handleDragStart}
                         />
                         {/*<Choose for me />*/}
                     </div>
                     <div className='timeTableTable'>
-                        <Timetable/>
+                        <Timetable highLightCells={highLightCells}/>
                     </div>
                 </div>
             </div>
