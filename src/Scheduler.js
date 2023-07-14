@@ -177,7 +177,11 @@ const Lecs = (props) => {
         lectures = props.lectureTab.map((lecture) => {
 
             const lectureInfo = props.lecInfo.find(lectureInfo => lectureInfo.name === lecture);
-            const option = lectureInfo.options;
+
+            let option;
+            if (lectureInfo !== undefined) {
+                option = lectureInfo.options;
+            }
 
             return (
                 <div
