@@ -213,6 +213,8 @@
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
 
+    position: relative;
+
     text-align: center;
 }
 
@@ -235,29 +237,32 @@
     height: 40px;
 }
 
-
-.spinner {
-    width: 70px;
-    height: 70px;
-    position: relative;
-    margin: 100px auto;
-}
-
-.double-bounce1, .double-bounce2 {
-    width: 100%;
+.innerCell, .innerCellStart, .innerCellEnd {
     height: 100%;
-    border-radius: 50%;
-    background-color: #333;
-    opacity: 0.6;
-    position: absolute;
-    top: 0;
-    left: 0;
+    width: 95%;
+    margin-left: 2.5%;
 
-    animation: sk-bounce 2.0s infinite ease-in-out;
+    display: flex;
+    justify-content: center;
 }
 
-.double-bounce2 {
-    animation-delay: -1.0s;
+.innerCellStart {
+    margin-top: 4%;
+}
+
+.innerCellEnd {
+    margin-bottom: 4%;
+}
+
+.content {
+    position: absolute;
+
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+
+    color: white;
+
+    margin-top: 10px;
 }
 
 @keyframes sk-bounce {

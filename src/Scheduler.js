@@ -110,6 +110,7 @@ const Terms = (props) => {
             restController.getSems(data).then((sems) => {
                 props.setSemInfo(sems);
             });
+
         }
     }, [props.selectedProgram, props.selectedPlan, props.selectedTerm]);
 
@@ -121,7 +122,12 @@ const Terms = (props) => {
         return (
             <div
                 className={className}
-                onClick={() => props.setSelectedTerm(term)}
+                onClick={() => {
+                    props.setSelectedTerm(term);
+
+                    const newHighLightCells = Array.from({length: 26}, () => Array.from({length: 5}, () => [null, '', null]));
+                    props.setHighLightCells(newHighLightCells);
+                }}
             >
                 {term}
             </div>
@@ -162,11 +168,13 @@ const Lecs = (props) => {
 
     useEffect(() => {
         if (props.lecInfo && props.lecInfo.length > 0) {
-            const lectures = props.lecInfo.map((lecture) => {
-                    return lecture.name;
-                }
-            )
-            props.setLectureTab(lectures);
+            if (props.lectureTab === null || !props.lectureTab.some(lecture => props.lecInfo.map(info => info.name).includes(lecture))) {
+                const lectures = props.lecInfo.map((lecture) => {
+                        return lecture.name;
+                    }
+                )
+                props.setLectureTab(lectures);
+            }
         } else {
             props.setLectureTab(null);
         }
@@ -187,8 +195,8 @@ const Lecs = (props) => {
                 <div
                     className='indivLecture'
                     draggable={true}
-                    onDragStart={() => {
-                        props.handleDragStart(option)
+                    onDragStart={(event) => {
+                        props.handleDragStart(option, event, lecture)
                     }}
                 >
                     {lecture}
@@ -221,6 +229,7 @@ const Lecs = (props) => {
         </div>
     )
 }
+
 const Labs = (props) => {
 
     const isDropDown = props.dropDownClick[2];
@@ -354,15 +363,49 @@ const Timetable = (props) => {
                         <tr key={hourIndex.toString()}>
                             {hourIndex % 2 === 0 && <td rowSpan="2" className="timeCell">{timeSlot}</td>}
                             {weekDays.map((day, dayIndex) => {
-                                const color = props.highLightCells[hourIndex][dayIndex];
-                                const backgroundColor = color ? color : null;
+                                const color = props.highLightCells[hourIndex][dayIndex][0];
+                                const part = props.highLightCells[hourIndex][dayIndex][1];
+                                const section = props.highLightCells[hourIndex][dayIndex][2];
                                 const className = hourIndex % 2 === 0 ? 'topCell' : 'bottomCell';
+
+                                const innerClassName = "innerCell" + part;
+
+                                let content;
+                                let text = section;
+
+                                if (section !== null && color === '#275D38') {
+                                    const sectionParts = section.split(' ');
+                                    text = '';
+                                    sectionParts.slice(0, sectionParts.length - 1).forEach((part) => {
+                                        text += part;
+                                        text += ' ';
+                                    })
+
+                                    text = text.trimEnd();
+                                }
+
+                                if (innerClassName === 'innerCellStart') {
+                                    content = text;
+                                }
+
                                 return (
                                     <td
                                         key={day}
                                         className={className}
-                                        style={{backgroundColor: backgroundColor}}
                                     >
+                                        {color && (
+                                            <div
+                                                className={innerClassName}
+                                                style={{backgroundColor: color}}
+                                                onContextMenu={(event) => props.handleRightClick(event, section)}
+                                                onDragOver={props.handleDragOver}
+                                                onDrop={(event) => props.handleDrop(event, hourIndex, dayIndex, section)}
+                                            >
+                                                <div className='content'>
+                                                    {content}
+                                                </div>
+                                            </div>
+                                        )}
                                     </td>
                                 );
                             })}
@@ -425,7 +468,44 @@ class Scheduler extends Component {
         return type === 'start' ? (hourInInt - 8) * 2 : (hourInInt - 8) * 2 - 1;
     }
 
-    handleDragStart = (options) => {
+    handleRightClick = (event, section) => {
+        event.preventDefault();
+
+        if (section.includes('Lab')) {
+            console.log('later');
+        } else if (section.includes('seminar')) {
+            console.log('later');
+        } else {
+            // add the course back to palette
+            const newLectureTab = this.props.lectureTab;
+            const sectionParts = section.split(' ');
+            const course = sectionParts.slice(0, sectionParts.length - 1);
+            let newCourse = '';
+            course.forEach((part) => {
+                newCourse += part;
+                newCourse += ' ';
+            })
+
+            newLectureTab.push(newCourse.trimEnd());
+            this.props.setLectureTab(newLectureTab);
+
+            // delete from the timetable
+            const newHighLightCells = this.props.highLightCells;
+            newHighLightCells.forEach((row, rowIndex) => {
+                row.forEach((column, columnIndex) => {
+                    if (column[2] === section) {
+                        newHighLightCells[rowIndex][columnIndex] = [null, '', null];
+                    }
+                })
+            });
+
+            this.props.setHighLightCells(newHighLightCells);
+        }
+    }
+
+    // start dragging function
+    handleDragStart = (options, event, courseInfo) => {
+        event.dataTransfer.setData('text', JSON.stringify(courseInfo));
 
         const newHighlightedCells = this.props.highLightCells.map(row => [...row]);
 
@@ -433,6 +513,7 @@ class Scheduler extends Component {
 
         options.map((option) => {
             const durations = option.times;
+            const section = courseInfo + " " + option.section;
             const color = restController.generateRandomColor();
 
             durations.map((duration) => {
@@ -447,13 +528,63 @@ class Scheduler extends Component {
                 const endRowNumber = this.timeProcess(endTime, 'end');
 
                 for (let i = startRowNumber; i <= endRowNumber; i++) {
-                    newHighlightedCells[i][colNum] = color;
-                }
 
+                    if (newHighlightedCells[i][colNum][0] !== '#275D38') {
+                        if (i === startRowNumber) {
+                            newHighlightedCells[i][colNum] = [color, 'Start', section];
+                        } else if (i === endRowNumber) {
+                            newHighlightedCells[i][colNum] = [color, 'End', section];
+                        } else {
+                            newHighlightedCells[i][colNum] = [color, '', section];
+                        }
+                    }
+                }
             })
         })
 
         this.props.setHighLightCells(newHighlightedCells);
+    }
+
+    // end dragging function
+    handleDragOver(event) {
+        event.preventDefault();
+    }
+
+    // drop function
+    handleDrop = (event, hourIndex, dayIndex, section) => {
+
+        const courseInfo = JSON.parse(event.dataTransfer.getData('text'));
+        const updatedLecTab = [...this.props.lectureTab];
+        const newLecTab = updatedLecTab.filter(item => item !== courseInfo);
+        this.props.setLectureTab(newLecTab);
+
+        if (this.checkCell(hourIndex, dayIndex)) {
+            let newHighlightedCells = this.props.highLightCells.map(row => row.map(cell => [...cell]));
+
+            newHighlightedCells.forEach((row) => {
+                row.forEach((column) => {
+                    if (column[0] !== '#275D38') {
+                        if (column[2] === section) {
+                            column[0] = '#275D38';
+                        } else {
+                            column[0] = null;
+                            column[1] = '';
+                            column[2] = null;
+                        }
+                    }
+                })
+            });
+
+            this.props.setHighLightCells(newHighlightedCells);
+
+        } else {
+            event.preventDefault();
+        }
+    }
+
+    checkCell = (hourIndex, dayIndex) => {
+        const color = this.props.highLightCells[hourIndex][dayIndex][0];
+        return color !== null && color !== '#275D38';
     }
 
     render() {
@@ -492,6 +623,7 @@ class Scheduler extends Component {
                         setTermList={this.props.setTermList}
                         selectedTerm={selectedTerm}
                         setSelectedTerm={this.props.setSelectedTerm}
+                        setHighLightCells={this.props.setHighLightCells}
                         setLecInfo={this.props.setLecInfo}
                         setSemInfo={this.props.setSemInfo}
                         setLabInfo={this.props.setLabInfo}
@@ -535,7 +667,12 @@ class Scheduler extends Component {
                         {/*<Choose for me />*/}
                     </div>
                     <div className='timeTableTable'>
-                        <Timetable highLightCells={highLightCells}/>
+                        <Timetable
+                            highLightCells={highLightCells}
+                            handleDrop={this.handleDrop}
+                            handleDragOver={this.handleDragOver}
+                            handleRightClick={this.handleRightClick}
+                        />
                     </div>
                 </div>
             </div>

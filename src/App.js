@@ -750,7 +750,7 @@ class App extends Component {
             labTab: [],
             seminarTab: [],
 
-            highLightCells: Array.from({length: 26}, () => Array.from({length: 5}, () => [null, false, null])),
+            highLightCells: Array.from({length: 26}, () => Array.from({length: 5}, () => [null, '', null])),
         };
 
         this.controller = new RESTController();
