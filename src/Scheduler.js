@@ -198,6 +198,9 @@ const Lecs = (props) => {
                     onDragStart={(event) => {
                         props.handleDragStart(option, event, lecture)
                     }}
+                    onDragEnd={(event) => {
+                        props.handleDragEnd(event);
+                    }}
                 >
                     {lecture}
                 </div>
@@ -545,6 +548,22 @@ class Scheduler extends Component {
         this.props.setHighLightCells(newHighlightedCells);
     }
 
+    handleDragEnd = (event) => {
+        event.preventDefault();
+
+        let newHighlightedCells = this.props.highLightCells.map(row => row.map(cell => [...cell]));
+
+        newHighlightedCells.forEach((row, rowIndex) => {
+            row.forEach((cell, cellIndex) => {
+                if (cell[0] !== '#275D38') {
+                    newHighlightedCells[rowIndex][cellIndex] = [null, '', null];
+                }
+            })
+        })
+
+        this.props.setHighLightCells(newHighlightedCells);
+    }
+
     // end dragging function
     handleDragOver(event) {
         event.preventDefault();
@@ -641,6 +660,7 @@ class Scheduler extends Component {
                             lectureTab={lectureTab}
                             setLectureTab={this.props.setLectureTab}
                             handleDragStart={this.handleDragStart}
+                            handleDragEnd={this.handleDragEnd}
                         />
                         <Labs
                             dropDownClick={dropDownClick}
