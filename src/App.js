@@ -576,6 +576,7 @@ const CourseGroupCheckbox = (props) => {
                     onClick={props.handleCourseGroupOnClick}
                     type="checkbox"
                     name="show group"
+                    checked={props.courseGroupOnClick}
                 >
                 </input>
                 <label for="show group">
@@ -1290,6 +1291,7 @@ class App extends Component {
                                         />
                                         <CourseGroupCheckbox
                                             handleCourseGroupOnClick={this.handleCourseGroupOnClick}
+                                            courseGroupOnClick={this.state.courseGroupOnClick}
                                             selectedPlan={selectedPlan}
                                         />
                                     </div>)}
