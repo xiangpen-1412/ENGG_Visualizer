@@ -1,0 +1,58 @@
+.searchbar-container {
+    text-align: left;
+    position: relative;
+
+    /* Text color of each term div*/
+    background-color: rgb(255, 255, 255); /* Background color of each term div*/
+    border-color: rgb(105, 110, 110); /* Text color of each term div*/
+    border-style: solid;
+    border-radius: 3px;
+    border-width: 1px;
+
+    width: 220px;
+    padding: 5px;
+
+    cursor: pointer;
+}
+
+.searchbar-input {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+}
+
+.searchbar-menu {
+    position: absolute;
+    transform: translateY(4px);
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: auto;
+    max-height: 150px;
+    background-color: #fff;
+}
+
+.searchbar-item {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.searchbar-item:hover {
+    background-color: #cccccc;
+    color: #fff;
+}
+
+.search-box {
+    padding: 5px;
+    background-color: #eee;
+}
+
+.search-box input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}

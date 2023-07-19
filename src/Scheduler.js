@@ -351,7 +351,6 @@ const Seminars = (props) => {
 
 const Electives = (props) => {
 
-    const [electiveTab, setElectiveTab] = useState([]);
 
     const isDropDown = props.dropDownClick[3];
 
@@ -369,7 +368,7 @@ const Electives = (props) => {
         <div>
             <div className={`electivesPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
                 <div className='electivesPaletteTitle'>
-                    Electives
+                    Add
                 </div>
                 <div className='electivesPaletteDropDownButton' onClick={onSignClick}>
                     <DropDownSign isDropDown={isDropDown}/>
