@@ -266,10 +266,22 @@ class RESTController extends Component {
 
     /**
      * Scheduler API
+     * get all the courses for a given program
+     * */
+    getAllCourses = (data) => {
+        return axios
+            .post(`${this.schedulerBaseURL}/getAllCourses`, data, this.config)
+            .then(response => {
+                return response.data.obj;
+            })
+    }
+
+
+    /**
+     * Scheduler API
      * get lecture/lab/seminar information for a given course
      * */
     getIndivCourseInfo = (data, path, type) => {
-        console.log(path);
 
         return axios
             .post(`${this.schedulerBaseURL}/${path}`, data, this.config)
