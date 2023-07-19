@@ -564,6 +564,30 @@ const CourseGroupButton = (props) => {
     }
 }
 
+const CourseGroupCheckbox = (props) => {
+    const location = useLocation();
+    const {selectedProgram} = location.state;
+
+    if (selectedProgram === "Mechanical Engineering" && !props.selectedPlan.includes("Biomedical")) {
+        return (
+            <div >
+                <input 
+                    className='groupCheckbox'
+                    onClick={props.handleCourseGroupOnClick}
+                    type="checkbox"
+                    name="show group"
+                >
+                </input>
+                <label for="show group">
+                    Show group selections on courses below
+                </label>
+            </div>
+        )
+    } else {
+        return null;
+    }
+}
+
 const Footer = () => {
 
     return (
@@ -1264,6 +1288,10 @@ class App extends Component {
                                                      setStructure={this.setStructure}
                                                      setSelectedPlan={this.setSelectedPlan}
                                         />
+                                        <CourseGroupCheckbox
+                                            handleCourseGroupOnClick={this.handleCourseGroupOnClick}
+                                            selectedPlan={selectedPlan}
+                                        />
                                     </div>)}
                             </div>
 
@@ -1318,12 +1346,12 @@ class App extends Component {
                                     coreqisites.
                                 </div>
 
-                                <div className='structureGroupButton'>
+                                {/* <div className='structureGroupButton'>
                                     <CourseGroupButton
                                         handleCourseGroupOnClick={this.handleCourseGroupOnClick}
                                         selectedPlan={selectedPlan}
                                     />
-                                </div>
+                                </div> */}
                             </div>
                         </div>
 

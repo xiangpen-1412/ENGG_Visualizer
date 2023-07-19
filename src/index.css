@@ -52,6 +52,19 @@ code {
     margin-left: 500px;
 }
 
+.groupCheckbox {
+    text-align: center;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    margin: 0 10px 0 0;
+    accent-color: #275d38;
+}
+
+.groupCheckbox:hover {
+    background-color: #ccc;
+}
+
 .structureDescription {
     color: #464646;
     height: 30px;
