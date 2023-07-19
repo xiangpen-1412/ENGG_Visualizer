@@ -85,7 +85,7 @@
     margin-right: 20px;
 }
 
-.coursePalette, .seminarsPalette, .labsPalette {
+.coursePalette, .seminarsPalette, .labsPalette, .electivesPalette {
     display: flex;
     flex-direction: row;
 
@@ -102,7 +102,7 @@
     /*border-radius: 4px 4px 0 0;*/
 }
 
-.coursePaletteTitle, .seminarsPaletteTitle, .labsPaletteTitle {
+.coursePaletteTitle, .seminarsPaletteTitle, .labsPaletteTitle, .electivesPaletteTitle {
     width: 200px;
     height: 43px;
 
@@ -114,7 +114,7 @@
     align-items: center;
 }
 
-.coursePaletteDropDownButton, .seminarsPaletteDropDownButton, .labsPaletteDropDownButton {
+.coursePaletteDropDownButton, .seminarsPaletteDropDownButton, .labsPaletteDropDownButton, .electivesPaletteDropDownButton {
     width: 45px;
     height: 43px;
     display: flex;
@@ -126,11 +126,11 @@
     border-radius: 4px 4px 0 0;
 }
 
-.seminarsPalette, .seminarsPalette.dropdownOpen {
+.electivesPalette, .electivesPalette.dropdownOpen {
     border-bottom: 1px solid #7B7B7B;
 }
 
-.seminarsPalette.dropdownOpen {
+.electivesPalette.dropdownOpen {
     border-radius: 0 0 4px 4px;
 }
 

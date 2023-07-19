@@ -1,5 +1,6 @@
 import React, {Component, useEffect} from "react";
 import './Scheduler.css'
+import Searchbar from './Searchbar.js';
 import {useLocation} from "react-router-dom";
 import RESTController from "./controller/RESTController";
 
@@ -232,7 +233,6 @@ const Lecs = (props) => {
         </div>
     )
 }
-
 const Labs = (props) => {
 
     const isDropDown = props.dropDownClick[2];
@@ -288,6 +288,7 @@ const Labs = (props) => {
         </div>
     )
 }
+
 const Seminars = (props) => {
 
     const isDropDown = props.dropDownClick[1];
@@ -343,6 +344,59 @@ const Seminars = (props) => {
         </div>
     )
 }
+
+
+
+
+
+const Electives = (props) => {
+
+    const [electiveTab, setElectiveTab] = useState([]);
+
+    const isDropDown = props.dropDownClick[3];
+
+    const onSignClick = () => {
+        props.setDropDownClick(3);
+    }
+
+    const controller = new RESTController();
+
+    const electives = ['HIST 115', 'HIST 391', 'HGEO 250', 'PHIL 265', 'PHIL 366'];
+    const placeHolder = 'Search...';
+
+    // Return component with all the discipline's plans
+    return (
+        <div>
+            <div className={`electivesPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
+                <div className='electivesPaletteTitle'>
+                    Electives
+                </div>
+                <div className='electivesPaletteDropDownButton' onClick={onSignClick}>
+                    <DropDownSign isDropDown={isDropDown}/>
+                </div>
+            </div>
+            {!isDropDown && (
+                <div className='coursesInfoBottom'>
+                    <Searchbar
+                        placeHolder={placeHolder}
+                        options={electives}
+                        onChange={(elective) => {
+
+
+                        }}
+                        isSearchable={true}
+                    />
+                </div>
+            )}
+        </div>
+    )
+}
+
+
+
+
+
+
 
 const Timetable = (props) => {
     const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -422,6 +476,21 @@ const Timetable = (props) => {
 };
 
 class Scheduler extends Component {
+
+    addElective = (selectedProgram, selectedPlan) => {
+
+        this.deleteLineMap();
+    
+        this.setState({selectedProgram: selectedProgram, selectedPlan: selectedPlan, structure: [], planChanged: true});
+    
+        const haveCourseGroupOption = selectedProgram === "Mechanical Engineering" && !selectedPlan.includes("Co-op Plan 3");
+        if (haveCourseGroupOption) {
+            this.setState({containCourseGroup: true});
+            this.setCourseGroup(selectedPlan);
+        } else {
+            this.setStructure(selectedProgram, selectedPlan);
+        }
+    }    
     dataProcess = (date) => {
 
         // column number
@@ -684,6 +753,10 @@ class Scheduler extends Component {
                             setSeminarTab={this.props.setSeminarTab}
                             handleDragStart={this.handleDragStart}
                         />
+                        <Electives
+                            dropDownClick={dropDownClick}
+                            setDropDownClick={this.props.setDropDownClick}
+                        />
                         {/*<Choose for me />*/}
                     </div>
                     <div className='timeTableTable'>
@@ -694,6 +767,10 @@ class Scheduler extends Component {
                             handleRightClick={this.handleRightClick}
                         />
                     </div>
+                </div>
+
+                <div>
+                    <Searchbar placeHolder="Select..." options="HIST 115" />
                 </div>
             </div>
         )
