@@ -264,6 +264,92 @@ class RESTController extends Component {
             });
     }
 
+    /**
+     * Scheduler API
+     * get all the courses for a given program
+     * */
+    getAllCourses = (data) => {
+        return axios
+            .post(`${this.schedulerBaseURL}/getAllCourses`, data, this.config)
+            .then(response => {
+                return response.data.obj;
+            })
+    }
+
+
+    /**
+     * Scheduler API
+     * get lecture/lab/seminar information for a given course
+     * */
+    getIndivCourseInfo = (data, path, type) => {
+
+        return axios
+            .post(`${this.schedulerBaseURL}/${path}`, data, this.config)
+            .then(response => {
+                const courseMap = response.data.obj;
+                const courseInfo = [];
+
+                let courseTitle;
+
+                for (const course in courseMap) {
+                    if (courseMap[course] != null) {
+                        const options = courseMap[course].map((option) => {
+
+                            const duration = this.updateTime(option);
+
+                            if (courseTitle == null) {
+                                courseTitle = option.courseTitle;
+                            }
+
+                            return {
+                                section: option.section,
+                                color: this.generateRandomColor(),
+                                times: duration,
+                            }
+                        });
+
+                        courseInfo.push({
+                            name: course + type,
+                            extendedName: type ? course : courseTitle,
+                            color: "lightgrey",
+                            options: options,
+                        });
+
+                    } else {
+                        console.log("Missing information about " + course);
+                    }
+                }
+
+                return courseInfo;
+            })
+            .catch(error => {
+                console.error(`get${type}: Error fetching data:`, error);
+            });
+    }
+
+    /**
+     * Scheduler API
+     * get lecture information for a given course
+     * */
+    getIndivLec = (data) => {
+        return this.getIndivCourseInfo(data, 'getIndividualCourseLecsInfo', '');
+    }
+
+    /**
+     * Scheduler API
+     * get lab information for a given course
+     * */
+    getIndivLab = (data) => {
+        return this.getIndivCourseInfo(data, 'getIndividualCourseLabsInfo', ' Lab');
+    }
+
+    /**
+     * Scheduler API
+     * get seminar information for a given course
+     * */
+    getIndivSem = (data) => {
+        return this.getIndivCourseInfo(data, 'getIndividualCourseSemsInfo', ' Sem');
+    }
 
     updateTime(option) {
         return option.times.map((time) => {
