@@ -101,7 +101,13 @@ const Terms = (props) => {
 
             restController.getLecs(data).then((lecs) => {
                 props.setLecInfo(lecs);
+                console.log(lecs);
             });
+
+            // TODO: Example about using the new api
+            restController.getIndivLec({courseName: "MATH 100", term: "Fall term 1"}).then((data) => {
+                console.log(data);
+            })
 
             restController.getLabs(data).then((labs) => {
                 props.setLabInfo(labs);
