@@ -391,12 +391,6 @@ const Electives = (props) => {
     )
 }
 
-
-
-
-
-
-
 const Timetable = (props) => {
     const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
     const timeSlots = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30'];
@@ -424,7 +418,7 @@ const Timetable = (props) => {
                                 const section = props.highLightCells[hourIndex][dayIndex][2];
                                 const className = hourIndex % 2 === 0 ? 'topCell' : 'bottomCell';
 
-                                const innerClassName = "innerCell" + part;
+                                let innerClassName = "innerCell" + part;
 
                                 let content;
                                 let text = section;
@@ -443,6 +437,7 @@ const Timetable = (props) => {
                                 // time conflict text
                                 if (section !== null && color === '#888888') {
                                     text = '';
+                                    innerClassName += 'Conflict';
                                 }
 
                                 if (innerClassName === 'innerCellStart') {
@@ -457,7 +452,12 @@ const Timetable = (props) => {
                                         {color && (
                                             <div
                                                 className={innerClassName}
-                                                style={{backgroundColor: color}}
+                                                style={{
+                                                    backgroundColor: color,
+                                                    backgroundImage: innerClassName.includes("Conflict")? `url(/conflict.png)` : null,
+                                                    backgroundSize: '41px 41px',
+                                                    backgroundPosition: "center",
+                                            }}
                                                 onContextMenu={(event) => props.handleRightClick(event, section)}
                                                 onDragOver={props.handleDragOver}
                                                 onDrop={(event) => props.handleDrop(event, hourIndex, dayIndex, section)}

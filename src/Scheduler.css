@@ -237,7 +237,7 @@
     height: 40px;
 }
 
-.innerCell, .innerCellStart, .innerCellEnd {
+.innerCell, .innerCellStart, .innerCellEnd, .innerCellConflict, .innerCellStartConflict, .innerCellEndConflict {
     height: 100%;
     width: 95%;
     margin-left: 2.5%;
@@ -246,11 +246,11 @@
     justify-content: center;
 }
 
-.innerCellStart {
+.innerCellStart, .innerCellStartConflict {
     margin-top: 4%;
 }
 
-.innerCellEnd {
+.innerCellEnd, .innerCellEndConflict {
     margin-bottom: 4%;
 }
 
@@ -266,6 +266,10 @@
 }
 
 @keyframes sk-bounce {
-    0%, 100% { transform: scale(0.0); }
-    50% { transform: scale(1.0); }
+    0%, 100% {
+        transform: scale(0.0);
+    }
+    50% {
+        transform: scale(1.0);
+    }
 }
