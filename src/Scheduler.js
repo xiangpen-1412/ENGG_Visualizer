@@ -103,16 +103,6 @@ const Terms = (props) => {
                 props.setLecInfo(lecs);
             });
 
-            // TODO: Example about using the new api
-            restController.getAllCourses({program: "Computer Engineering"}).then((data) => {
-                console.log(data);
-            })
-
-            // TODO: Example about using the new api
-            restController.getIndivLec({courseName: "MATH 100", term: "Fall term 1"}).then((data) => {
-                console.log(data);
-            })
-
             restController.getLabs(data).then((labs) => {
                 props.setLabInfo(labs);
             });
@@ -397,6 +387,11 @@ const Timetable = (props) => {
                                     text = text.trimEnd();
                                 }
 
+                                // time conflict text
+                                if (section !== null && color === '#888888') {
+                                    text = '';
+                                }
+
                                 if (innerClassName === 'innerCellStart') {
                                     content = text;
                                 }
@@ -524,6 +519,8 @@ class Scheduler extends Component {
 
         const restController = new RESTController();
 
+        const duplicateSectionSet = new Set();
+
         options.map((option) => {
             const durations = option.times;
             const section = courseInfo + " " + option.section;
@@ -550,8 +547,23 @@ class Scheduler extends Component {
                         } else {
                             newHighlightedCells[i][colNum] = [color, '', section];
                         }
+                    } else {
+                        const oldSection = newHighlightedCells[i][colNum][2];
+                        duplicateSectionSet.add(oldSection);
                     }
                 }
+            })
+        })
+
+        duplicateSectionSet.forEach((section) => {
+            newHighlightedCells.forEach((row, rowIndex) => {
+                row.forEach((column, columnIndex) => {
+                    const part = newHighlightedCells[rowIndex][columnIndex][1];
+                    const oldSection = newHighlightedCells[rowIndex][columnIndex][2];
+                    if (oldSection === section) {
+                        newHighlightedCells[rowIndex][columnIndex] = ['#888888', part, section];
+                    }
+                })
             })
         })
 
@@ -566,7 +578,11 @@ class Scheduler extends Component {
         newHighlightedCells.forEach((row, rowIndex) => {
             row.forEach((cell, cellIndex) => {
                 if (cell[0] !== '#275D38') {
-                    newHighlightedCells[rowIndex][cellIndex] = [null, '', null];
+                    if (cell[0] !== '#888888') {
+                        newHighlightedCells[rowIndex][cellIndex] = [null, '', null];
+                    } else {
+                        newHighlightedCells[rowIndex][cellIndex][0] = '#275D38';
+                    }
                 }
             })
         })
@@ -582,17 +598,38 @@ class Scheduler extends Component {
     // drop function
     handleDrop = (event, hourIndex, dayIndex, section) => {
 
+        // if drop to a time conflict cell, nothing happens,
+        if (!this.checkCell(hourIndex, dayIndex)) {
+            event.preventDefault();
+
+            let newHighlightedCells = this.props.highLightCells.map(row => row.map(cell => [...cell]));
+
+            newHighlightedCells.forEach((row) => {
+                row.forEach((column) => {
+                    if (column[0] === '#888888') {
+                        column[0] = '#275D38';
+                    }
+                })
+            });
+
+            this.props.setHighLightCells(newHighlightedCells);
+
+            return;
+        }
+
         const courseInfo = JSON.parse(event.dataTransfer.getData('text'));
         const updatedLecTab = [...this.props.lectureTab];
         const newLecTab = updatedLecTab.filter(item => item !== courseInfo);
         this.props.setLectureTab(newLecTab);
 
-        if (this.checkCell(hourIndex, dayIndex)) {
-            let newHighlightedCells = this.props.highLightCells.map(row => row.map(cell => [...cell]));
+        let newHighlightedCells = this.props.highLightCells.map(row => row.map(cell => [...cell]));
 
-            newHighlightedCells.forEach((row) => {
-                row.forEach((column) => {
-                    if (column[0] !== '#275D38') {
+        newHighlightedCells.forEach((row) => {
+            row.forEach((column) => {
+                if (column[0] !== '#275D38') {
+                    if (column[0] === '#888888') {
+                        column[0] = '#275D38';
+                    } else {
                         if (column[2] === section) {
                             column[0] = '#275D38';
                         } else {
@@ -601,19 +638,16 @@ class Scheduler extends Component {
                             column[2] = null;
                         }
                     }
-                })
-            });
+                }
+            })
+        });
 
-            this.props.setHighLightCells(newHighlightedCells);
-
-        } else {
-            event.preventDefault();
-        }
+        this.props.setHighLightCells(newHighlightedCells);
     }
 
     checkCell = (hourIndex, dayIndex) => {
         const color = this.props.highLightCells[hourIndex][dayIndex][0];
-        return color !== null && color !== '#275D38';
+        return color !== null && color !== '#275D38' && color !== '#888888';
     }
 
     render() {
