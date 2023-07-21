@@ -841,10 +841,6 @@ class Scheduler extends Component {
                         />
                     </div>
                 </div>
-
-                <div>
-                    <Searchbar placeHolder="Select..." options="HIST 115" />
-                </div>
             </div>
         )
 
