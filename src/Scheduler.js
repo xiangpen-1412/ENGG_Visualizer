@@ -689,10 +689,14 @@ class Scheduler extends Component {
 
             let newHighlightedCells = this.props.highLightCells.map(row => row.map(cell => [...cell]));
 
-            newHighlightedCells.forEach((row) => {
-                row.forEach((column) => {
+            newHighlightedCells.forEach((row, rowIndex) => {
+                row.forEach((column, columnIndex) => {
                     if (column[0] === '#888888') {
-                        column[0] = '#275D38';
+                        if (column[2] !== null) {
+                            column[0] = '#275D38';
+                        } else {
+                            newHighlightedCells[rowIndex][columnIndex] = [null, '', null];
+                        }
                     }
                 })
             });
@@ -709,11 +713,15 @@ class Scheduler extends Component {
 
         let newHighlightedCells = this.props.highLightCells.map(row => row.map(cell => [...cell]));
 
-        newHighlightedCells.forEach((row) => {
-            row.forEach((column) => {
+        newHighlightedCells.forEach((row, rowIndex) => {
+            row.forEach((column, columnIndex) => {
                 if (column[0] !== '#275D38') {
                     if (column[0] === '#888888') {
-                        column[0] = '#275D38';
+                        if (column[2] !== null) {
+                            column[0] = '#275D38';
+                        } else {
+                            newHighlightedCells[rowIndex][columnIndex] = [null, '',null];
+                        }
                     } else {
                         if (column[2] === section) {
                             column[0] = '#275D38';
