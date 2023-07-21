@@ -771,6 +771,7 @@ class App extends Component {
             lecInfo: [],
             labInfo: [],
             semInfo: [],
+            searchInfo: [],
             lectureTab: [],
             labTab: [],
             seminarTab: [],
@@ -1174,6 +1175,10 @@ class App extends Component {
         this.setState({semInfo: semInfo});
     }
 
+    setSearchInfo = (searchInfo) => {
+        this.setState({searchInfo: searchInfo});
+    }
+
     setLectureTab = (lectureTab) => {
         this.setState({lectureTab: lectureTab});
     }
@@ -1217,6 +1222,7 @@ class App extends Component {
             lecInfo,
             labInfo,
             semInfo,
+            searchInfo,
             lectureTab,
             labTab,
             seminarTab,
@@ -1386,9 +1392,11 @@ class App extends Component {
                             lecInfo={lecInfo}
                             labInfo={labInfo}
                             semInfo={semInfo}
+                            searchInfo={searchInfo}
                             setLecInfo={this.setLecInfo}
                             setLabInfo={this.setLabInfo}
                             setSemInfo={this.setSemInfo}
+                            setSearchInfo={this.setSearchInfo}
                             lectureTab={lectureTab}
                             labTab={labTab}
                             seminarTab={seminarTab}

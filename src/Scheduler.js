@@ -112,6 +112,10 @@ const Terms = (props) => {
                 props.setSemInfo(sems);
             });
 
+            restController.getAllCourses({program: data.programName}).then((courses) => {
+                console.log(courses);
+                props.setSearchInfo(courses);
+            });
         }
     }, [props.selectedProgram, props.selectedPlan, props.selectedTerm]);
 
@@ -351,16 +355,14 @@ const Seminars = (props) => {
 
 const Electives = (props) => {
 
-
     const isDropDown = props.dropDownClick[3];
 
     const onSignClick = () => {
         props.setDropDownClick(3);
     }
 
-    const controller = new RESTController();
-
-    const electives = ['HIST 115', 'HIST 391', 'HGEO 250', 'PHIL 265', 'PHIL 366'];
+    // Get list of all courses into a local var
+    const courses = props.searchInfo;
     const placeHolder = 'Search...';
 
     // Return component with all the discipline's plans
@@ -378,7 +380,7 @@ const Electives = (props) => {
                 <div className='coursesInfoBottom'>
                     <Searchbar
                         placeHolder={placeHolder}
-                        options={electives}
+                        options={courses}
                         onChange={(elective) => {
 
 
@@ -729,6 +731,7 @@ class Scheduler extends Component {
             lecInfo,
             labInfo,
             semInfo,
+            searchInfo,
             lectureTab,
             labTab,
             seminarTab,
@@ -758,6 +761,7 @@ class Scheduler extends Component {
                         setLecInfo={this.props.setLecInfo}
                         setSemInfo={this.props.setSemInfo}
                         setLabInfo={this.props.setLabInfo}
+                        setSearchInfo={this.props.setSearchInfo}
                     />
                 </div>
                 <div className='mainTable'>
@@ -799,6 +803,7 @@ class Scheduler extends Component {
                         <Electives
                             dropDownClick={dropDownClick}
                             setDropDownClick={this.props.setDropDownClick}
+                            searchInfo={searchInfo}
                         />
                         {/*<Choose for me />*/}
                     </div>

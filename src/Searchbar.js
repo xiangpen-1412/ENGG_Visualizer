@@ -29,6 +29,12 @@ const Searchbar = ({placeHolder, options, onChange, index, isSearchable}) => {
         }
     }, [showMenu]);
 
+    useEffect(() => {
+        
+
+
+    }, [options]);
+
     const onSearch = (e) => {
         setSearchValue(e.target.value);
     };    
@@ -84,12 +90,12 @@ const Searchbar = ({placeHolder, options, onChange, index, isSearchable}) => {
             </div>
             {showMenu && (
                 <div className="searchbar-menu">
-                {isSearchable && (
-                    <div className="search-box">
-                        <input onChange={onSearch} value={searchValue} ref={searchRef} />
-                    </div>
-                )}
-                {getOptions().map((option) => (
+                    {isSearchable && (
+                        <div className="search-box">
+                            <input onChange={onSearch} value={searchValue} ref={searchRef} />
+                        </div>
+                    )}
+                    {getOptions().map((option) => (
                         <div
                             onClick={() => onItemClick(option)}
                             key={option}
