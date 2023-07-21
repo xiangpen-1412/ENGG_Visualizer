@@ -437,7 +437,7 @@ const Timetable = (props) => {
                                 }
 
                                 // time conflict text
-                                if (section !== null && color === '#888888') {
+                                if (color === '#888888') {
                                     text = '';
                                     innerClassName += 'Conflict';
                                 }
@@ -496,8 +496,9 @@ class Scheduler extends Component {
         } else {
             this.setStructure(selectedProgram, selectedPlan);
         }
-    }    
-    dataProcess = (date) => {
+    }
+
+    dateProcess = (date) => {
 
         // column number
         let colNum;
@@ -590,6 +591,7 @@ class Scheduler extends Component {
         const restController = new RESTController();
 
         const duplicateSectionSet = new Set();
+        const conflictSections = new Set();
 
         options.map((option) => {
             const durations = option.times;
@@ -603,7 +605,7 @@ class Scheduler extends Component {
                 const startTime = time.split('-')[0].length === 4 ? '0' + time.split('-')[0] : time.split('-')[0];
                 const endTime = time.split('-')[1].length === 4 ? '0' + time.split('-')[1] : time.split('-')[1];
 
-                const colNum = this.dataProcess(date);
+                const colNum = this.dateProcess(date);
                 const startRowNumber = this.timeProcess(startTime, 'start');
                 const endRowNumber = this.timeProcess(endTime, 'end');
 
@@ -618,8 +620,8 @@ class Scheduler extends Component {
                             newHighlightedCells[i][colNum] = [color, '', section];
                         }
                     } else {
-                        const oldSection = newHighlightedCells[i][colNum][2];
-                        duplicateSectionSet.add(oldSection);
+                        duplicateSectionSet.add(newHighlightedCells[i][colNum][2]);
+                        conflictSections.add(section);
                     }
                 }
             })
@@ -632,6 +634,17 @@ class Scheduler extends Component {
                     const oldSection = newHighlightedCells[rowIndex][columnIndex][2];
                     if (oldSection === section) {
                         newHighlightedCells[rowIndex][columnIndex] = ['#888888', part, section];
+                    }
+                })
+            })
+        })
+
+        conflictSections.forEach((section) => {
+            newHighlightedCells.forEach((row, rowIndex) => {
+                row.forEach((column, columnIndex) => {
+                    const part = newHighlightedCells[rowIndex][columnIndex][1];
+                    if (column[2] === section) {
+                        newHighlightedCells[rowIndex][columnIndex] = ['#888888', part, null];
                     }
                 })
             })
@@ -651,7 +664,11 @@ class Scheduler extends Component {
                     if (cell[0] !== '#888888') {
                         newHighlightedCells[rowIndex][cellIndex] = [null, '', null];
                     } else {
-                        newHighlightedCells[rowIndex][cellIndex][0] = '#275D38';
+                        if (cell[2] === null) {
+                            newHighlightedCells[rowIndex][cellIndex] = [null, '', null];
+                        } else {
+                            newHighlightedCells[rowIndex][cellIndex][0] = '#275D38';
+                        }
                     }
                 }
             })
@@ -674,10 +691,14 @@ class Scheduler extends Component {
 
             let newHighlightedCells = this.props.highLightCells.map(row => row.map(cell => [...cell]));
 
-            newHighlightedCells.forEach((row) => {
-                row.forEach((column) => {
+            newHighlightedCells.forEach((row, rowIndex) => {
+                row.forEach((column, columnIndex) => {
                     if (column[0] === '#888888') {
-                        column[0] = '#275D38';
+                        if (column[2] !== null) {
+                            column[0] = '#275D38';
+                        } else {
+                            newHighlightedCells[rowIndex][columnIndex] = [null, '', null];
+                        }
                     }
                 })
             });
@@ -694,11 +715,15 @@ class Scheduler extends Component {
 
         let newHighlightedCells = this.props.highLightCells.map(row => row.map(cell => [...cell]));
 
-        newHighlightedCells.forEach((row) => {
-            row.forEach((column) => {
+        newHighlightedCells.forEach((row, rowIndex) => {
+            row.forEach((column, columnIndex) => {
                 if (column[0] !== '#275D38') {
                     if (column[0] === '#888888') {
-                        column[0] = '#275D38';
+                        if (column[2] !== null) {
+                            column[0] = '#275D38';
+                        } else {
+                            newHighlightedCells[rowIndex][columnIndex] = [null, '',null];
+                        }
                     } else {
                         if (column[2] === section) {
                             column[0] = '#275D38';
