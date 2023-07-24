@@ -761,7 +761,8 @@ class Scheduler extends Component {
             })
         })
 
-        this.props.setHighLightCells(newHighlightedCells);
+        const newTimeTable = this.reformatTimetable(newHighlightedCells);
+        this.props.setHighLightCells(newTimeTable);
     }
 
     // end dragging function
