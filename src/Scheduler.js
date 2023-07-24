@@ -111,10 +111,10 @@ const Terms = (props) => {
             restController.getSems(data).then((sems) => {
                 props.setSemInfo(sems);
             });
-            //
-            // restController.getAllCourses({program: data.programName}).then((courses) => {
-            //     props.setSearchInfo(courses);
-            // });
+
+            restController.getAllCourses({program: data.programName}).then((courses) => {
+                props.setSearchInfo(courses);
+            });
         }
     }, [props.selectedProgram, props.selectedPlan, props.selectedTerm]);
 
