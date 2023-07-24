@@ -244,10 +244,12 @@ const Labs = (props) => {
 
     useEffect(() => {
         if (props.labInfo && props.labInfo.length > 0) {
-            const labs = props.labInfo.map((lab) => {
-                return lab.name;
-            })
-            props.setLabTab(labs);
+            if (props.labTab === null || !props.labTab.some(lab => props.labInfo.map(info => info.name).includes(lab))) {
+                const labs = props.labInfo.map((lab) => {
+                    return lab.name;
+                })
+                props.setLabTab(labs);
+            }
         } else {
             props.setLabTab(null);
         }
@@ -256,8 +258,25 @@ const Labs = (props) => {
     let labs;
     if (props.labTab !== null) {
         labs = props.labTab.map((lab) => {
+
+            const labInfo = props.labInfo.find(labInfo => labInfo.name === lab);
+
+            let option;
+            if (labInfo !== undefined) {
+                option = labInfo.options;
+            }
+
             return (
-                <div className='indivLab'>
+                <div
+                    className='indivLab'
+                    draggable={true}
+                    onDragStart={(event) => {
+                        props.handleDragStart(option, event, lab)
+                    }}
+                    onDragEnd={(event) => {
+                        props.handleDragEnd(event);
+                    }}
+                >
                     {lab}
                 </div>
             )
@@ -299,11 +318,12 @@ const Seminars = (props) => {
 
     useEffect(() => {
         if (props.semInfo && props.semInfo.length > 0) {
-            const seminars = props.semInfo.map((seminar) => {
+            if (props.semInfo === null || !props.seminarTab.some(sem => props.semInfo.map(info => info.name).includes(sem))) {
+                const seminars = props.semInfo.map((seminar) => {
                     return seminar.name;
-                }
-            )
-            props.setSeminarTab(seminars);
+                })
+                props.setSeminarTab(seminars);
+            }
         } else {
             props.setSeminarTab(null);
         }
@@ -312,8 +332,25 @@ const Seminars = (props) => {
     let seminars;
     if (props.seminarTab !== null) {
         seminars = props.seminarTab.map((seminar) => {
+
+            const semInfo = props.semInfo.find(semInfo => semInfo.name === seminar);
+
+            let option;
+            if (semInfo !== undefined) {
+                option = semInfo.options;
+            }
+
             return (
-                <div className='indivSeminar'>
+                <div
+                    className='indivSeminar'
+                    draggable={true}
+                    onDragStart={(event) => {
+                        props.handleDragStart(option, event, seminar)
+                    }}
+                    onDragEnd={(event) => {
+                        props.handleDragEnd(event);
+                    }}
+                >
                     {seminar}
                 </div>
             )
@@ -321,7 +358,7 @@ const Seminars = (props) => {
     } else {
         seminars = (
             <div className='empty'>
-                No Seminars
+                No Labs
             </div>
         )
     }
@@ -344,9 +381,6 @@ const Seminars = (props) => {
         </div>
     )
 }
-
-
-
 
 
 const Electives = (props) => {
@@ -454,10 +488,10 @@ const Timetable = (props) => {
                                                 className={innerClassName}
                                                 style={{
                                                     backgroundColor: color,
-                                                    backgroundImage: innerClassName.includes("Conflict")? `url(/conflict.png)` : null,
+                                                    backgroundImage: innerClassName.includes("Conflict") ? `url(/conflict.png)` : null,
                                                     backgroundSize: '41px 41px',
                                                     backgroundPosition: "center",
-                                            }}
+                                                }}
                                                 onContextMenu={(event) => props.handleRightClick(event, section)}
                                                 onDragOver={props.handleDragOver}
                                                 onDrop={(event) => props.handleDrop(event, hourIndex, dayIndex, section)}
@@ -484,9 +518,9 @@ class Scheduler extends Component {
     addElective = (selectedProgram, selectedPlan) => {
 
         this.deleteLineMap();
-    
+
         this.setState({selectedProgram: selectedProgram, selectedPlan: selectedPlan, structure: [], planChanged: true});
-    
+
         const haveCourseGroupOption = selectedProgram === "Mechanical Engineering" && !selectedPlan.includes("Co-op Plan 3");
         if (haveCourseGroupOption) {
             this.setState({containCourseGroup: true});
@@ -545,13 +579,36 @@ class Scheduler extends Component {
         return type === 'start' ? (hourInInt - 8) * 2 : (hourInInt - 8) * 2 - 1;
     }
 
+    // put back function
     handleRightClick = (event, section) => {
         event.preventDefault();
 
         if (section.includes('Lab')) {
-            console.log('later');
+            // add the course back to palette
+            const newLabTab = this.props.labTab;
+            const sectionParts = section.split(' ');
+            const course = sectionParts.slice(0, sectionParts.length - 1);
+            let newCourse = '';
+            course.forEach((part) => {
+                newCourse += part;
+                newCourse += ' ';
+            })
+
+            newLabTab.push(newCourse.trimEnd());
+            this.props.setLabTab(newLabTab);
         } else if (section.includes('seminar')) {
-            console.log('later');
+            // add the course back to palette
+            const newSemTab = this.props.seminarTab;
+            const sectionParts = section.split(' ');
+            const course = sectionParts.slice(0, sectionParts.length - 1);
+            let newCourse = '';
+            course.forEach((part) => {
+                newCourse += part;
+                newCourse += ' ';
+            })
+
+            newSemTab.push(newCourse.trimEnd());
+            this.props.setSeminarTab(newSemTab);
         } else {
             // add the course back to palette
             const newLectureTab = this.props.lectureTab;
@@ -565,19 +622,19 @@ class Scheduler extends Component {
 
             newLectureTab.push(newCourse.trimEnd());
             this.props.setLectureTab(newLectureTab);
-
-            // delete from the timetable
-            const newHighLightCells = this.props.highLightCells;
-            newHighLightCells.forEach((row, rowIndex) => {
-                row.forEach((column, columnIndex) => {
-                    if (column[2] === section) {
-                        newHighLightCells[rowIndex][columnIndex] = [null, '', null];
-                    }
-                })
-            });
-
-            this.props.setHighLightCells(newHighLightCells);
         }
+
+        // delete from the timetable
+        const newHighLightCells = this.props.highLightCells;
+        newHighLightCells.forEach((row, rowIndex) => {
+            row.forEach((column, columnIndex) => {
+                if (column[2] === section) {
+                    newHighLightCells[rowIndex][columnIndex] = [null, '', null];
+                }
+            })
+        });
+
+        this.props.setHighLightCells(newHighLightCells);
     }
 
     // start dragging function
@@ -606,6 +663,9 @@ class Scheduler extends Component {
                 const colNum = this.dateProcess(date);
                 const startRowNumber = this.timeProcess(startTime, 'start');
                 const endRowNumber = this.timeProcess(endTime, 'end');
+
+                console.log(startRowNumber);
+                console.log(endRowNumber);
 
                 for (let i = startRowNumber; i <= endRowNumber; i++) {
 
@@ -640,9 +700,8 @@ class Scheduler extends Component {
         conflictSections.forEach((section) => {
             newHighlightedCells.forEach((row, rowIndex) => {
                 row.forEach((column, columnIndex) => {
-                    const part = newHighlightedCells[rowIndex][columnIndex][1];
                     if (column[2] === section) {
-                        newHighlightedCells[rowIndex][columnIndex] = ['#888888', part, null];
+                        newHighlightedCells[rowIndex][columnIndex] = ['#888888', '', null];
                     }
                 })
             })
@@ -706,10 +765,21 @@ class Scheduler extends Component {
             return;
         }
 
+        // remove selected course from the palette
         const courseInfo = JSON.parse(event.dataTransfer.getData('text'));
-        const updatedLecTab = [...this.props.lectureTab];
-        const newLecTab = updatedLecTab.filter(item => item !== courseInfo);
-        this.props.setLectureTab(newLecTab);
+        if (courseInfo.includes('Lab')) {
+            const updatedLabTab = [...this.props.labTab];
+            const newLabTab = updatedLabTab.filter(item => item !== courseInfo);
+            this.props.setLabTab(newLabTab);
+        } else if (courseInfo.includes('Sem')) {
+            const updatedSemTab = [...this.props.seminarTab];
+            const newSeminarTab = updatedSemTab.filter(item => item !== courseInfo);
+            this.props.setLabTab(newSeminarTab);
+        } else {
+            const updatedLecTab = [...this.props.lectureTab];
+            const newLecTab = updatedLecTab.filter(item => item !== courseInfo);
+            this.props.setLectureTab(newLecTab);
+        }
 
         let newHighlightedCells = this.props.highLightCells.map(row => row.map(cell => [...cell]));
 
@@ -809,6 +879,7 @@ class Scheduler extends Component {
                             labTab={labTab}
                             setLabTab={this.props.setLabTab}
                             handleDragStart={this.handleDragStart}
+                            handleDragEnd={this.handleDragEnd}
                         />
                         <Seminars
                             dropDownClick={dropDownClick}
@@ -820,6 +891,7 @@ class Scheduler extends Component {
                             seminarTab={seminarTab}
                             setSeminarTab={this.props.setSeminarTab}
                             handleDragStart={this.handleDragStart}
+                            handleDragEnd={this.handleDragEnd}
                         />
                         <Electives
                             dropDownClick={dropDownClick}
@@ -838,7 +910,7 @@ class Scheduler extends Component {
                 </div>
 
                 <div>
-                    <Searchbar placeHolder="Select..." options="HIST 115" />
+                    <Searchbar placeHolder="Select..." options="HIST 115"/>
                 </div>
             </div>
         )

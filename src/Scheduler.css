@@ -237,8 +237,17 @@
     height: 40px;
 }
 
-.innerCell, .innerCellStart, .innerCellEnd, .innerCellConflict, .innerCellStartConflict, .innerCellEndConflict {
+.innerCellStart, .innerCellEnd, .innerCellStartConflict, .innerCellEndConflict {
     height: 100%;
+    width: 95%;
+    margin-left: 2.5%;
+
+    display: flex;
+    justify-content: center;
+}
+
+.innerCell, .innerCellConflict {
+    height: 110%;
     width: 95%;
     margin-left: 2.5%;
 
