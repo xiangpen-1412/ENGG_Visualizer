@@ -223,17 +223,17 @@
 }
 
 .timeCell, .headerTimeCell {
-    width: 140px;
+    width: 150px;
     height: 60px;
 }
 
 .headerCell {
-    width: 195px;
+    width: 200px;
     height: 60px;
 }
 
 .topCell, .bottomCell {
-    width: 195px;
+    width: 200px;
     height: 40px;
 }
 

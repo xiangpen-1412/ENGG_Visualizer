@@ -111,11 +111,10 @@ const Terms = (props) => {
             restController.getSems(data).then((sems) => {
                 props.setSemInfo(sems);
             });
-
-            restController.getAllCourses({program: data.programName}).then((courses) => {
-                console.log(courses);
-                props.setSearchInfo(courses);
-            });
+            //
+            // restController.getAllCourses({program: data.programName}).then((courses) => {
+            //     props.setSearchInfo(courses);
+            // });
         }
     }, [props.selectedProgram, props.selectedPlan, props.selectedTerm]);
 
@@ -322,7 +321,7 @@ const Seminars = (props) => {
 
     useEffect(() => {
         if (props.semInfo && props.semInfo.length > 0) {
-            if (props.semInfo === null || !props.seminarTab.some(sem => props.semInfo.map(info => info.name).includes(sem))) {
+            if (props.seminarTab === null || !props.seminarTab.some(sem => props.semInfo.map(info => info.name).includes(sem))) {
                 const seminars = props.semInfo.map((seminar) => {
                     return seminar.name;
                 })
@@ -362,7 +361,7 @@ const Seminars = (props) => {
     } else {
         seminars = (
             <div className='empty'>
-                No Labs
+                No Seminars
             </div>
         )
     }
@@ -378,7 +377,7 @@ const Seminars = (props) => {
                 </div>
             </div>
             {!isDropDown && (
-                <div className='coursesInfoBottom'>
+                <div className='coursesInfo'>
                     {seminars}
                 </div>
             )}
@@ -598,7 +597,7 @@ class Scheduler extends Component {
 
             newLabTab.push(newCourse.trimEnd());
             this.props.setLabTab(newLabTab);
-        } else if (section.includes('seminar')) {
+        } else if (section.includes('Sem')) {
             // add the course back to palette
             const newSemTab = this.props.seminarTab;
             const sectionParts = section.split(' ');
@@ -665,9 +664,6 @@ class Scheduler extends Component {
                 const colNum = this.dateProcess(date);
                 const startRowNumber = this.timeProcess(startTime, 'start');
                 const endRowNumber = this.timeProcess(endTime, 'end');
-
-                console.log(startRowNumber);
-                console.log(endRowNumber);
 
                 for (let i = startRowNumber; i <= endRowNumber; i++) {
 
@@ -776,7 +772,7 @@ class Scheduler extends Component {
         } else if (courseInfo.includes('Sem')) {
             const updatedSemTab = [...this.props.seminarTab];
             const newSeminarTab = updatedSemTab.filter(item => item !== courseInfo);
-            this.props.setLabTab(newSeminarTab);
+            this.props.setSeminarTab(newSeminarTab);
         } else {
             const updatedLecTab = [...this.props.lectureTab];
             const newLecTab = updatedLecTab.filter(item => item !== courseInfo);
