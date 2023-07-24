@@ -705,6 +705,38 @@ class Scheduler extends Component {
             })
         })
 
+        // reformat the conflict region
+        newHighlightedCells.forEach((row, rowIndex) => {
+            row.forEach((column, columnIndex) => {
+                const cell = newHighlightedCells[rowIndex][columnIndex];
+                const color = cell[0];
+                if (rowIndex === 0) {
+                    if (color === '#888888') {
+                        newHighlightedCells[rowIndex][columnIndex][1] = 'Start';
+                    }
+                } else if (rowIndex === newHighlightedCells.length - 1) {
+                    if (color === '#888888') {
+                        newHighlightedCells[rowIndex][columnIndex][1] = 'End';
+                    }
+                } else {
+                    if (color === '#888888') {
+                        newHighlightedCells[rowIndex][columnIndex][1] = '';
+
+                        if (newHighlightedCells[rowIndex + 1][columnIndex][0] !== '#888888') {
+                            newHighlightedCells[rowIndex][columnIndex][1] = 'End';
+                        }
+
+                        if (newHighlightedCells[rowIndex - 1][columnIndex][0] !== '#888888') {
+                            newHighlightedCells[rowIndex][columnIndex][1] = 'Start';
+                        }
+
+                    }
+                }
+            })
+        })
+
+        console.log(newHighlightedCells);
+
         this.props.setHighLightCells(newHighlightedCells);
     }
 
@@ -758,8 +790,8 @@ class Scheduler extends Component {
                 })
             });
 
-            this.props.setHighLightCells(newHighlightedCells);
-
+            const newTimeTable = this.reformatTimetable(newHighlightedCells);
+            this.props.setHighLightCells(newTimeTable);
             return;
         }
 
@@ -803,12 +835,51 @@ class Scheduler extends Component {
             })
         });
 
-        this.props.setHighLightCells(newHighlightedCells);
+        const newTimeTable = this.reformatTimetable(newHighlightedCells);
+        this.props.setHighLightCells(newTimeTable);
     }
 
     checkCell = (hourIndex, dayIndex) => {
         const color = this.props.highLightCells[hourIndex][dayIndex][0];
         return color !== null && color !== '#275D38' && color !== '#888888';
+    }
+
+
+    /**
+     * reformat the timetable
+     * */
+    reformatTimetable = (highLightCells) => {
+        let newHighlightedCells = highLightCells.map(row => row.map(cell => [...cell]));
+
+        newHighlightedCells.forEach((row, rowIndex) => {
+            row.forEach((column, columnIndex) => {
+                const color = newHighlightedCells[rowIndex][columnIndex][0];
+                const section = newHighlightedCells[rowIndex][columnIndex][2];
+                if (rowIndex === 0) {
+                    if (color === '#275D38' && section !== null) {
+                        newHighlightedCells[rowIndex][columnIndex][1] = 'Start';
+                    }
+                } else if (rowIndex === newHighlightedCells.length - 1) {
+                    if (color === '#275D38' && section !== null) {
+                        newHighlightedCells[rowIndex][columnIndex][1] = 'End';
+                    }
+                } else {
+                    if (color === '#275D38') {
+                        newHighlightedCells[rowIndex][columnIndex][1] = '';
+
+                        if (newHighlightedCells[rowIndex + 1][columnIndex][2] !== section) {
+                            newHighlightedCells[rowIndex][columnIndex][1] = 'End';
+                        }
+
+                        if (newHighlightedCells[rowIndex - 1][columnIndex][2] !== section) {
+                            newHighlightedCells[rowIndex][columnIndex][1] = 'Start';
+                        }
+                    }
+                }
+            })
+        });
+
+        return newHighlightedCells;
     }
 
     render() {
