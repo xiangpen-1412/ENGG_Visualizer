@@ -1,6 +1,7 @@
 import React, {Component, useEffect} from "react";
 import './Scheduler.css'
 import Searchbar from './Searchbar.js';
+import {ExportCSV} from './ExportCSV.js';
 import {useLocation} from "react-router-dom";
 import RESTController from "./controller/RESTController";
 
@@ -907,6 +908,11 @@ class Scheduler extends Component {
                 <Plan
                     selectedProgram={selectedProgram}
                     selectedPlan={selectedPlan}
+                />
+                <ExportCSV
+                    // csvData={JSON.stringify(this.props.highLightCells)}
+                    csvData={this.props.highLightCells}
+                    fileName="Schedule"
                 />
                 <PlaceCourse
                     selectedProgram={selectedProgram}
