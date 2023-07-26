@@ -909,11 +909,6 @@ class Scheduler extends Component {
                     selectedProgram={selectedProgram}
                     selectedPlan={selectedPlan}
                 />
-                <ExportCSV
-                    // csvData={JSON.stringify(this.props.highLightCells)}
-                    csvData={this.props.highLightCells}
-                    fileName="Schedule"
-                />
                 <PlaceCourse
                     selectedProgram={selectedProgram}
                     selectedPlan={selectedPlan}
@@ -975,6 +970,10 @@ class Scheduler extends Component {
                             dropDownClick={dropDownClick}
                             setDropDownClick={this.props.setDropDownClick}
                             searchInfo={searchInfo}
+                        />
+                        <ExportCSV
+                            csvData={this.props.highLightCells}
+                            fileName="Schedule"
                         />
                         {/*<Choose for me />*/}
                     </div>

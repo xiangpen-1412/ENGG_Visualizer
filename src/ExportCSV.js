@@ -1,6 +1,7 @@
 import React from 'react'
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
+import './Scheduler.css'
 
 export const ExportCSV = ({csvData, fileName}) => {
 
@@ -45,25 +46,27 @@ export const ExportCSV = ({csvData, fileName}) => {
         '20:30',
     ];
 
+    // Take input data, convert it to an xlsx sheet, download to user's computer
     const exportToCSV = (csvData, fileName) => {
 
-        console.log("-")
-        console.log(csvData);
-        console.log(JSON.stringify(csvData));
-
+        // Construct csv data from inputted course matrix
         var rows = csvData.map((row, index) => {
 
+            // Read out the names of each object in Schedule matrix
             var timedRow = row.map((course) => {
                 return course[2];
             });
 
+            // Add time to left side
             timedRow.unshift(times[index]);
 
             return timedRow;
         });
 
+        // Add Days of the Week to first row of sheet
         rows.unshift(headers);
         
+        // Convert rows to xlsx and save to user's computer
         const ws = XLSX.utils.json_to_sheet(rows);
         const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
         const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
@@ -72,7 +75,7 @@ export const ExportCSV = ({csvData, fileName}) => {
     }
 
     return (
-        <div className="button" onClick={(e) => exportToCSV(csvData,fileName)}>
+        <div className="exportButton" onClick={(e) => exportToCSV(csvData,fileName)}>
             Export to Excel
         </div>
     )
