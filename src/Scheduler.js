@@ -2,6 +2,7 @@ import React, {Component, useEffect} from "react";
 import './Scheduler.css'
 import Searchbar from './Searchbar.js';
 import {ExportCSV} from './ExportCSV.js';
+import {ImportCSV} from './ImportCSV.js';
 import {useLocation} from "react-router-dom";
 import RESTController from "./controller/RESTController";
 
@@ -975,6 +976,7 @@ class Scheduler extends Component {
                             csvData={this.props.highLightCells}
                             fileName="Schedule"
                         />
+                        <ImportCSV />
                         {/*<Choose for me />*/}
                     </div>
                     <div className='timeTableTable'>
