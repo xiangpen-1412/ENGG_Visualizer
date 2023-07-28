@@ -4,65 +4,38 @@ import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import './Scheduler.css'
 
-export const ImportCSV = ({setHighLightCells}) => {
-
-    const [data, setData] = useState([]);
-    const [selectedFile, setSelectedFile] = useState(null);
+export const ImportCSV = ({setHighLightCells, reformatTimetable}) => {
 
     const hiddenFileInput = React.useRef();
 
-
-
     const placeData = (data) => {
 
-
-        // this.setState(prevState => {
-        //     return {
-        //         data: [
-        //             ...prevState.data.slice(0,2)
-        //         ]
-        //     }
-        // })
-
-        // console.log(this.state.data);
-
-        console.log('data');
-        console.log(data);
-
-
+        // Remove the Weekday rows from the top of the excel sheet
         const newData = data.slice(2, data.length);
 
-        console.log('newData');
-        console.log(newData);
+        // Create an empty timetable with [null, '', null] cells
+        var emptyTable = Array.from({length: 26}, () => Array.from({length: 5}, () => [null, '', null]));
 
-
-        // var emptyTable = Array.from({length: 26}, () => Array.from({length: 5}, () => [null, '', null]));
-
-
-        const cleanedData = newData.map(row => {
+        // Move data from excel into the empty table
+        const cleanedData = newData.map((row, rowIndex) => {
             var newRow = row.slice(1, row.length);
-            return newRow.map(cell => {
-                if (cell != []) {
-                    return ["#275D38", '', cell];
-                }
-                else {
-                    return [null, '', null];
+            return newRow.map((cell, colIndex) => {
+                if (cell != null) {
+                    emptyTable[rowIndex][colIndex] = ["#275D38", '', cell];
                 }
             })
         })
 
-        console.log(0);
-        console.log(cleanedData);
-
-        // setHighLightCells(cleanedData);
+        // Add formatting data to the middle section of the cells and set the timeTable tp the scheduler
+        const reformattedTimetable = reformatTimetable(emptyTable);
+        setHighLightCells(reformattedTimetable);
     }
 
 
     const fileSelectedHandler = event => {
-        setSelectedFile(event.target.files[0]);
-
         const reader = new FileReader();
 
+        // Read spreadsheet data from the uploaded excel file
         reader.onload = (e) => {
             const result = e.target.result;
             const workbook = XLSX.read(result, {type: "array"});
@@ -70,26 +43,25 @@ export const ImportCSV = ({setHighLightCells}) => {
             const sheet = workbook.Sheets[sheetName];
             const data = XLSX.utils.sheet_to_json(sheet, {header:1});
 
-            setData(data);
+            // Format and display data on the Scheduler
             placeData(data);
         }
         reader.readAsArrayBuffer(event.target.files[0]);
     }
 
+    // Click the hidden import button when the much nicer looking "Import from File" button is pressed
     const handleClick = event => {
         hiddenFileInput.current.click();
     };
 
     return (
         <div >
-
             <button 
                 className="exportButton"
                 onClick={handleClick}
             >
                 Import from File
             </button>
-            
             <input 
                 type="file" 
                 onChange={fileSelectedHandler} 
