@@ -976,7 +976,9 @@ class Scheduler extends Component {
                             csvData={this.props.highLightCells}
                             fileName="Schedule"
                         />
-                        <ImportCSV />
+                        <ImportCSV 
+                            setHighLightCells={this.props.setHighLightCells}
+                        />
                         {/*<Choose for me />*/}
                     </div>
                     <div className='timeTableTable'>
