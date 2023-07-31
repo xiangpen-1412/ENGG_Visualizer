@@ -4,7 +4,7 @@ import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import './Scheduler.css'
 
-export const ImportCSV = ({setHighLightCells, reformatTimetable}) => {
+export const ImportCSV = ({setHighLightCells, reformatTimetable, lectureTab, setLectureTab, labTab, setLabTab, seminarTab, setSeminarTab}) => {
 
     const hiddenFileInput = React.useRef();
 
@@ -16,12 +16,15 @@ export const ImportCSV = ({setHighLightCells, reformatTimetable}) => {
         // Create an empty timetable with [null, '', null] cells
         var emptyTable = Array.from({length: 26}, () => Array.from({length: 5}, () => [null, '', null]));
 
+        const courseSet = new Set();
+
         // Move data from excel into the empty table
         const cleanedData = newData.map((row, rowIndex) => {
             var newRow = row.slice(1, row.length);
             return newRow.map((cell, colIndex) => {
                 if (cell != null) {
                     emptyTable[rowIndex][colIndex] = ["#275D38", '', cell];
+                    courseSet.add(cell);
                 }
             })
         })
@@ -29,6 +32,9 @@ export const ImportCSV = ({setHighLightCells, reformatTimetable}) => {
         // Add formatting data to the middle section of the cells and set the timeTable tp the scheduler
         const reformattedTimetable = reformatTimetable(emptyTable);
         setHighLightCells(reformattedTimetable);
+
+        var courseArray = Array.from(courseSet);
+        checkTabs(courseArray);
     }
 
 
@@ -53,6 +59,34 @@ export const ImportCSV = ({setHighLightCells, reformatTimetable}) => {
     const handleClick = event => {
         hiddenFileInput.current.click();
     };
+
+    // Remove each course in the imported table from the corresponding side panel
+    const checkTabs = (duplicateEntries) => {
+
+        duplicateEntries.map(entry => {
+
+            // Remove section from the end of the course name
+            var lastIndex = entry.lastIndexOf(" ");
+            var courseName = entry.substring(0, lastIndex).trim();
+
+            // Remove course from the tabs on the side of the scheduler
+            if (entry.includes("Sem")) {
+                const updatedSemTab = [...seminarTab];
+                const newSemTab = updatedSemTab.filter(item => item !== courseName);
+                setSeminarTab(newSemTab);
+            }
+            else if (entry.includes("Lab")) {
+                const updatedLabTab = [...labTab];
+                const newLabTab = updatedLabTab.filter(item => item !== courseName);
+                setLabTab(newLabTab);
+            }
+            else {
+                const updatedLecTab = [...lectureTab];
+                const newLecTab = updatedLecTab.filter(item => item !== courseName);
+                setLectureTab(newLecTab);
+            }
+        });
+    }
 
     return (
         <div >

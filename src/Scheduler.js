@@ -979,6 +979,12 @@ class Scheduler extends Component {
                         <ImportCSV 
                             setHighLightCells={this.props.setHighLightCells}
                             reformatTimetable={this.reformatTimetable}
+                            lectureTab={lectureTab}
+                            setLectureTab={this.props.setLectureTab}
+                            labTab={labTab}
+                            setLabTab={this.props.setLabTab}
+                            seminarTab={seminarTab}
+                            setSeminarTab={this.props.setSeminarTab}
                         />
                         {/*<Choose for me />*/}
                     </div>
