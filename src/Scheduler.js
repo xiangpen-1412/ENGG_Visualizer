@@ -492,7 +492,7 @@ const Timetable = (props) => {
                                                 style={{
                                                     backgroundColor: color,
                                                     backgroundImage: innerClassName.includes("Conflict") ? `url(/conflict.png)` : null,
-                                                    backgroundSize: '41px 41px',
+                                                    backgroundSize: '37px 37px',
                                                     backgroundPosition: "center",
                                                 }}
                                                 onContextMenu={(event) => props.handleRightClick(event, section)}
