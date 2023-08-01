@@ -528,6 +528,7 @@ const Timetable = (props) => {
                                             <div
                                                 className={innerClassName}
                                                 style={{
+                                                    color: color,
                                                     backgroundColor: color,
                                                     backgroundImage: innerClassName.includes("Conflict") ? `url(/conflict.png)` : null,
                                                     backgroundSize: '37px 37px',

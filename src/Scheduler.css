@@ -272,14 +272,18 @@
 
     display: flex;
     justify-content: center;
+
+    box-shadow: 0 5px, 0 -5px;
 }
 
 .innerCellStart, .innerCellStartConflict {
     margin-top: 4px;
+    box-shadow: 0 5px;
 }
 
 .innerCellEnd, .innerCellEndConflict {
     margin-bottom: 4px;
+    box-shadow: 0 -5px;
 }
 
 .content {
