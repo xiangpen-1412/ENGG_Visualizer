@@ -151,6 +151,7 @@ const Terms = (props) => {
     )
 }
 
+// Button to add additional terms to Scheduler
 const NewTerm = (props) => {
 
     const [termNumber, setTermNumber] = useState(9);
@@ -158,16 +159,18 @@ const NewTerm = (props) => {
 
     const termTypes = ['Summer', 'Fall', 'Winter'];
 
-
+    // Add a new term with proper number and term type when + is clicked
     const handleClick = () => {
 
         const newTermName = [termTypes[termIndex], 'Term', termNumber];
 
+        // Add term to terms array
         props.setTermList([
             ...props.termList,
             newTermName.join(' ')
         ])
 
+        // Store next term type and number
         setTermNumber((prevNumber) => prevNumber + 1);
         setTermIndex((prevIndex) => (prevIndex + 1) % 3);
     }
