@@ -1,4 +1,4 @@
-import React, {Component, useEffect} from "react";
+import React, {Component, useEffect, useState} from "react";
 import './Scheduler.css'
 import Searchbar from './Searchbar.js';
 import {ExportCSV} from './ExportCSV.js';
@@ -143,6 +143,41 @@ const Terms = (props) => {
     return (
         <div className='termTube'>
             {terms}
+            <NewTerm
+                termList={props.termList}
+                setTermList={props.setTermList}
+            />
+        </div>
+    )
+}
+
+const NewTerm = (props) => {
+
+    const [termNumber, setTermNumber] = useState(9);
+    const [termIndex, setTermIndex] = useState(0);
+
+    const termTypes = ['Summer', 'Fall', 'Winter'];
+
+
+    const handleClick = () => {
+
+        const newTermName = [termTypes[termIndex], 'Term', termNumber];
+
+        props.setTermList([
+            ...props.termList,
+            newTermName.join(' ')
+        ])
+
+        setTermNumber((prevNumber) => prevNumber + 1);
+        setTermIndex((prevIndex) => (prevIndex + 1) % 3);
+    }
+
+    return (
+        <div
+            className="indivTerm"
+            onClick={handleClick}
+        >
+            +
         </div>
     )
 }

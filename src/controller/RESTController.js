@@ -330,6 +330,8 @@ class RESTController extends Component {
     /**
      * Scheduler API
      * get lecture information for a given course
+     * 
+     * data: courseName, term
      * */
     getIndivLec = (data) => {
         return this.getIndivCourseInfo(data, 'getIndividualCourseLecsInfo', '');
@@ -338,6 +340,8 @@ class RESTController extends Component {
     /**
      * Scheduler API
      * get lab information for a given course
+     * 
+     * data: courseName, term
      * */
     getIndivLab = (data) => {
         return this.getIndivCourseInfo(data, 'getIndividualCourseLabsInfo', ' Lab');
@@ -346,6 +350,8 @@ class RESTController extends Component {
     /**
      * Scheduler API
      * get seminar information for a given course
+     * 
+     * data: courseName, term
      * */
     getIndivSem = (data) => {
         return this.getIndivCourseInfo(data, 'getIndividualCourseSemsInfo', ' Sem');
