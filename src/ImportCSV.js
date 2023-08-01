@@ -63,6 +63,12 @@ export const ImportCSV = ({setHighLightCells, reformatTimetable, lectureTab, set
     // Remove each course in the imported table from the corresponding side panel
     const checkTabs = (duplicateEntries) => {
 
+        // get the current state of the course tabs
+        var updatedSemTab = [...seminarTab];
+        var updatedLabTab = [...labTab];
+        var updatedLecTab = [...lectureTab];
+
+        // Loop through courses found during the import
         duplicateEntries.map(entry => {
 
             // Remove section from the end of the course name
@@ -71,21 +77,20 @@ export const ImportCSV = ({setHighLightCells, reformatTimetable, lectureTab, set
 
             // Remove course from the tabs on the side of the scheduler
             if (entry.includes("Sem")) {
-                const updatedSemTab = [...seminarTab];
-                const newSemTab = updatedSemTab.filter(item => item !== courseName);
-                setSeminarTab(newSemTab);
+                updatedSemTab = updatedSemTab.filter(item => item !== courseName);
             }
             else if (entry.includes("Lab")) {
-                const updatedLabTab = [...labTab];
-                const newLabTab = updatedLabTab.filter(item => item !== courseName);
-                setLabTab(newLabTab);
+                updatedLabTab = updatedLabTab.filter(item => item !== courseName);
             }
             else {
-                const updatedLecTab = [...lectureTab];
-                const newLecTab = updatedLecTab.filter(item => item !== courseName);
-                setLectureTab(newLecTab);
+                updatedLecTab = updatedLecTab.filter(item => item !== courseName);
             }
         });
+        
+        // Set the updeated tabs
+        setSeminarTab(updatedSemTab);
+        setLabTab(updatedLabTab);
+        setLectureTab(updatedLecTab);
     }
 
     return (
