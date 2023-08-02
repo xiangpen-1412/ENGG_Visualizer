@@ -15,7 +15,7 @@ const Icon = () => {
     );
 };
 
-const Searchbar = ({placeHolder, options, onChange, index, isSearchable}) => {
+const Searchbar = ({placeHolder, options, index, isSearchable, addCourse}) => {
     const [showMenu, setShowMenu] = useState(false);
     const [selectedValue, setSelectedValue] = useState(null);
     const inputRef = useRef();
@@ -63,10 +63,23 @@ const Searchbar = ({placeHolder, options, onChange, index, isSearchable}) => {
         setShowMenu(!showMenu);
     };
 
+
+
+
+
+
+
     const onItemClick = (option) => {
         setSelectedValue(option);
-        onChange(option);
+        addCourse(option);
     };
+
+
+
+
+
+
+
 
     const isSelected = (option) => {
 

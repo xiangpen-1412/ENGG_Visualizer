@@ -276,6 +276,8 @@ const Lecs = (props) => {
         </div>
     )
 }
+
+
 const Labs = (props) => {
 
     const isDropDown = props.dropDownClick[2];
@@ -426,7 +428,7 @@ const Seminars = (props) => {
 }
 
 
-const Electives = (props) => {
+const Search = (props) => {
 
     const isDropDown = props.dropDownClick[3];
 
@@ -437,6 +439,7 @@ const Electives = (props) => {
     // Get list of all courses into a local var
     const courses = props.searchInfo;
     const placeHolder = 'Search...';
+
 
     // Return component with all the discipline's plans
     return (
@@ -454,10 +457,7 @@ const Electives = (props) => {
                     <Searchbar
                         placeHolder={placeHolder}
                         options={courses}
-                        onChange={(elective) => {
-
-
-                        }}
+                        addCourse={props.addCourse}
                         isSearchable={true}
                     />
                 </div>
@@ -557,19 +557,65 @@ const Timetable = (props) => {
 
 class Scheduler extends Component {
 
-    addElective = (selectedProgram, selectedPlan) => {
+    addCourse = (courseName) => {
+        
+        const termType = this.props.selectedTerm.split(" ")[0].toLowerCase();
+        const restController = new RESTController();
 
-        this.deleteLineMap();
-
-        this.setState({selectedProgram: selectedProgram, selectedPlan: selectedPlan, structure: [], planChanged: true});
-
-        const haveCourseGroupOption = selectedProgram === "Mechanical Engineering" && !selectedPlan.includes("Co-op Plan 3");
-        if (haveCourseGroupOption) {
-            this.setState({containCourseGroup: true});
-            this.setCourseGroup(selectedPlan);
-        } else {
-            this.setStructure(selectedProgram, selectedPlan);
+        const data = {
+            courseName: courseName,
+            term: termType,
         }
+        
+        // Query backend for data about lec, lab, sem if exist for the searched course
+        restController.getIndivLec(data).then((result) => {
+            
+            // Update respective info and tab data structures for lectures
+            if (result.size != []) {
+                this.props.setLecInfo([
+                    ...this.props.lecInfo,
+                    result[0]
+                ])
+                this.props.setLectureTab([
+                    ...this.props.lectureTab,
+                    result[0].name
+                ])
+            }
+
+            console.log(result);
+        });
+        restController.getIndivLab(data).then((result) => {
+            
+            // Update respective info and tab data structures for lab
+            if (result.size != []) {
+                this.props.setLabInfo([
+                    ...this.props.labInfo,
+                    result[0]
+                ])
+                this.props.setLabTab([
+                    ...this.props.labTab,
+                    result[0].name
+                ])
+            }
+
+            console.log(result);
+        });
+        restController.getIndivSem(data).then((result) => {
+            
+            // Update respective info and tab data structures for seminar
+            if (result.size != []) {
+                this.props.setSemInfo([
+                    ...this.props.semInfo,
+                    result[0]
+                ])
+                this.props.setSeminarTab([
+                    ...this.props.seminarTab,
+                    result[0].name
+                ])
+            }
+
+            console.log(result);
+        });
     }
 
     dateProcess = (date) => {
@@ -1006,10 +1052,12 @@ class Scheduler extends Component {
                             handleDragStart={this.handleDragStart}
                             handleDragEnd={this.handleDragEnd}
                         />
-                        <Electives
+                        <Search
                             dropDownClick={dropDownClick}
                             setDropDownClick={this.props.setDropDownClick}
+                            selectedTerm={selectedTerm}
                             searchInfo={searchInfo}
+                            addCourse={this.addCourse}
                         />
                         <ExportCSV
                             csvData={this.props.highLightCells}
