@@ -444,11 +444,11 @@ const Search = (props) => {
     // Return component with all the discipline's plans
     return (
         <div>
-            <div className={`electivesPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
-                <div className='electivesPaletteTitle'>
+            <div className={`searchPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
+                <div className='searchPaletteTitle'>
                     Add
                 </div>
-                <div className='electivesPaletteDropDownButton' onClick={onSignClick}>
+                <div className='searchPaletteDropDownButton' onClick={onSignClick}>
                     <DropDownSign isDropDown={isDropDown}/>
                 </div>
             </div>
