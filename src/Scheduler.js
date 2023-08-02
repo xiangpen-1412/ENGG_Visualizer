@@ -146,6 +146,8 @@ const Terms = (props) => {
             <NewTerm
                 termList={props.termList}
                 setTermList={props.setTermList}
+                setHighLightCells={props.setHighLightCells}
+                setSelectedTerm={props.setSelectedTerm}
             />
         </div>
     )
@@ -163,16 +165,23 @@ const NewTerm = (props) => {
     const handleClick = () => {
 
         const newTermName = [termTypes[termIndex], 'Term', termNumber];
+        const term = newTermName.join(' ');
 
         // Add term to terms array
         props.setTermList([
             ...props.termList,
-            newTermName.join(' ')
+            term
         ])
 
         // Store next term type and number
         setTermNumber((prevNumber) => prevNumber + 1);
         setTermIndex((prevIndex) => (prevIndex + 1) % 3);
+
+
+        props.setSelectedTerm(term);
+
+        const newHighLightCells = Array.from({length: 26}, () => Array.from({length: 5}, () => [null, '', null]));
+        props.setHighLightCells(newHighLightCells);
     }
 
     return (
