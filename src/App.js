@@ -607,13 +607,6 @@ const Footer = () => {
     );
 };
 
-const Spinner = () => (
-    <div className="spinner">
-        <div className="double-bounce1"></div>
-        <div className="double-bounce2"></div>
-    </div>
-);
-
 class App extends Component {
     constructor(props) {
         super(props);

@@ -102,6 +102,7 @@ const Terms = (props) => {
 
             restController.getLecs(data).then((lecs) => {
                 props.setLecInfo(lecs);
+                console.log(lecs);
             });
 
             restController.getLabs(data).then((labs) => {
