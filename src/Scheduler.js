@@ -1,6 +1,8 @@
-import React, {Component, useEffect} from "react";
+import React, {Component, useEffect, useState} from "react";
 import './Scheduler.css'
 import Searchbar from './Searchbar.js';
+import {ExportCSV} from './ExportCSV.js';
+import {ImportCSV} from './ImportCSV.js';
 import {useLocation} from "react-router-dom";
 import RESTController from "./controller/RESTController";
 
@@ -101,6 +103,12 @@ const Terms = (props) => {
             }
 
             restController.getLecs(data).then((lecs) => {
+                console.log("lecs: ", lecs);
+                if (lecs.length == 0) {
+                    console.log("0");
+
+                    
+                }
                 props.setLecInfo(lecs);
                 console.log(lecs);
             });
@@ -142,6 +150,53 @@ const Terms = (props) => {
     return (
         <div className='termTube'>
             {terms}
+            <NewTerm
+                termList={props.termList}
+                setTermList={props.setTermList}
+                setHighLightCells={props.setHighLightCells}
+                setSelectedTerm={props.setSelectedTerm}
+            />
+        </div>
+    )
+}
+
+// Button to add additional terms to Scheduler
+const NewTerm = (props) => {
+
+    const [termNumber, setTermNumber] = useState(9);
+    const [termIndex, setTermIndex] = useState(0);
+
+    const termTypes = ['Summer', 'Fall', 'Winter'];
+
+    // Add a new term with proper number and term type when + is clicked
+    const handleClick = () => {
+
+        const newTermName = [termTypes[termIndex], 'Term', termNumber];
+        const term = newTermName.join(' ');
+
+        // Add term to terms array
+        props.setTermList([
+            ...props.termList,
+            term
+        ])
+
+        // Store next term type and number
+        setTermNumber((prevNumber) => prevNumber + 1);
+        setTermIndex((prevIndex) => (prevIndex + 1) % 3);
+
+
+        props.setSelectedTerm(term);
+
+        const newHighLightCells = Array.from({length: 26}, () => Array.from({length: 5}, () => [null, '', null]));
+        props.setHighLightCells(newHighLightCells);
+    }
+
+    return (
+        <div
+            className="indivTerm"
+            onClick={handleClick}
+        >
+            +
         </div>
     )
 }
@@ -172,6 +227,12 @@ const Lecs = (props) => {
     }
 
     useEffect(() => {
+
+        var linfo = props.lecInfo.length > 0
+
+        console.log("lecInfo: " + linfo);
+        console.log(props.lecInfo);
+
         if (props.lecInfo && props.lecInfo.length > 0) {
             if (props.lectureTab === null || !props.lectureTab.some(lecture => props.lecInfo.map(info => info.name).includes(lecture))) {
                 const lectures = props.lecInfo.map((lecture) => {
@@ -237,6 +298,8 @@ const Lecs = (props) => {
         </div>
     )
 }
+
+
 const Labs = (props) => {
 
     const isDropDown = props.dropDownClick[2];
@@ -247,6 +310,13 @@ const Labs = (props) => {
 
 
     useEffect(() => {
+
+        var linfo = props.labInfo.length > 0
+
+        console.log("labInfo: " + linfo);
+        console.log(props.labInfo);
+
+
         if (props.labInfo && props.labInfo.length > 0) {
             if (props.labTab === null || !props.labTab.some(lab => props.labInfo.map(info => info.name).includes(lab))) {
                 const labs = props.labInfo.map((lab) => {
@@ -387,7 +457,7 @@ const Seminars = (props) => {
 }
 
 
-const Electives = (props) => {
+const Search = (props) => {
 
     const isDropDown = props.dropDownClick[3];
 
@@ -399,14 +469,15 @@ const Electives = (props) => {
     const courses = props.searchInfo;
     const placeHolder = 'Search...';
 
+
     // Return component with all the discipline's plans
     return (
         <div>
-            <div className={`electivesPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
-                <div className='electivesPaletteTitle'>
+            <div className={`searchPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
+                <div className='searchPaletteTitle'>
                     Add
                 </div>
-                <div className='electivesPaletteDropDownButton' onClick={onSignClick}>
+                <div className='searchPaletteDropDownButton' onClick={onSignClick}>
                     <DropDownSign isDropDown={isDropDown}/>
                 </div>
             </div>
@@ -415,10 +486,7 @@ const Electives = (props) => {
                     <Searchbar
                         placeHolder={placeHolder}
                         options={courses}
-                        onChange={(elective) => {
-
-
-                        }}
+                        addCourse={props.addCourse}
                         isSearchable={true}
                     />
                 </div>
@@ -489,9 +557,10 @@ const Timetable = (props) => {
                                             <div
                                                 className={innerClassName}
                                                 style={{
+                                                    color: color,
                                                     backgroundColor: color,
                                                     backgroundImage: innerClassName.includes("Conflict") ? `url(/conflict.png)` : null,
-                                                    backgroundSize: '41px 41px',
+                                                    backgroundSize: '37px 37px',
                                                     backgroundPosition: "center",
                                                 }}
                                                 onContextMenu={(event) => props.handleRightClick(event, section)}
@@ -517,19 +586,79 @@ const Timetable = (props) => {
 
 class Scheduler extends Component {
 
-    addElective = (selectedProgram, selectedPlan) => {
+    addCourse = (courseName) => {
+        
+        const termType = this.props.selectedTerm.split(" ")[0].toLowerCase();
+        const restController = new RESTController();
 
-        this.deleteLineMap();
-
-        this.setState({selectedProgram: selectedProgram, selectedPlan: selectedPlan, structure: [], planChanged: true});
-
-        const haveCourseGroupOption = selectedProgram === "Mechanical Engineering" && !selectedPlan.includes("Co-op Plan 3");
-        if (haveCourseGroupOption) {
-            this.setState({containCourseGroup: true});
-            this.setCourseGroup(selectedPlan);
-        } else {
-            this.setStructure(selectedProgram, selectedPlan);
+        const data = {
+            courseName: courseName,
+            term: termType,
         }
+        
+        // Query backend for data about lec, lab, sem if exist for the searched course
+        restController.getIndivLec(data).then((result) => {
+
+            console.log("result[0]: " + result[0]);
+            
+            // Update respective info and tab data structures for lectures
+            if (result !== [] && result[0] !== undefined && result[0] !== null) {
+                this.props.setLecInfo([
+                    ...this.props.lecInfo,
+                    result[0]
+                ])
+
+                // Ensure we're not assigning a null to LectureTab (throws error)
+                var updatedLecTab = (this.props.lectureTab !== null) ? [...this.props.lectureTab] : [];
+
+                this.props.setLectureTab([
+                    ...updatedLecTab,
+                    result[0].name
+                ])
+            }
+
+            console.log(result);
+        });
+        restController.getIndivLab(data).then((result) => {
+            
+            // Update respective info and tab data structures for lab
+            if (result !== [] && result[0] !== undefined && result[0] !== null) {
+                this.props.setLabInfo([
+                    ...this.props.labInfo,
+                    result[0]
+                ])
+
+                // Ensure we're not assigning a null to LectureTab (throws error)
+                var updatedLabTab = (this.props.labTab !== null) ? [...this.props.labTab] : [];
+
+                this.props.setLabTab([
+                    ...updatedLabTab,
+                    result[0].name
+                ])
+            }
+
+            console.log(result);
+        });
+        restController.getIndivSem(data).then((result) => {
+            
+            // Update respective info and tab data structures for seminar
+            if (result !== [] && result[0] !== undefined && result[0] !== null) {
+                this.props.setSemInfo([
+                    ...this.props.semInfo,
+                    result[0]
+                ])
+
+                // Ensure we're not assigning a null to LectureTab (throws error)
+                var updatedSemTab = (this.props.seminarTab !== null) ? [...this.props.seminarTab] : []; 
+
+                this.props.setSeminarTab([
+                    ...updatedSemTab,
+                    result[0].name
+                ])
+            }
+
+            console.log(result);
+        });
     }
 
     dateProcess = (date) => {
@@ -966,10 +1095,26 @@ class Scheduler extends Component {
                             handleDragStart={this.handleDragStart}
                             handleDragEnd={this.handleDragEnd}
                         />
-                        <Electives
+                        <Search
                             dropDownClick={dropDownClick}
                             setDropDownClick={this.props.setDropDownClick}
+                            selectedTerm={selectedTerm}
                             searchInfo={searchInfo}
+                            addCourse={this.addCourse}
+                        />
+                        <ExportCSV
+                            csvData={this.props.highLightCells}
+                            fileName="Schedule"
+                        />
+                        <ImportCSV 
+                            setHighLightCells={this.props.setHighLightCells}
+                            reformatTimetable={this.reformatTimetable}
+                            lectureTab={lectureTab}
+                            setLectureTab={this.props.setLectureTab}
+                            labTab={labTab}
+                            setLabTab={this.props.setLabTab}
+                            seminarTab={seminarTab}
+                            setSeminarTab={this.props.setSeminarTab}
                         />
                         {/*<Choose for me />*/}
                     </div>

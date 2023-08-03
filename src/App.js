@@ -758,7 +758,7 @@ class App extends Component {
             selectedCourseGroupButtons: new Map(),
 
             // states for scheduler
-            dropDownClick: [true, true, true],
+            dropDownClick: [true, true, true, true],
             termList: [],
             selectedTerm: "",
             lecInfo: [],

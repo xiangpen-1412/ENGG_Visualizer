@@ -40,6 +40,23 @@
     margin-left: 20px;
 }
 
+.exportButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: #275d38 solid 3px;
+    text-align: center;
+    height: 70px;
+    cursor: pointer;
+
+    font-size: 17px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    color: #000000;
+    margin-top: 20px;
+    width: 100%;
+}
+
 .termTube {
     display: flex;
     flex-direction: row;
@@ -48,6 +65,8 @@
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     color: #275D38;
+
+    overflow-x: auto;
 }
 
 .indivTerm, .selectedIndivTerm {
@@ -55,7 +74,7 @@
     padding: 15px;
 
     cursor: pointer;
-    min-width: 60px;
+    white-space: nowrap;
 }
 
 .selectedIndivTerm {
@@ -87,7 +106,7 @@
     margin-right: 20px;
 }
 
-.coursePalette, .seminarsPalette, .labsPalette, .electivesPalette {
+.coursePalette, .seminarsPalette, .labsPalette, .searchPalette {
     display: flex;
     flex-direction: row;
 
@@ -104,7 +123,7 @@
     /*border-radius: 4px 4px 0 0;*/
 }
 
-.coursePaletteTitle, .seminarsPaletteTitle, .labsPaletteTitle, .electivesPaletteTitle {
+.coursePaletteTitle, .seminarsPaletteTitle, .labsPaletteTitle, .searchPaletteTitle {
     width: 200px;
     height: 43px;
 
@@ -116,7 +135,7 @@
     align-items: center;
 }
 
-.coursePaletteDropDownButton, .seminarsPaletteDropDownButton, .labsPaletteDropDownButton, .electivesPaletteDropDownButton {
+.coursePaletteDropDownButton, .seminarsPaletteDropDownButton, .labsPaletteDropDownButton, .searchPaletteDropDownButton {
     width: 45px;
     height: 43px;
     display: flex;
@@ -128,11 +147,11 @@
     border-radius: 4px 4px 0 0;
 }
 
-.electivesPalette, .electivesPalette.dropdownOpen {
+.searchPalette, .searchPalette.dropdownOpen {
     border-bottom: 1px solid #7B7B7B;
 }
 
-.electivesPalette.dropdownOpen {
+.searchPalette.dropdownOpen {
     border-radius: 0 0 4px 4px;
 }
 
@@ -240,7 +259,7 @@
 }
 
 .innerCellStart, .innerCellEnd, .innerCellStartConflict, .innerCellEndConflict {
-    height: 100%;
+    height: 36px;
     width: 95%;
     margin-left: 2.5%;
 
@@ -249,20 +268,24 @@
 }
 
 .innerCell, .innerCellConflict {
-    height: 110%;
+    height: 40px;
     width: 95%;
     margin-left: 2.5%;
 
     display: flex;
     justify-content: center;
+
+    box-shadow: 0 5px, 0 -5px;
 }
 
 .innerCellStart, .innerCellStartConflict {
-    margin-top: 4%;
+    margin-top: 4px;
+    box-shadow: 0 5px;
 }
 
 .innerCellEnd, .innerCellEndConflict {
-    margin-bottom: 4%;
+    margin-bottom: 4px;
+    box-shadow: 0 -5px;
 }
 
 .content {
