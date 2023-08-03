@@ -64,9 +64,9 @@ export const ImportCSV = ({setHighLightCells, reformatTimetable, lectureTab, set
     const checkTabs = (duplicateEntries) => {
 
         // get the current state of the course tabs
-        var updatedSemTab = [...seminarTab];
-        var updatedLabTab = [...labTab];
-        var updatedLecTab = [...lectureTab];
+        var updatedSemTab = (seminarTab !== null) ? [...seminarTab] : []; 
+        var updatedLabTab = (labTab !== null) ? [...labTab] : [];
+        var updatedLecTab = (lectureTab !== null) ? [...lectureTab] : [];
 
         // Loop through courses found during the import
         duplicateEntries.map(entry => {
