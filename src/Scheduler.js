@@ -103,6 +103,12 @@ const Terms = (props) => {
             }
 
             restController.getLecs(data).then((lecs) => {
+                console.log("lecs: ", lecs);
+                if (lecs.length == 0) {
+                    console.log("0");
+
+                    
+                }
                 props.setLecInfo(lecs);
             });
 
@@ -220,6 +226,12 @@ const Lecs = (props) => {
     }
 
     useEffect(() => {
+
+        var linfo = props.lecInfo.length > 0
+
+        console.log("lecInfo: " + linfo);
+        console.log(props.lecInfo);
+
         if (props.lecInfo && props.lecInfo.length > 0) {
             if (props.lectureTab === null || !props.lectureTab.some(lecture => props.lecInfo.map(info => info.name).includes(lecture))) {
                 const lectures = props.lecInfo.map((lecture) => {
@@ -297,6 +309,13 @@ const Labs = (props) => {
 
 
     useEffect(() => {
+
+        var linfo = props.labInfo.length > 0
+
+        console.log("labInfo: " + linfo);
+        console.log(props.labInfo);
+
+
         if (props.labInfo && props.labInfo.length > 0) {
             if (props.labTab === null || !props.labTab.some(lab => props.labInfo.map(info => info.name).includes(lab))) {
                 const labs = props.labInfo.map((lab) => {
@@ -578,15 +597,21 @@ class Scheduler extends Component {
         
         // Query backend for data about lec, lab, sem if exist for the searched course
         restController.getIndivLec(data).then((result) => {
+
+            console.log("result[0]: " + result[0]);
             
             // Update respective info and tab data structures for lectures
-            if (result.size != []) {
+            if (result !== [] && result[0] !== undefined && result[0] !== null) {
                 this.props.setLecInfo([
                     ...this.props.lecInfo,
                     result[0]
                 ])
+
+                // Ensure we're not assigning a null to LectureTab (throws error)
+                var updatedLecTab = (this.props.lectureTab !== null) ? [...this.props.lectureTab] : [];
+
                 this.props.setLectureTab([
-                    ...this.props.lectureTab,
+                    ...updatedLecTab,
                     result[0].name
                 ])
             }
@@ -596,13 +621,17 @@ class Scheduler extends Component {
         restController.getIndivLab(data).then((result) => {
             
             // Update respective info and tab data structures for lab
-            if (result.size != []) {
+            if (result !== [] && result[0] !== undefined && result[0] !== null) {
                 this.props.setLabInfo([
                     ...this.props.labInfo,
                     result[0]
                 ])
+
+                // Ensure we're not assigning a null to LectureTab (throws error)
+                var updatedLabTab = (this.props.labTab !== null) ? [...this.props.labTab] : [];
+
                 this.props.setLabTab([
-                    ...this.props.labTab,
+                    ...updatedLabTab,
                     result[0].name
                 ])
             }
@@ -612,13 +641,17 @@ class Scheduler extends Component {
         restController.getIndivSem(data).then((result) => {
             
             // Update respective info and tab data structures for seminar
-            if (result.size != []) {
+            if (result !== [] && result[0] !== undefined && result[0] !== null) {
                 this.props.setSemInfo([
                     ...this.props.semInfo,
                     result[0]
                 ])
+
+                // Ensure we're not assigning a null to LectureTab (throws error)
+                var updatedSemTab = (this.props.seminarTab !== null) ? [...this.props.seminarTab] : []; 
+
                 this.props.setSeminarTab([
-                    ...this.props.seminarTab,
+                    ...updatedSemTab,
                     result[0].name
                 ])
             }
