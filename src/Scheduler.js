@@ -123,9 +123,14 @@ const Terms = (props) => {
             restController.getAllCourses({program: data.programName}).then((courses) => {
                 props.setSearchInfo(courses);
             });
+
+            // Restore the saved schedule for the selected term
+            if (props.scheduleMap.get(props.selectedTerm)) {
+                props.setHighLightCells(props.scheduleMap.get(props.selectedTerm));
+            }
         }
     }, [props.selectedProgram, props.selectedPlan, props.selectedTerm]);
-
+    
     const terms = props.termList.map((term) => {
 
         const isSelected = props.selectedTerm === term;
@@ -227,11 +232,6 @@ const Lecs = (props) => {
 
     useEffect(() => {
 
-        var linfo = props.lecInfo.length > 0
-
-        console.log("lecInfo: " + linfo);
-        console.log(props.lecInfo);
-
         if (props.lecInfo && props.lecInfo.length > 0) {
             if (props.lectureTab === null || !props.lectureTab.some(lecture => props.lecInfo.map(info => info.name).includes(lecture))) {
                 const lectures = props.lecInfo.map((lecture) => {
@@ -309,12 +309,6 @@ const Labs = (props) => {
 
 
     useEffect(() => {
-
-        var linfo = props.labInfo.length > 0
-
-        console.log("labInfo: " + linfo);
-        console.log(props.labInfo);
-
 
         if (props.labInfo && props.labInfo.length > 0) {
             if (props.labTab === null || !props.labTab.some(lab => props.labInfo.map(info => info.name).includes(lab))) {
@@ -498,6 +492,21 @@ const Timetable = (props) => {
     const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
     const timeSlots = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30'];
 
+
+    useEffect(() => {
+
+
+        const updatedMap = new Map(props.scheduleMap);
+        updatedMap.set(props.selectedTerm, props.highLightCells);
+        props.setScheduleMap(updatedMap);
+        
+        console.log(updatedMap);
+        
+    }, [props.highLightCells]);
+
+
+    useEffect(() => console.log(props.scheduleMap), [props.scheduleMap]);
+
     return (
         <table className='timeTable'>
             <div className='tableWrapper'>
@@ -598,7 +607,7 @@ class Scheduler extends Component {
         // Query backend for data about lec, lab, sem if exist for the searched course
         restController.getIndivLec(data).then((result) => {
 
-            console.log("result[0]: " + result[0]);
+            // console.log("result[0]: " + result[0]);
             
             // Update respective info and tab data structures for lectures
             if (result !== [] && result[0] !== undefined && result[0] !== null) {
@@ -616,7 +625,7 @@ class Scheduler extends Component {
                 ])
             }
 
-            console.log(result);
+            // console.log(result);
         });
         restController.getIndivLab(data).then((result) => {
             
@@ -636,7 +645,7 @@ class Scheduler extends Component {
                 ])
             }
 
-            console.log(result);
+            // console.log(result);
         });
         restController.getIndivSem(data).then((result) => {
             
@@ -656,7 +665,7 @@ class Scheduler extends Component {
                 ])
             }
 
-            console.log(result);
+            // console.log(result);
         });
     }
 
@@ -864,7 +873,7 @@ class Scheduler extends Component {
             })
         })
 
-        console.log(newHighlightedCells);
+        // console.log(newHighlightedCells);
 
         this.props.setHighLightCells(newHighlightedCells);
     }
@@ -1050,6 +1059,8 @@ class Scheduler extends Component {
                         selectedTerm={selectedTerm}
                         setSelectedTerm={this.props.setSelectedTerm}
                         setHighLightCells={this.props.setHighLightCells}
+                        scheduleMap={this.props.scheduleMap}
+                        setScheduleMap={this.props.setScheduleMap}
                         setLecInfo={this.props.setLecInfo}
                         setSemInfo={this.props.setSemInfo}
                         setLabInfo={this.props.setLabInfo}
@@ -1123,6 +1134,9 @@ class Scheduler extends Component {
                             handleDrop={this.handleDrop}
                             handleDragOver={this.handleDragOver}
                             handleRightClick={this.handleRightClick}
+                            selectedTerm={this.props.selectedTerm}
+                            scheduleMap={this.props.scheduleMap}
+                            setScheduleMap={this.props.setScheduleMap}
                         />
                     </div>
                 </div>
