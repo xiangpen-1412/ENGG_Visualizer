@@ -3,7 +3,7 @@ import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import './Scheduler.css'
 
-export const ExportCSV = ({csvData, csvMap, fileName}) => {
+export const ExportCSV = ({csvMap, fileName}) => {
 
     const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     const fileExtension = '.xlsx';
@@ -45,35 +45,6 @@ export const ExportCSV = ({csvData, csvMap, fileName}) => {
         '20:00',
         '20:30',
     ];
-
-    // Take input data, convert it to an xlsx sheet, download to user's computer
-    const exportToCSV = (csvData, fileName) => {
-
-        // Construct csv data from inputted course matrix
-        var rows = csvData.map((row, index) => {
-
-            // Read out the names of each object in Schedule matrix
-            var timedRow = row.map((course) => {
-                return course[2];
-            });
-
-            // Add time to left side
-            timedRow.unshift(times[index]);
-
-            return timedRow;
-        });
-
-        // Add Days of the Week to first row of sheet
-        rows.unshift(headers);
-        
-        // Convert rows to xlsx and save to user's computer
-        const ws = XLSX.utils.json_to_sheet(rows);
-        const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
-        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-        const data = new Blob([excelBuffer], {type: fileType});
-        FileSaver.saveAs(data, fileName + fileExtension);
-    }
-
 
 
     // Take input data, convert it to an xlsx sheet, download to user's computer

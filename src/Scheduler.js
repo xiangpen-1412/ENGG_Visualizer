@@ -1226,7 +1226,6 @@ class Scheduler extends Component {
                             addCourse={this.addCourse}
                         />
                         <ExportCSV
-                            csvData={this.props.highLightCells}
                             csvMap={this.props.scheduleMap}
                             fileName="EngineeringSchedule"
                         />
