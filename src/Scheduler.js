@@ -521,6 +521,8 @@ const Timetable = (props) => {
     // Store the schedule for the current term in scheduleMap whenever it changes
     useEffect(() => {
 
+        console.log(props.scheduleMap);
+
         const updatedMap = new Map(props.scheduleMap);
         updatedMap.set(props.selectedTerm, props.highLightCells);
         props.setScheduleMap(updatedMap);
@@ -1231,6 +1233,8 @@ class Scheduler extends Component {
                         />
                         <ImportCSV 
                             setHighLightCells={this.props.setHighLightCells}
+                            scheduleMap={this.props.scheduleMap}
+                            setScheduleMap={this.props.setScheduleMap}
                             reformatTimetable={this.reformatTimetable}
                             lectureTab={lectureTab}
                             setLectureTab={this.props.setLectureTab}

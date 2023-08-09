@@ -4,11 +4,11 @@ import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import './Scheduler.css'
 
-export const ImportCSV = ({setHighLightCells, reformatTimetable, lectureTab, setLectureTab, labTab, setLabTab, seminarTab, setSeminarTab}) => {
+export const ImportCSV = ({setHighLightCells, scheduleMap, setScheduleMap, reformatTimetable, lectureTab, setLectureTab, labTab, setLabTab, seminarTab, setSeminarTab}) => {
 
     const hiddenFileInput = React.useRef();
 
-    const placeData = (data) => {
+    const placeData = (data, sheetName, updatedMap) => {
 
         // Remove the Weekday rows from the top of the excel sheet
         const newData = data.slice(2, data.length);
@@ -29,12 +29,18 @@ export const ImportCSV = ({setHighLightCells, reformatTimetable, lectureTab, set
             })
         })
 
-        // Add formatting data to the middle section of the cells and set the timeTable tp the scheduler
+        // Add formatting data to the middle section of the cells and set the timeTable to the scheduler
         const reformattedTimetable = reformatTimetable(emptyTable);
-        setHighLightCells(reformattedTimetable);
 
-        var courseArray = Array.from(courseSet);
-        checkTabs(courseArray);
+        console.log(sheetName);
+        console.log(reformattedTimetable);
+
+        // Update the scheduleMap with the new term record
+        updatedMap.set(sheetName, reformattedTimetable);
+
+        // Clear duplicates from the lec, lab, sem tabs
+        // var courseArray = Array.from(courseSet);
+        // checkTabs(courseArray);
     }
 
 
@@ -45,12 +51,18 @@ export const ImportCSV = ({setHighLightCells, reformatTimetable, lectureTab, set
         reader.onload = (e) => {
             const result = e.target.result;
             const workbook = XLSX.read(result, {type: "array"});
-            const sheetName = workbook.SheetNames[0];
-            const sheet = workbook.Sheets[sheetName];
-            const data = XLSX.utils.sheet_to_json(sheet, {header:1});
+            const updatedMap = new Map(scheduleMap);
 
-            // Format and display data on the Scheduler
-            placeData(data);
+            workbook.SheetNames.map((sheetName) => {
+
+                const sheet = workbook.Sheets[sheetName];
+                const data = XLSX.utils.sheet_to_json(sheet, {header:1});
+    
+                // Format and display data on the Scheduler
+                placeData(data, sheetName, updatedMap);
+            })
+
+            setScheduleMap(updatedMap);
         }
         reader.readAsArrayBuffer(event.target.files[0]);
     }
