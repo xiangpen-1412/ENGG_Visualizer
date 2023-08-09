@@ -157,8 +157,6 @@ class RESTController extends Component {
                         console.log("Missing information about " + course);
                     }
                 }
-
-                console.log("lec succeed");
                 return lecs;
             })
             .catch(error => {

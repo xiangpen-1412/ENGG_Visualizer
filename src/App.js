@@ -777,7 +777,8 @@ class App extends Component {
             seminarTab: [],
 
             highLightCells: Array.from({length: 26}, () => Array.from({length: 5}, () => [null, '', null])),
-            scheduleMap: new Map([["Fall Term 1", props.selectedTerm, Array.from({length: 26}, () => Array.from({length: 5}, () => [null, '', null]))]]),
+            scheduleMap: new Map(),
+            tabMap: new Map()
         };
 
         this.controller = new RESTController();
@@ -1196,8 +1197,12 @@ class App extends Component {
         this.setState({highLightCells: newCells});
     }
 
-    setScheduleMap = (newSchedule, term) => {
+    setScheduleMap = (newSchedule) => {
         this.setState({scheduleMap: newSchedule});
+    }
+
+    setTabMap = (newTabs) => {
+        this.setState({tabMap: newTabs});
     }
 
 
@@ -1232,7 +1237,8 @@ class App extends Component {
             labTab,
             seminarTab,
             highLightCells,
-            scheduleMap
+            scheduleMap,
+            tabMap
         } = this.state;
 
         let width = '100%';
@@ -1413,6 +1419,8 @@ class App extends Component {
                             setHighLightCells={this.setHighLightCells}
                             scheduleMap={scheduleMap}
                             setScheduleMap={this.setScheduleMap}
+                            tabMap={tabMap}
+                            setTabMap={this.setTabMap}
                         />
                     </div>
                 )}

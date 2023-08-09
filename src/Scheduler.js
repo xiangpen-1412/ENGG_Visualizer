@@ -103,12 +103,6 @@ const Terms = (props) => {
             }
 
             restController.getLecs(data).then((lecs) => {
-                console.log("lecs: ", lecs);
-                if (lecs.length == 0) {
-                    console.log("0");
-
-                    
-                }
                 props.setLecInfo(lecs);
             });
 
@@ -230,10 +224,21 @@ const Lecs = (props) => {
         props.setDropDownClick(0);
     }
 
+    // Adjust the lectureTab if lecInfo changes (if the term is switched)
     useEffect(() => {
 
         if (props.lecInfo && props.lecInfo.length > 0) {
             if (props.lectureTab === null || !props.lectureTab.some(lecture => props.lecInfo.map(info => info.name).includes(lecture))) {
+
+                // Restore the saved tabs for the selected term if it exists
+                if (props.tabMap.get(props.selectedTerm)) {
+                    if (props.tabMap.get(props.selectedTerm).lectureTab) {
+
+                        props.setLectureTab(props.tabMap.get(props.selectedTerm).lectureTab);
+                        return
+                    }
+                }
+
                 const lectures = props.lecInfo.map((lecture) => {
                         return lecture.name;
                     }
@@ -307,11 +312,21 @@ const Labs = (props) => {
         props.setDropDownClick(2);
     }
 
-
+    // Adjust the labTab if lecInfo changes (if the term is switched)
     useEffect(() => {
 
         if (props.labInfo && props.labInfo.length > 0) {
             if (props.labTab === null || !props.labTab.some(lab => props.labInfo.map(info => info.name).includes(lab))) {
+                
+                // Restore the saved tab for the selected term
+                if (props.tabMap.get(props.selectedTerm)) {
+                    if (props.tabMap.get(props.selectedTerm).labTab) {
+
+                        props.setLabTab(props.tabMap.get(props.selectedTerm).labTab);
+                        return
+                    }
+                }
+
                 const labs = props.labInfo.map((lab) => {
                     return lab.name;
                 })
@@ -383,9 +398,19 @@ const Seminars = (props) => {
         props.setDropDownClick(1);
     }
 
+    // Adjust the seminarTab if lecInfo changes (if the term is switched)
     useEffect(() => {
         if (props.semInfo && props.semInfo.length > 0) {
             if (props.seminarTab === null || !props.seminarTab.some(sem => props.semInfo.map(info => info.name).includes(sem))) {
+                
+                // Restore the saved tabs for the selected term
+                if (props.tabMap.get(props.selectedTerm)) {
+                    if (props.tabMap.get(props.selectedTerm).seminarTab) {
+                        props.setSeminarTab(props.tabMap.get(props.selectedTerm).seminarTab);
+                        return
+                    }
+                }
+                
                 const seminars = props.semInfo.map((seminar) => {
                     return seminar.name;
                 })
@@ -493,19 +518,102 @@ const Timetable = (props) => {
     const timeSlots = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30'];
 
 
+    // Store the schedule for the current term in scheduleMap whenever it changes
     useEffect(() => {
-
 
         const updatedMap = new Map(props.scheduleMap);
         updatedMap.set(props.selectedTerm, props.highLightCells);
         props.setScheduleMap(updatedMap);
         
-        console.log(updatedMap);
-        
     }, [props.highLightCells]);
 
 
-    useEffect(() => console.log(props.scheduleMap), [props.scheduleMap]);
+    // Store the state of each lecture tab whenever any of them change
+    useEffect(() => {
+
+        var tabs = {};
+
+        if (!props.tabMap.get(props.selectedTerm)) {
+
+            // Create an empty data storage object for this term's tabs
+            tabs = {
+                lectureTab: null,
+                labTab: null,
+                seminarTab: null
+            }
+        }
+        else {
+            tabs = props.tabMap.get(props.selectedTerm);
+        }
+
+        // Updated the specific tab in the specific record
+        tabs.lectureTab = props.lectureTab;
+
+        // Write record to tabMap
+        const updatedTabMap = new Map(props.tabMap);
+        updatedTabMap.set(props.selectedTerm, tabs);
+        props.setTabMap(updatedTabMap);
+
+    }, [props.lectureTab]);
+
+
+    // Store the state of each lab  tab whenever any of them change
+    useEffect(() => {
+
+        var tabs = {};
+
+        if (!props.tabMap.get(props.selectedTerm)) {
+
+            // Create an empty data storage object for this term's tabs
+            tabs = {
+                lectureTab: null,
+                labTab: null,
+                seminarTab: null
+            }
+        }
+        else {
+            tabs = props.tabMap.get(props.selectedTerm);
+        }
+
+        // Updated the specific tab in the specific record in the tabMap
+        tabs.labTab = props.labTab;
+
+        const updatedTabMap = new Map(props.tabMap);
+        updatedTabMap.set(props.selectedTerm, tabs);
+        props.setTabMap(updatedTabMap);
+    
+    }, [props.labTab]);
+
+
+    // Store the state of each seminar tab whenever any of them change
+    useEffect(() => {
+
+        var tabs = {};
+
+        if (!props.tabMap.get(props.selectedTerm)) {
+
+            // Create an empty data storage object for this term's tabs
+            tabs = {
+                lectureTab: null,
+                labTab: null,
+                seminarTab: null
+            }
+        }
+        else {
+            tabs = props.tabMap.get(props.selectedTerm);
+        }
+
+        // Updated the specific tab in the specific record in the tabMap
+        tabs.seminarTab = props.seminarTab;
+
+        const updatedTabMap = new Map(props.tabMap);
+        updatedTabMap.set(props.selectedTerm, tabs);
+        props.setTabMap(updatedTabMap);
+
+    }, [props.seminarTab]);
+
+
+    // useEffect(() => console.log(props.scheduleMap), [props.scheduleMap]);
 
     return (
         <table className='timeTable'>
@@ -1065,6 +1173,8 @@ class Scheduler extends Component {
                         setSemInfo={this.props.setSemInfo}
                         setLabInfo={this.props.setLabInfo}
                         setSearchInfo={this.props.setSearchInfo}
+                        tabMap={this.props.tabMap}
+                        setTabMap={this.props.setTabMap}
                     />
                 </div>
                 <div className='mainTable'>
@@ -1080,6 +1190,7 @@ class Scheduler extends Component {
                             setLectureTab={this.props.setLectureTab}
                             handleDragStart={this.handleDragStart}
                             handleDragEnd={this.handleDragEnd}
+                            tabMap={this.props.tabMap}
                         />
                         <Labs
                             dropDownClick={dropDownClick}
@@ -1092,6 +1203,7 @@ class Scheduler extends Component {
                             setLabTab={this.props.setLabTab}
                             handleDragStart={this.handleDragStart}
                             handleDragEnd={this.handleDragEnd}
+                            tabMap={this.props.tabMap}
                         />
                         <Seminars
                             dropDownClick={dropDownClick}
@@ -1104,6 +1216,7 @@ class Scheduler extends Component {
                             setSeminarTab={this.props.setSeminarTab}
                             handleDragStart={this.handleDragStart}
                             handleDragEnd={this.handleDragEnd}
+                            tabMap={this.props.tabMap}
                         />
                         <Search
                             dropDownClick={dropDownClick}
@@ -1134,9 +1247,14 @@ class Scheduler extends Component {
                             handleDrop={this.handleDrop}
                             handleDragOver={this.handleDragOver}
                             handleRightClick={this.handleRightClick}
-                            selectedTerm={this.props.selectedTerm}
+                            selectedTerm={selectedTerm}
                             scheduleMap={this.props.scheduleMap}
                             setScheduleMap={this.props.setScheduleMap}
+                            tabMap={this.props.tabMap}
+                            setTabMap={this.props.setTabMap}
+                            lectureTab={lectureTab}
+                            labTab={labTab}
+                            seminarTab={seminarTab}
                         />
                     </div>
                 </div>
