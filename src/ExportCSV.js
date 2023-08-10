@@ -54,28 +54,29 @@ export const ExportCSV = ({csvMap, fileName}) => {
 
         csvMap.forEach(function(value, key) {
 
+            if (key !== "") {
+                // Construct csv data from inputted course matrix
+                var rows = value.map((row, index) => {
 
-            // Construct csv data from inputted course matrix
-            var rows = value.map((row, index) => {
+                    // Read out the names of each object in Schedule matrix
+                    var timedRow = row.map((course) => {
+                        return course[2];
+                    });
 
-                // Read out the names of each object in Schedule matrix
-                var timedRow = row.map((course) => {
-                    return course[2];
+                    // Add time to left side
+                    timedRow.unshift(times[index]);
+
+                    return timedRow;
                 });
 
-                // Add time to left side
-                timedRow.unshift(times[index]);
+                // Add Days of the Week to first row of sheet
+                rows.unshift(headers);
+                
+                // Convert rows to xlsx and save to user's computer
+                const ws = XLSX.utils.json_to_sheet(rows);
 
-                return timedRow;
-            });
-
-            // Add Days of the Week to first row of sheet
-            rows.unshift(headers);
-            
-            // Convert rows to xlsx and save to user's computer
-            const ws = XLSX.utils.json_to_sheet(rows);
-
-            sheetObject[key] = ws;
+                sheetObject[key] = ws;
+            }
         })
 
         console.log(Array.from(csvMap.keys()));
