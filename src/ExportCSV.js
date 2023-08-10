@@ -52,6 +52,10 @@ export const ExportCSV = ({csvMap, fileName}) => {
 
         var sheetObject = {};
 
+        const keys = Array.from(csvMap.keys()).filter( function (key) {
+            return key !== "";
+        })
+
         csvMap.forEach(function(value, key) {
 
             if (key !== "") {
@@ -79,9 +83,9 @@ export const ExportCSV = ({csvMap, fileName}) => {
             }
         })
 
-        console.log(Array.from(csvMap.keys()));
+        console.log(keys);
 
-        const wb = { Sheets: sheetObject, SheetNames: Array.from(csvMap.keys()) };
+        const wb = { Sheets: sheetObject, SheetNames: keys };
         const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
         const data = new Blob([excelBuffer], {type: fileType});
         FileSaver.saveAs(data, fileName + fileExtension);
