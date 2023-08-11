@@ -758,7 +758,7 @@ class App extends Component {
             selectedCourseGroupButtons: new Map(),
 
             // states for scheduler
-            dropDownClick: [true, true, true, true],
+            dropDownClick: [true, true, true, true, true],
             termList: [],
             selectedTerm: "",
             lecInfo: [],
@@ -769,7 +769,7 @@ class App extends Component {
             labTab: [],
             seminarTab: [],
 
-            highLightCells: Array.from({length: 26}, () => Array.from({length: 5}, () => [null, '', null])),
+            highLightCells: Array.from({length: 28}, () => Array.from({length: 5}, () => [null, '', null])),
         };
 
         this.controller = new RESTController();

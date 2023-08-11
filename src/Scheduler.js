@@ -6,6 +6,15 @@ import {ImportCSV} from './ImportCSV.js';
 import {useLocation} from "react-router-dom";
 import RESTController from "./controller/RESTController";
 
+const Icon = () => {
+    return (
+        <svg height="20" width="20" viewBox="0 0 20 20">
+            <path
+                d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z"></path>
+        </svg>
+    );
+};
+
 const PageTitle = (props) => {
 
     return (
@@ -103,14 +112,10 @@ const Terms = (props) => {
             }
 
             restController.getLecs(data).then((lecs) => {
-                console.log("lecs: ", lecs);
                 if (lecs.length == 0) {
                     console.log("0");
-
-                    
                 }
                 props.setLecInfo(lecs);
-                console.log(lecs);
             });
 
             restController.getLabs(data).then((labs) => {
@@ -138,7 +143,7 @@ const Terms = (props) => {
                 onClick={() => {
                     props.setSelectedTerm(term);
 
-                    const newHighLightCells = Array.from({length: 26}, () => Array.from({length: 5}, () => [null, '', null]));
+                    const newHighLightCells = Array.from({length: 28}, () => Array.from({length: 5}, () => [null, '', null]));
                     props.setHighLightCells(newHighLightCells);
                 }}
             >
@@ -187,7 +192,7 @@ const NewTerm = (props) => {
 
         props.setSelectedTerm(term);
 
-        const newHighLightCells = Array.from({length: 26}, () => Array.from({length: 5}, () => [null, '', null]));
+        const newHighLightCells = Array.from({length: 28}, () => Array.from({length: 5}, () => [null, '', null]));
         props.setHighLightCells(newHighLightCells);
     }
 
@@ -229,9 +234,6 @@ const Lecs = (props) => {
     useEffect(() => {
 
         var linfo = props.lecInfo.length > 0
-
-        console.log("lecInfo: " + linfo);
-        console.log(props.lecInfo);
 
         if (props.lecInfo && props.lecInfo.length > 0) {
             if (props.lectureTab === null || !props.lectureTab.some(lecture => props.lecInfo.map(info => info.name).includes(lecture))) {
@@ -312,10 +314,6 @@ const Labs = (props) => {
     useEffect(() => {
 
         var linfo = props.labInfo.length > 0
-
-        console.log("labInfo: " + linfo);
-        console.log(props.labInfo);
-
 
         if (props.labInfo && props.labInfo.length > 0) {
             if (props.labTab === null || !props.labTab.some(lab => props.labInfo.map(info => info.name).includes(lab))) {
@@ -482,7 +480,7 @@ const Search = (props) => {
                 </div>
             </div>
             {!isDropDown && (
-                <div className='coursesInfoBottom'>
+                <div className='searchBarInfo'>
                     <Searchbar
                         placeHolder={placeHolder}
                         options={courses}
@@ -495,9 +493,161 @@ const Search = (props) => {
     )
 }
 
+const CreateFromPreference = (props) => {
+
+    const isDropDown = props.dropDownClick[4];
+
+    const onSignClick = () => {
+        props.setDropDownClick(4);
+    }
+
+    return (
+        <div>
+            <div className={`createPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
+                <div className='createsPaletteTitle'>
+                    Random Generate
+                </div>
+                <div className='createsPaletteDropDownButton' onClick={onSignClick}>
+                    <DropDownSign isDropDown={isDropDown}/>
+                </div>
+            </div>
+            {!isDropDown && (
+                <PreferenceTab {...props}/>
+            )}
+        </div>
+    )
+}
+
+const PreferenceTab = (props) => {
+    const timeSlots = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00'];
+    const [from, setFrom] = useState(timeSlots.at(0));
+    const [to, setTo] = useState(timeSlots.at(timeSlots.length - 1));
+    const [showDropDownList, setShowDropDownList] = useState([false, false]);
+
+    const handleDropDown = (index) => {
+        const dropDownList = [...showDropDownList];
+        dropDownList[index] = !dropDownList[index];
+        setShowDropDownList(dropDownList);
+    }
+
+    const handleFromOnClick = (timeSlot, index) => {
+        setFrom(timeSlot);
+        handleDropDown(index);
+    }
+
+    const fromTimeDivs = timeSlots.map((timeSlot) => (
+        <div className='time' onClick={() => handleFromOnClick(timeSlot, 0)}>
+            {timeSlot}
+        </div>
+    ));
+
+    const timeToMinutes = (time) => {
+        const [hours, minutes] = time.split(':');
+        return Number(hours) * 60 + Number(minutes);
+    }
+
+    const handleToOnClick = (timeSlot, index) => {
+        const fromTimeInMinutes = timeToMinutes(from);
+        const timeSlotInMinutes = timeToMinutes(timeSlot);
+
+        if (timeSlotInMinutes <= fromTimeInMinutes) {
+            alert('The selected time is invalid. It should be later than the start time.');
+        } else {
+            setTo(timeSlot);
+        }
+
+        handleDropDown(index);
+    }
+
+    const toTimeDivs = timeSlots.map((timeSlot) => (
+        <div className='time' onClick={() => handleToOnClick(timeSlot, 1)}>
+            {timeSlot}
+        </div>
+    ));
+
+    /**
+     * send http request to get updated timetable
+     * */
+    const handleGenerateButtonOnclick = () => {
+        const restController = new RESTController();
+        let unDraggedTagList = [];
+        props.lectureTab.forEach((lecture) => {
+            unDraggedTagList.push(lecture);
+        })
+
+        props.labTab.forEach((lab) => {
+            unDraggedTagList.push(lab);
+        })
+
+        props.seminarTab.forEach((seminar) => {
+            unDraggedTagList.push(seminar);
+        })
+
+        let newHighLightCells = [...props.highLightCells];
+        const startInMin = timeToMinutes("8:00");
+        const fromInMin = timeToMinutes(from);
+        const endInMin = timeToMinutes("22:00");
+        const toInMin = timeToMinutes(to);
+
+        const startRow = (fromInMin - startInMin)/30 - 1;
+        const endRow = newHighLightCells.length - (endInMin - toInMin)/30;
+
+        // TODO: Not being used, need to update in the future
+        const profs = Array.from({length: props.lectureTab.length}, () => ['ALL']);
+
+        restController.getUpdatedTimetable({timetable: props.highLightCells, courseList : unDraggedTagList, profs: profs, term: props.term, startRow: startRow, endRow: endRow})
+            .then(updatedTimetable => {
+                const reformatTimetable = props.reformatTimetable(updatedTimetable);
+                props.setHighLightCells(reformatTimetable);
+                props.setLectureTab([]);
+                props.setLabTab([]);
+                props.setSeminarTab([]);
+            });
+    }
+
+    return (
+        <div className='coursesInfoBottom'>
+            <div className='innerButtonDiv'>
+                <div className='preferredTime'>
+                    <div className='preferredTimeTitle'>Choose A Time Period</div>
+                    <div className='fromSection'>
+                        From
+                        <div className='fromTime'>
+                            <div className='fromPart'
+                                 onClick={() => {handleDropDown(0)}}>
+                                {from}
+                            </div>
+                            {showDropDownList[0] && (<div className='timeDivWrapper'>{fromTimeDivs}</div>)}
+                        </div>
+                    </div>
+                    <div className='toSection'>
+                        To
+                        <div className='toTime'>
+                            <div className='fromPart'
+                                 onClick={() => {handleDropDown(1)}}
+                            >
+                                {to}
+                            </div>
+                            {showDropDownList[1] && (<div className='timeDivWrapper'>{toTimeDivs}</div>)}
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    className='generateButton'
+                    onClick={handleGenerateButtonOnclick}
+                >
+                    Generate
+                </div>
+            </div>
+        </div>
+    );
+}
+
+
 const Timetable = (props) => {
     const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-    const timeSlots = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30'];
+    const timeSlots = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30'];
 
     return (
         <table className='timeTable'>
@@ -587,7 +737,7 @@ const Timetable = (props) => {
 class Scheduler extends Component {
 
     addCourse = (courseName) => {
-        
+
         const termType = this.props.selectedTerm.split(" ")[0].toLowerCase();
         const restController = new RESTController();
 
@@ -595,12 +745,10 @@ class Scheduler extends Component {
             courseName: courseName,
             term: termType,
         }
-        
+
         // Query backend for data about lec, lab, sem if exist for the searched course
         restController.getIndivLec(data).then((result) => {
 
-            console.log("result[0]: " + result[0]);
-            
             // Update respective info and tab data structures for lectures
             if (result !== [] && result[0] !== undefined && result[0] !== null) {
                 this.props.setLecInfo([
@@ -617,10 +765,9 @@ class Scheduler extends Component {
                 ])
             }
 
-            console.log(result);
         });
         restController.getIndivLab(data).then((result) => {
-            
+
             // Update respective info and tab data structures for lab
             if (result !== [] && result[0] !== undefined && result[0] !== null) {
                 this.props.setLabInfo([
@@ -636,11 +783,9 @@ class Scheduler extends Component {
                     result[0].name
                 ])
             }
-
-            console.log(result);
         });
         restController.getIndivSem(data).then((result) => {
-            
+
             // Update respective info and tab data structures for seminar
             if (result !== [] && result[0] !== undefined && result[0] !== null) {
                 this.props.setSemInfo([
@@ -649,7 +794,7 @@ class Scheduler extends Component {
                 ])
 
                 // Ensure we're not assigning a null to LectureTab (throws error)
-                var updatedSemTab = (this.props.seminarTab !== null) ? [...this.props.seminarTab] : []; 
+                var updatedSemTab = (this.props.seminarTab !== null) ? [...this.props.seminarTab] : [];
 
                 this.props.setSeminarTab([
                     ...updatedSemTab,
@@ -657,7 +802,6 @@ class Scheduler extends Component {
                 ])
             }
 
-            console.log(result);
         });
     }
 
@@ -865,8 +1009,6 @@ class Scheduler extends Component {
             })
         })
 
-        console.log(newHighlightedCells);
-
         this.props.setHighLightCells(newHighlightedCells);
     }
 
@@ -951,7 +1093,7 @@ class Scheduler extends Component {
                         if (column[2] !== null) {
                             column[0] = '#275D38';
                         } else {
-                            newHighlightedCells[rowIndex][columnIndex] = [null, '',null];
+                            newHighlightedCells[rowIndex][columnIndex] = [null, '', null];
                         }
                     } else {
                         if (column[2] === section) {
@@ -1038,6 +1180,7 @@ class Scheduler extends Component {
                     selectedProgram={selectedProgram}
                     selectedPlan={selectedPlan}
                 />
+
                 <PlaceCourse
                     selectedProgram={selectedProgram}
                     selectedPlan={selectedPlan}
@@ -1102,11 +1245,26 @@ class Scheduler extends Component {
                             searchInfo={searchInfo}
                             addCourse={this.addCourse}
                         />
+                        <CreateFromPreference
+                            dropDownClick={dropDownClick}
+                            setDropDownClick={this.props.setDropDownClick}
+                            highLightCells={highLightCells}
+                            setHighLightCells={this.props.setHighLightCells}
+                            lectureTab={lectureTab}
+                            setLectureTab={this.props.setLectureTab}
+                            labTab={labTab}
+                            setLabTab={this.props.setLabTab}
+                            seminarTab={seminarTab}
+                            setSeminarTab={this.props.setSeminarTab}
+                            reformatTimetable={this.reformatTimetable}
+                            term={this.props.selectedTerm}
+                            reformatTimeTable={this.reformatTimetable}
+                        />
                         <ExportCSV
                             csvData={this.props.highLightCells}
                             fileName="Schedule"
                         />
-                        <ImportCSV 
+                        <ImportCSV
                             setHighLightCells={this.props.setHighLightCells}
                             reformatTimetable={this.reformatTimetable}
                             lectureTab={lectureTab}
@@ -1116,7 +1274,6 @@ class Scheduler extends Component {
                             seminarTab={seminarTab}
                             setSeminarTab={this.props.setSeminarTab}
                         />
-                        {/*<Choose for me />*/}
                     </div>
                     <div className='timeTableTable'>
                         <Timetable

@@ -106,7 +106,7 @@
     margin-right: 20px;
 }
 
-.coursePalette, .seminarsPalette, .labsPalette, .searchPalette {
+.coursePalette, .seminarsPalette, .labsPalette, .searchPalette, .createPalette {
     display: flex;
     flex-direction: row;
 
@@ -123,7 +123,7 @@
     /*border-radius: 4px 4px 0 0;*/
 }
 
-.coursePaletteTitle, .seminarsPaletteTitle, .labsPaletteTitle, .searchPaletteTitle {
+.coursePaletteTitle, .seminarsPaletteTitle, .labsPaletteTitle, .searchPaletteTitle, .createsPaletteTitle {
     width: 200px;
     height: 43px;
 
@@ -135,7 +135,7 @@
     align-items: center;
 }
 
-.coursePaletteDropDownButton, .seminarsPaletteDropDownButton, .labsPaletteDropDownButton, .searchPaletteDropDownButton {
+.coursePaletteDropDownButton, .seminarsPaletteDropDownButton, .labsPaletteDropDownButton, .searchPaletteDropDownButton, .createsPaletteDropDownButton {
     width: 45px;
     height: 43px;
     display: flex;
@@ -147,11 +147,11 @@
     border-radius: 4px 4px 0 0;
 }
 
-.searchPalette, .searchPalette.dropdownOpen {
+.createPalette, .createPalette.dropdownOpen {
     border-bottom: 1px solid #7B7B7B;
 }
 
-.searchPalette.dropdownOpen {
+.createPalette.dropdownOpen {
     border-radius: 0 0 4px 4px;
 }
 
@@ -163,6 +163,14 @@
     padding: 25px 15px 10px 30px;
 }
 
+.searchBarInfo {
+    background-color: #FFFFFF;
+    border-left: 1px solid #7B7B7B;
+    border-right: 1px solid #7B7B7B;
+    border-top: 1px solid #7B7B7B;
+    padding: 15px 0px 10px 15px;
+}
+
 .coursesInfoBottom {
     background-color: #FFFFFF;
     border-left: 1px solid #7B7B7B;
@@ -171,6 +179,12 @@
     border-radius: 0 0 4px 4px;
 
     padding: 15px 15px 10px 15px;
+}
+
+.innerButtonDiv {
+    background-color: #275d38;
+    color: white;
+    padding: 0 10px 20px 10px;
 }
 
 .indivLecture, .indivLab, .indivSeminar {
@@ -211,6 +225,102 @@
 .plus, .minus {
     width: 20px;
     height: 20px;
+
+    cursor: pointer;
+}
+
+.partOne {
+    margin-top: 20px;
+    width: 100%;
+    height: auto;
+}
+
+.partOneTitle {
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+
+    text-align: center;
+}
+
+.preferredTime {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.preferredTimeTitle {
+    font-size: 17px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.fromSection, .toSection {
+    position: relative;
+
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+
+    cursor: pointer;
+}
+
+.fromTime{
+    margin-left: 20px;
+}
+
+.toTime {
+    margin-left: 41px;
+}
+
+.fromPart {
+    background-color: white;
+    width: 80px;
+    height: 23px;
+    border: #7B7B7B 1px solid;
+
+    color: black;
+    text-align: center;
+}
+
+.time {
+    width: 100%;
+    height: 20px;
+}
+
+.time:hover {
+    color: white;
+    background-color: #7B7B7B;
+}
+
+.timeDivWrapper {
+    background-color: white;
+    color: #275d38;
+    overflow-y: auto;
+    height: 120px;
+    width: 80px;
+    border-radius: 6px;
+
+    margin-top: 3px;
+    border: 1px solid #ccc;
+    position: absolute;
+    z-index: 2000;
+}
+
+.generateButton {
+    display: flex;
+    justify-content: center;
+    background-color: whitesmoke;
+    color: #275d38;
+    height: 40px;
+    font-size: 18px;
+
+    align-items: center;
+
+    border: #7B7B7B solid 2px;
+    border-radius: 4px;
+    margin: auto 20px;
 
     cursor: pointer;
 }

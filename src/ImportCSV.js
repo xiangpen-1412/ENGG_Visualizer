@@ -14,7 +14,7 @@ export const ImportCSV = ({setHighLightCells, reformatTimetable, lectureTab, set
         const newData = data.slice(2, data.length);
 
         // Create an empty timetable with [null, '', null] cells
-        var emptyTable = Array.from({length: 26}, () => Array.from({length: 5}, () => [null, '', null]));
+        var emptyTable = Array.from({length: 28}, () => Array.from({length: 5}, () => [null, '', null]));
 
         const courseSet = new Set();
 
