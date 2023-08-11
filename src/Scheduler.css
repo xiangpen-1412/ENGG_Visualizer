@@ -171,6 +171,15 @@
     padding: 15px 0px 10px 15px;
 }
 
+.searchBarCoursesInfo {
+    background-color: #FFFFFF;
+    border-left: 1px solid #7B7B7B;
+    border-right: 1px solid #7B7B7B;
+    border-top: 1px solid #7B7B7B;
+
+    padding: 15px 12px 10px 15px;
+}
+
 .coursesInfoBottom {
     background-color: #FFFFFF;
     border-left: 1px solid #7B7B7B;
