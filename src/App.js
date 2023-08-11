@@ -607,6 +607,13 @@ const Footer = () => {
     );
 };
 
+const Spinner = () => (
+    <div className="spinner">
+        <div className="double-bounce1"></div>
+        <div className="double-bounce2"></div>
+    </div>
+);
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -758,7 +765,7 @@ class App extends Component {
             selectedCourseGroupButtons: new Map(),
 
             // states for scheduler
-            dropDownClick: [true, true, true, true, true],
+            dropDownClick: [true, true, true, true],
             termList: [],
             selectedTerm: "",
             lecInfo: [],
@@ -769,7 +776,9 @@ class App extends Component {
             labTab: [],
             seminarTab: [],
 
-            highLightCells: Array.from({length: 28}, () => Array.from({length: 5}, () => [null, '', null])),
+            highLightCells: Array.from({length: 26}, () => Array.from({length: 5}, () => [null, '', null])),
+            scheduleMap: new Map(),
+            tabMap: new Map()
         };
 
         this.controller = new RESTController();
@@ -1188,6 +1197,14 @@ class App extends Component {
         this.setState({highLightCells: newCells});
     }
 
+    setScheduleMap = (newSchedule) => {
+        this.setState({scheduleMap: newSchedule});
+    }
+
+    setTabMap = (newTabs) => {
+        this.setState({tabMap: newTabs});
+    }
+
 
     render() {
         const {
@@ -1219,7 +1236,9 @@ class App extends Component {
             lectureTab,
             labTab,
             seminarTab,
-            highLightCells
+            highLightCells,
+            scheduleMap,
+            tabMap
         } = this.state;
 
         let width = '100%';
@@ -1398,6 +1417,10 @@ class App extends Component {
                             setSeminarTab={this.setSeminarTab}
                             highLightCells={highLightCells}
                             setHighLightCells={this.setHighLightCells}
+                            scheduleMap={scheduleMap}
+                            setScheduleMap={this.setScheduleMap}
+                            tabMap={tabMap}
+                            setTabMap={this.setTabMap}
                         />
                     </div>
                 )}
