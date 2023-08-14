@@ -392,6 +392,19 @@ class RESTController extends Component {
         }
         return color;
     }
+
+    /**
+     * run the automatic populate algorithm in the backend and get the updated table
+     * */
+    getUpdatedTimetable = (data) => {
+        return axios.post(`${this.schedulerBaseURL}/optimizeTimeTable`, data, this.config)
+            .then(response => {
+                console.log(response.data.obj);
+                return response.data.obj;
+            }).catch(error => {
+                console.error(error);
+            });
+    }
 }
 
 export default RESTController;

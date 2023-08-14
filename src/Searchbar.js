@@ -20,8 +20,8 @@ const Searchbar = ({placeHolder, options, index, isSearchable, addCourse}) => {
     const [selectedValue, setSelectedValue] = useState(null);
     const inputRef = useRef();
     const [searchValue, setSearchValue] = useState("");
-    const searchRef = useRef();    
-    
+    const searchRef = useRef();
+
     useEffect(() => {
         setSearchValue("");
         if (showMenu && searchRef.current) {
@@ -30,15 +30,14 @@ const Searchbar = ({placeHolder, options, index, isSearchable, addCourse}) => {
     }, [showMenu]);
 
     useEffect(() => {
-        
 
 
     }, [options]);
 
     const onSearch = (e) => {
         setSearchValue(e.target.value);
-    };    
-    
+    };
+
     const getOptions = () => {
         if (!searchValue) {
             return options;
@@ -64,21 +63,10 @@ const Searchbar = ({placeHolder, options, index, isSearchable, addCourse}) => {
     };
 
 
-
-
-
-
-
     const onItemClick = (option) => {
         setSelectedValue(option);
         addCourse(option);
     };
-
-
-
-
-
-
 
 
     const isSelected = (option) => {
@@ -105,7 +93,7 @@ const Searchbar = ({placeHolder, options, index, isSearchable, addCourse}) => {
                 <div className="searchbar-menu">
                     {isSearchable && (
                         <div className="search-box">
-                            <input onChange={onSearch} value={searchValue} ref={searchRef} />
+                            <input onChange={onSearch} value={searchValue} ref={searchRef}/>
                         </div>
                     )}
                     {getOptions().map((option) => (

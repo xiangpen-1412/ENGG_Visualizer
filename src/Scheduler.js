@@ -136,7 +136,7 @@ const Terms = (props) => {
                 onClick={() => {
                     props.setSelectedTerm(term);
 
-                    const newHighLightCells = Array.from({length: 26}, () => Array.from({length: 5}, () => [null, '', null]));
+                    const newHighLightCells = Array.from({length: 28}, () => Array.from({length: 5}, () => [null, '', null]));
                     props.setHighLightCells(newHighLightCells);
                 }}
             >
@@ -185,7 +185,7 @@ const NewTerm = (props) => {
 
         props.setSelectedTerm(term);
 
-        const newHighLightCells = Array.from({length: 26}, () => Array.from({length: 5}, () => [null, '', null]));
+        const newHighLightCells = Array.from({length: 28}, () => Array.from({length: 5}, () => [null, '', null]));
         props.setHighLightCells(newHighLightCells);
     }
 
@@ -309,7 +309,6 @@ const Lecs = (props) => {
         </div>
     )
 }
-
 
 const Labs = (props) => {
 
@@ -494,7 +493,6 @@ const Seminars = (props) => {
     )
 }
 
-
 const Search = (props) => {
 
     const isDropDown = props.dropDownClick[3];
@@ -520,7 +518,7 @@ const Search = (props) => {
                 </div>
             </div>
             {!isDropDown && (
-                <div className='coursesInfoBottom'>
+                <div className='searchBarCoursesInfo'>
                     <Searchbar
                         placeHolder={placeHolder}
                         options={courses}
@@ -533,9 +531,160 @@ const Search = (props) => {
     )
 }
 
+
+const CreateFromPreference = (props) => {
+
+    const isDropDown = props.dropDownClick[4];
+
+    const onSignClick = () => {
+        props.setDropDownClick(4);
+    }
+
+    return (
+        <div>
+            <div className={`createPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
+                <div className='createsPaletteTitle'>
+                    Random Generate
+                </div>
+                <div className='createsPaletteDropDownButton' onClick={onSignClick}>
+                    <DropDownSign isDropDown={isDropDown}/>
+                </div>
+            </div>
+            {!isDropDown && (
+                <PreferenceTab {...props}/>
+            )}
+        </div>
+    )
+}
+
+const PreferenceTab = (props) => {
+    const timeSlots = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00'];
+    const [from, setFrom] = useState(timeSlots.at(0));
+    const [to, setTo] = useState(timeSlots.at(timeSlots.length - 1));
+    const [showDropDownList, setShowDropDownList] = useState([false, false]);
+
+    const handleDropDown = (index) => {
+        const dropDownList = [...showDropDownList];
+        dropDownList[index] = !dropDownList[index];
+        setShowDropDownList(dropDownList);
+    }
+
+    const handleFromOnClick = (timeSlot, index) => {
+        setFrom(timeSlot);
+        handleDropDown(index);
+    }
+
+    const fromTimeDivs = timeSlots.map((timeSlot) => (
+        <div className='time' onClick={() => handleFromOnClick(timeSlot, 0)}>
+            {timeSlot}
+        </div>
+    ));
+
+    const timeToMinutes = (time) => {
+        const [hours, minutes] = time.split(':');
+        return Number(hours) * 60 + Number(minutes);
+    }
+
+    const handleToOnClick = (timeSlot, index) => {
+        const fromTimeInMinutes = timeToMinutes(from);
+        const timeSlotInMinutes = timeToMinutes(timeSlot);
+
+        if (timeSlotInMinutes <= fromTimeInMinutes) {
+            alert('The selected time is invalid. It should be later than the start time.');
+        } else {
+            setTo(timeSlot);
+        }
+
+        handleDropDown(index);
+    }
+
+    const toTimeDivs = timeSlots.map((timeSlot) => (
+        <div className='time' onClick={() => handleToOnClick(timeSlot, 1)}>
+            {timeSlot}
+        </div>
+    ));
+
+    /**
+     * send http request to get updated timetable
+     * */
+    const handleGenerateButtonOnclick = () => {
+        const restController = new RESTController();
+        let unDraggedTagList = [];
+        props.lectureTab.forEach((lecture) => {
+            unDraggedTagList.push(lecture);
+        })
+
+        props.labTab.forEach((lab) => {
+            unDraggedTagList.push(lab);
+        })
+
+        props.seminarTab.forEach((seminar) => {
+            unDraggedTagList.push(seminar);
+        })
+
+        let newHighLightCells = [...props.highLightCells];
+        const startInMin = timeToMinutes("8:00");
+        const fromInMin = timeToMinutes(from);
+        const endInMin = timeToMinutes("22:00");
+        const toInMin = timeToMinutes(to);
+
+        const startRow = (fromInMin - startInMin)/30 - 1;
+        const endRow = newHighLightCells.length - (endInMin - toInMin)/30;
+
+        // TODO: Not being used, need to update in the future
+        const profs = Array.from({length: props.lectureTab.length}, () => ['ALL']);
+
+        restController.getUpdatedTimetable({timetable: props.highLightCells, courseList : unDraggedTagList, profs: profs, term: props.term, startRow: startRow, endRow: endRow})
+            .then(updatedTimetable => {
+                const reformatTimetable = props.reformatTimetable(updatedTimetable);
+                props.setHighLightCells(reformatTimetable);
+                props.setLectureTab([]);
+                props.setLabTab([]);
+                props.setSeminarTab([]);
+            });
+    }
+
+    return (
+        <div className='coursesInfoBottom'>
+            <div className='innerButtonDiv'>
+                <div className='preferredTime'>
+                    <div className='preferredTimeTitle'>Choose A Time Period</div>
+                    <div className='fromSection'>
+                        From
+                        <div className='fromTime'>
+                            <div className='fromPart'
+                                 onClick={() => {handleDropDown(0)}}>
+                                {from}
+                            </div>
+                            {showDropDownList[0] && (<div className='timeDivWrapper'>{fromTimeDivs}</div>)}
+                        </div>
+                    </div>
+                    <div className='toSection'>
+                        To
+                        <div className='toTime'>
+                            <div className='fromPart'
+                                 onClick={() => {handleDropDown(1)}}
+                            >
+                                {to}
+                            </div>
+                            {showDropDownList[1] && (<div className='timeDivWrapper'>{toTimeDivs}</div>)}
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    className='generateButton'
+                    onClick={handleGenerateButtonOnclick}
+                >
+                    Generate
+                </div>
+            </div>
+        </div>
+    );
+}
 const Timetable = (props) => {
     const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-    const timeSlots = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30'];
+    const timeSlots = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30'];
 
 
     // Store the schedule for the current term in scheduleMap whenever it changes
@@ -548,7 +697,7 @@ const Timetable = (props) => {
         const updatedMap = new Map(props.scheduleMap);
         updatedMap.set(props.selectedTerm, props.highLightCells);
         props.setScheduleMap(updatedMap);
-        
+
     }, [props.highLightCells]);
 
 
@@ -854,7 +1003,7 @@ class Scheduler extends Component {
     handleRightClick = (event, section) => {
         event.preventDefault();
 
-        if (section.includes('Lab')) {
+        if (section.toLowerCase().includes('lab')) {
             // add the course back to palette
             const newLabTab = this.props.labTab;
             const sectionParts = section.split(' ');
@@ -870,7 +1019,7 @@ class Scheduler extends Component {
             // Remove course from list of placed courses
             this.removeTabMap(newCourse.trimEnd());
 
-        } else if (section.includes('Sem')) {
+        } else if (section.toLowerCase().includes('sem')) {
             // add the course back to palette
             const newSemTab = this.props.seminarTab;
             const sectionParts = section.split(' ');
@@ -1196,7 +1345,6 @@ class Scheduler extends Component {
         return color !== null && color !== '#275D38' && color !== '#888888';
     }
 
-
     /**
      * reformat the timetable
      * */
@@ -1330,6 +1478,21 @@ class Scheduler extends Component {
                             searchInfo={searchInfo}
                             addCourse={this.addCourse}
                         />
+                        <CreateFromPreference
+                            dropDownClick={dropDownClick}
+                            setDropDownClick={this.props.setDropDownClick}
+                            highLightCells={highLightCells}
+                            setHighLightCells={this.props.setHighLightCells}
+                            lectureTab={lectureTab}
+                            setLectureTab={this.props.setLectureTab}
+                            labTab={labTab}
+                            setLabTab={this.props.setLabTab}
+                            seminarTab={seminarTab}
+                            setSeminarTab={this.props.setSeminarTab}
+                            reformatTimetable={this.reformatTimetable}
+                            term={this.props.selectedTerm}
+                            reformatTimeTable={this.reformatTimetable}
+                        />
                         <ExportCSV
                             csvMap={this.props.scheduleMap}
                             fileName="EngineeringSchedule"
@@ -1349,7 +1512,6 @@ class Scheduler extends Component {
                             setTabMap={this.props.setTabMap}
                             selectedTerm={selectedTerm}
                         />
-                        {/*<Choose for me />*/}
                     </div>
                     <div className='timeTableTable'>
                         <Timetable

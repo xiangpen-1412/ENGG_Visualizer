@@ -44,6 +44,8 @@ export const ExportCSV = ({csvMap, fileName}) => {
         '19:30',
         '20:00',
         '20:30',
+        '21:00',
+        '21:30',
     ];
 
 
