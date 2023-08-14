@@ -1403,10 +1403,44 @@ class Scheduler extends Component {
         return (
             <div>
                 <PageTitle selectedProgram={selectedProgram}/>
-                <Plan
-                    selectedProgram={selectedProgram}
-                    selectedPlan={selectedPlan}
-                />
+                <div className="optionsWrapper">
+                    <div className="planDisplayWrapper">
+                        <Plan
+                            selectedProgram={selectedProgram}
+                            selectedPlan={selectedPlan}
+                        />
+                    </div>
+                    <div className="allOptions">
+                        <div className="SelectedPlanDescription">ADDITIONAL ACTIONS</div>
+                        <div className="sectionDescription">
+                            Create a schedule from template, from a local file, or to export your progress.
+                        </div>
+                        <div className="optionsButtonsWrapper">
+                            <ExportCSV
+                                csvMap={this.props.scheduleMap}
+                                fileName="EngineeringSchedule"
+                            />
+                            <ImportCSV 
+                                setHighLightCells={this.props.setHighLightCells}
+                                scheduleMap={this.props.scheduleMap}
+                                setScheduleMap={this.props.setScheduleMap}
+                                reformatTimetable={this.reformatTimetable}
+                                lectureTab={lectureTab}
+                                setLectureTab={this.props.setLectureTab}
+                                labTab={labTab}
+                                setLabTab={this.props.setLabTab}
+                                seminarTab={seminarTab}
+                                setSeminarTab={this.props.setSeminarTab}
+                                tabMap={this.props.tabMap}
+                                setTabMap={this.props.setTabMap}
+                                selectedTerm={selectedTerm}
+                            />
+                            <button className="exportButton">
+                                Create from Template
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <PlaceCourse
                     selectedProgram={selectedProgram}
                     selectedPlan={selectedPlan}
@@ -1492,25 +1526,6 @@ class Scheduler extends Component {
                             reformatTimetable={this.reformatTimetable}
                             term={this.props.selectedTerm}
                             reformatTimeTable={this.reformatTimetable}
-                        />
-                        <ExportCSV
-                            csvMap={this.props.scheduleMap}
-                            fileName="EngineeringSchedule"
-                        />
-                        <ImportCSV 
-                            setHighLightCells={this.props.setHighLightCells}
-                            scheduleMap={this.props.scheduleMap}
-                            setScheduleMap={this.props.setScheduleMap}
-                            reformatTimetable={this.reformatTimetable}
-                            lectureTab={lectureTab}
-                            setLectureTab={this.props.setLectureTab}
-                            labTab={labTab}
-                            setLabTab={this.props.setLabTab}
-                            seminarTab={seminarTab}
-                            setSeminarTab={this.props.setSeminarTab}
-                            tabMap={this.props.tabMap}
-                            setTabMap={this.props.setTabMap}
-                            selectedTerm={selectedTerm}
                         />
                     </div>
                     <div className='timeTableTable'>

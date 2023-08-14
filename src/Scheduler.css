@@ -6,6 +6,29 @@
     font-weight: 350;
 }
 
+.optionsWrapper {
+    display: flex;
+    flex-direction: row;
+    overflow: visible;
+    margin-bottom: 25px;
+}
+
+.optionsButtonsWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.allOptions {
+    display: flex;
+    flex-direction: column;
+}
+
+.planDisplayWrapper {
+    margin-right: 300px;
+    min-width: 600px;
+}
+
 .planTube {
     font-size: 17px;
     font-family: 'Roboto', sans-serif;
@@ -47,14 +70,15 @@
     border: #275d38 solid 3px;
     text-align: center;
     height: 70px;
+    width: 180px;
     cursor: pointer;
 
     font-size: 17px;
     font-family: 'Roboto', sans-serif;
     font-weight: 400;
     color: #000000;
-    margin-top: 20px;
-    width: 100%;
+    background-color: white;
+    margin-right: 15px;
 }
 
 .termTube {
