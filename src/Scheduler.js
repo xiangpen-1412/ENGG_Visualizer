@@ -3,8 +3,11 @@ import './Scheduler.css'
 import Searchbar from './Searchbar.js';
 import {ExportCSV} from './ExportCSV.js';
 import {ImportCSV} from './ImportCSV.js';
+import {TestReport} from './ExportPDF.js';
 import {useLocation} from "react-router-dom";
 import RESTController from "./controller/RESTController";
+import {pdf} from '@react-pdf/renderer';
+import {saveAs} from 'file-saver';
 
 const PageTitle = (props) => {
 
@@ -682,6 +685,8 @@ const PreferenceTab = (props) => {
         </div>
     );
 }
+
+// Table for courses componet
 const Timetable = (props) => {
     const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
     const timeSlots = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30'];
@@ -699,94 +704,6 @@ const Timetable = (props) => {
         props.setScheduleMap(updatedMap);
 
     }, [props.highLightCells]);
-
-
-    // // Store the state of each lecture tab whenever any of them change
-    // useEffect(() => {
-
-    //     var tabs = {};
-
-    //     if (!props.tabMap.get(props.selectedTerm)) {
-
-    //         // Create an empty data storage object for this term's tabs
-    //         tabs = {
-    //             lectureTab: null,
-    //             labTab: null,
-    //             seminarTab: null
-    //         }
-    //     }
-    //     else {
-    //         tabs = props.tabMap.get(props.selectedTerm);
-    //     }
-
-    //     // Updated the specific tab in the specific record
-    //     tabs.lectureTab = props.lectureTab;
-
-    //     // Write record to tabMap
-    //     const updatedTabMap = new Map(props.tabMap);
-    //     updatedTabMap.set(props.selectedTerm, tabs);
-    //     props.setTabMap(updatedTabMap);
-
-    // }, [props.lectureTab]);
-
-
-    // // Store the state of each lab  tab whenever any of them change
-    // useEffect(() => {
-
-    //     var tabs = {};
-
-    //     if (!props.tabMap.get(props.selectedTerm)) {
-
-    //         // Create an empty data storage object for this term's tabs
-    //         tabs = {
-    //             lectureTab: null,
-    //             labTab: null,
-    //             seminarTab: null
-    //         }
-    //     }
-    //     else {
-    //         tabs = props.tabMap.get(props.selectedTerm);
-    //     }
-
-    //     // Updated the specific tab in the specific record in the tabMap
-    //     tabs.labTab = props.labTab;
-
-    //     const updatedTabMap = new Map(props.tabMap);
-    //     updatedTabMap.set(props.selectedTerm, tabs);
-    //     props.setTabMap(updatedTabMap);
-    
-    // }, [props.labTab]);
-
-
-    // // Store the state of each seminar tab whenever any of them change
-    // useEffect(() => {
-
-    //     var tabs = {};
-
-    //     if (!props.tabMap.get(props.selectedTerm)) {
-
-    //         // Create an empty data storage object for this term's tabs
-    //         tabs = {
-    //             lectureTab: null,
-    //             labTab: null,
-    //             seminarTab: null
-    //         }
-    //     }
-    //     else {
-    //         tabs = props.tabMap.get(props.selectedTerm);
-    //     }
-
-    //     // Updated the specific tab in the specific record in the tabMap
-    //     tabs.seminarTab = props.seminarTab;
-
-    //     const updatedTabMap = new Map(props.tabMap);
-    //     updatedTabMap.set(props.selectedTerm, tabs);
-    //     props.setTabMap(updatedTabMap);
-
-    // }, [props.seminarTab]);
-
-
-    // useEffect(() => console.log(props.scheduleMap), [props.scheduleMap]);
 
     return (
         <table className='timeTable'>
@@ -1382,6 +1299,19 @@ class Scheduler extends Component {
         return newHighlightedCells;
     }
 
+    /**
+     * 
+     * @returns 
+     */
+    generatePdfReport = async (scheduleMap) => {
+        const blob = await pdf((
+            <TestReport
+                scheduleMap={scheduleMap}
+            />
+        )).toBlob();
+        saveAs(blob, "Scheduler_Report.pdf");
+    }
+
     render() {
 
         const {
@@ -1435,8 +1365,22 @@ class Scheduler extends Component {
                                 setTabMap={this.props.setTabMap}
                                 selectedTerm={selectedTerm}
                             />
-                            <button className="exportButton">
-                                Create from Template
+                            {/* <PDFDownloadLink 
+                                document={
+                                    <TestReport 
+                                        scheduleMap={this.props.scheduleMap}
+                                    />
+                                } 
+                                filename="SchedulerReport.pdf" 
+                                className="exportButton"
+                            >
+                                {({ blob, url, loading, error }) => (loading ? 'Loading...' : 'Download Report')}
+                            </PDFDownloadLink> */}
+                            <button
+                                onClick={ async () => {await this.generatePdfReport(this.props.scheduleMap); }}
+                                className="exportButton"
+                            >
+                                Download Report
                             </button>
                         </div>
                     </div>
