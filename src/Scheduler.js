@@ -441,6 +441,9 @@ const Labs = (props) => {
 
             const toolTipUniqueId = labInfo !== undefined ? labInfo.name.trim() + index.toString() : "";
 
+            const extendedName = labInfo=== undefined ? "" : labInfo.name;
+
+
             return (
                 <div>
                     <div
@@ -455,7 +458,7 @@ const Labs = (props) => {
                         data-tooltip-id={toolTipUniqueId}
                         data-tooltip-content={courseDesc}
                         courseDetails={courseDetails}
-                        extendedName={labInfo.name}
+                        extendedName={extendedName}
                     >
                         {lab}
                     </div>
@@ -583,6 +586,8 @@ const Seminars = (props) => {
 
             const toolTipUniqueId = semInfo !== undefined ? semInfo.name.trim() + index.toString() : "";
 
+            const extendedName = semInfo === undefined ? "" : semInfo.name;
+
             return (
                 <div>
                     <div
@@ -597,7 +602,7 @@ const Seminars = (props) => {
                         data-tooltip-id={toolTipUniqueId}
                         data-tooltip-content={courseDesc}
                         courseDetails={courseDetails}
-                        extendedName={semInfo.name}
+                        extendedName={extendedName}
                     >
                         {seminar}
                     </div>
