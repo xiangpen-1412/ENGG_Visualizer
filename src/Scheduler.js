@@ -234,19 +234,26 @@ const Lecs = (props) => {
         if (props.lecInfo && props.lecInfo.length > 0) {
             if (props.lectureTab === null || !props.lectureTab.some(lecture => props.lecInfo.map(info => info.name).includes(lecture))) {
 
-                // Restore the saved tabs for the selected term if it exists
-                if (props.tabMap.get(props.selectedTerm)) {
-                    if (props.tabMap.get(props.selectedTerm).lectureTab) {
-
-                        props.setLectureTab(props.tabMap.get(props.selectedTerm).lectureTab);
-                        return
-                    }
-                }
-
-                const lectures = props.lecInfo.map((lecture) => {
+                // Get all lecture names contained in lecInfo
+                var lectures = props.lecInfo.map((lecture) => {
                         return lecture.name;
                     }
                 )
+
+                // Remove all lectures that are currently in the schedule
+                if (props.tabMap.get(props.selectedTerm)) {
+                    if (props.tabMap.get(props.selectedTerm).lectureTab) {
+
+                        var toRemove = props.tabMap.get(props.selectedTerm).lectureTab;
+
+                        const cleanedLectures = lectures.filter(function(lecture) {
+                            return !toRemove.includes(lecture);
+                        })
+
+                        lectures = [...cleanedLectures];
+                    }
+                }
+
                 props.setLectureTab(lectures);
             }
         } else {
@@ -376,18 +383,24 @@ const Labs = (props) => {
         if (props.labInfo && props.labInfo.length > 0) {
             if (props.labTab === null || !props.labTab.some(lab => props.labInfo.map(info => info.name).includes(lab))) {
 
-                // Restore the saved tab for the selected term
+                // Get all lab names contained in lecInfo
+                var labs = props.labInfo.map((lab) => {
+                    return lab.name;
+                })
+
+                // Remove all labs that are currently in the schedule
                 if (props.tabMap.get(props.selectedTerm)) {
                     if (props.tabMap.get(props.selectedTerm).labTab) {
 
-                        props.setLabTab(props.tabMap.get(props.selectedTerm).labTab);
-                        return
+                        var toRemove = props.tabMap.get(props.selectedTerm).labTab;
+
+                        const cleanedLabs = labs.filter(function(lab) {
+                            return !toRemove.includes(lab);
+                        })
+                        labs = [...cleanedLabs];
                     }
                 }
 
-                const labs = props.labInfo.map((lab) => {
-                    return lab.name;
-                })
                 props.setLabTab(labs);
             }
         } else {
@@ -511,18 +524,25 @@ const Seminars = (props) => {
     useEffect(() => {
         if (props.semInfo && props.semInfo.length > 0) {
             if (props.seminarTab === null || !props.seminarTab.some(sem => props.semInfo.map(info => info.name).includes(sem))) {
-
-                // Restore the saved tabs for the selected term
-                if (props.tabMap.get(props.selectedTerm)) {
-                    if (props.tabMap.get(props.selectedTerm).seminarTab) {
-                        props.setSeminarTab(props.tabMap.get(props.selectedTerm).seminarTab);
-                        return
-                    }
-                }
-
-                const seminars = props.semInfo.map((seminar) => {
+                
+                // Get all seminar names contained in lecInfo
+                var seminars = props.semInfo.map((seminar) => {
                     return seminar.name;
                 })
+
+                // Remove all seminars that are currently in the schedule
+                if (props.tabMap.get(props.selectedTerm)) {
+                    if (props.tabMap.get(props.selectedTerm).seminarTab) {
+
+                        var toRemove = props.tabMap.get(props.selectedTerm).seminarTab;
+
+                        const cleanedSeminars = seminars.filter(function(seminar) {
+                            return !toRemove.includes(seminar);
+                        })
+                        seminars = [...cleanedSeminars];
+                    }
+                }
+                
                 props.setSeminarTab(seminars);
             }
         } else {
@@ -887,90 +907,6 @@ const Timetable = (props) => {
     }, [props.highLightCells]);
 
 
-    // Store the state of each lecture tab whenever any of them change
-    useEffect(() => {
-
-        var tabs = {};
-
-        if (!props.tabMap.get(props.selectedTerm)) {
-
-            // Create an empty data storage object for this term's tabs
-            tabs = {
-                lectureTab: null,
-                labTab: null,
-                seminarTab: null
-            }
-        } else {
-            tabs = props.tabMap.get(props.selectedTerm);
-        }
-
-        // Updated the specific tab in the specific record
-        tabs.lectureTab = props.lectureTab;
-
-        // Write record to tabMap
-        const updatedTabMap = new Map(props.tabMap);
-        updatedTabMap.set(props.selectedTerm, tabs);
-        props.setTabMap(updatedTabMap);
-
-    }, [props.lectureTab]);
-
-
-    // Store the state of each lab  tab whenever any of them change
-    useEffect(() => {
-
-        var tabs = {};
-
-        if (!props.tabMap.get(props.selectedTerm)) {
-
-            // Create an empty data storage object for this term's tabs
-            tabs = {
-                lectureTab: null,
-                labTab: null,
-                seminarTab: null
-            }
-        } else {
-            tabs = props.tabMap.get(props.selectedTerm);
-        }
-
-        // Updated the specific tab in the specific record in the tabMap
-        tabs.labTab = props.labTab;
-
-        const updatedTabMap = new Map(props.tabMap);
-        updatedTabMap.set(props.selectedTerm, tabs);
-        props.setTabMap(updatedTabMap);
-
-    }, [props.labTab]);
-
-
-    // Store the state of each seminar tab whenever any of them change
-    useEffect(() => {
-
-        var tabs = {};
-
-        if (!props.tabMap.get(props.selectedTerm)) {
-
-            // Create an empty data storage object for this term's tabs
-            tabs = {
-                lectureTab: null,
-                labTab: null,
-                seminarTab: null
-            }
-        } else {
-            tabs = props.tabMap.get(props.selectedTerm);
-        }
-
-        // Updated the specific tab in the specific record in the tabMap
-        tabs.seminarTab = props.seminarTab;
-
-        const updatedTabMap = new Map(props.tabMap);
-        updatedTabMap.set(props.selectedTerm, tabs);
-        props.setTabMap(updatedTabMap);
-
-    }, [props.seminarTab]);
-
-
-    // useEffect(() => console.log(props.scheduleMap), [props.scheduleMap]);
-
     return (
         <table className='timeTable'>
             <div className='tableWrapper'>
@@ -1286,9 +1222,12 @@ class Scheduler extends Component {
                 newCourse += part;
                 newCourse += ' ';
             })
-
             newLabTab.push(newCourse.trimEnd());
             this.props.setLabTab(newLabTab);
+
+            // Remove course from list of placed courses
+            this.removeTabMap(newCourse.trimEnd());
+
         } else if (section.toLowerCase().includes('sem')) {
             // add the course back to palette
             const newSemTab = this.props.seminarTab;
@@ -1299,9 +1238,12 @@ class Scheduler extends Component {
                 newCourse += part;
                 newCourse += ' ';
             })
-
             newSemTab.push(newCourse.trimEnd());
             this.props.setSeminarTab(newSemTab);
+
+            // Remove course from list of placed courses
+            this.removeTabMap(newCourse.trimEnd());
+
         } else {
             // add the course back to palette
             const newLectureTab = this.props.lectureTab;
@@ -1315,6 +1257,9 @@ class Scheduler extends Component {
 
             newLectureTab.push(newCourse.trimEnd());
             this.props.setLectureTab(newLectureTab);
+
+            // Remove course from list of placed courses
+            this.removeTabMap(newCourse.trimEnd());
         }
 
         // delete from the timetable
@@ -1462,6 +1407,75 @@ class Scheduler extends Component {
         event.preventDefault();
     }
 
+    // add a value to the tabMap, a map of all of the scheduled courses for each semester
+    addTabMap(courseName) {
+        var tabs = {};
+        if (!this.props.tabMap.get(this.props.selectedTerm)) {
+
+            // Create an empty data storage object for this term's tabs
+            tabs = {
+                lectureTab: [],
+                labTab: [],
+                seminarTab: []
+            }
+        }
+        else {
+            tabs = this.props.tabMap.get(this.props.selectedTerm);
+        }
+
+        // Updated the specific tab in the specific record in the tabMap
+        if (courseName.includes('Sem')) {
+            tabs.seminarTab.push(courseName);
+        }
+        else if (courseName.includes('Lab')) {
+            tabs.labTab.push(courseName);
+        }
+        else {
+            tabs.lectureTab.push(courseName);
+        }
+        const updatedTabMap = new Map(this.props.tabMap);
+        updatedTabMap.set(this.props.selectedTerm, tabs);
+        this.props.setTabMap(updatedTabMap);
+    }
+
+    // remove a value from the tabMap, a map of all of the scheduled courses for each semester
+    removeTabMap(courseName) {
+        if (this.props.tabMap.get(this.props.selectedTerm)) {
+
+            var tabs = this.props.tabMap.get(this.props.selectedTerm);
+            var updatedTabs = [];
+
+            console.log(tabs);
+            console.log(courseName);
+
+            // Updated the specific tab in the specific record in the tabMap
+            if (courseName.includes('Sem')) {
+                updatedTabs = tabs.seminarTab.filter(function (course) {
+                    return course !== courseName;
+                })
+                tabs["seminarTab"] = [...updatedTabs];
+            }
+            else if (courseName.includes('Lab')) {
+                updatedTabs = tabs.labTab.filter(function (course) {
+                    return course !== courseName;
+                })
+                tabs["labTab"] = [...updatedTabs];
+            }
+            else {
+                updatedTabs = tabs.lectureTab.filter(function (course) {
+                    return course !== courseName;
+                })
+                tabs["lectureTab"] = [...updatedTabs];
+            }
+
+            console.log(tabs);
+
+            const updatedTabMap = new Map(this.props.tabMap);
+            updatedTabMap.set(this.props.selectedTerm, tabs);
+            this.props.setTabMap(updatedTabMap);
+        }
+    }
+
     // drop function
     handleDrop = (event, hourIndex, dayIndex, section) => {
 
@@ -1503,6 +1517,9 @@ class Scheduler extends Component {
             const newLecTab = updatedLecTab.filter(item => item !== courseInfo);
             this.props.setLectureTab(newLecTab);
         }
+
+        // Add course to array of courses present in the schedule
+        this.addTabMap(courseInfo);
 
         let newHighlightedCells = this.props.highLightCells.map(row => row.map(cell => [...cell]));
 
@@ -1596,10 +1613,44 @@ class Scheduler extends Component {
         return (
             <div>
                 <PageTitle selectedProgram={selectedProgram}/>
-                <Plan
-                    selectedProgram={selectedProgram}
-                    selectedPlan={selectedPlan}
-                />
+                <div className="optionsWrapper">
+                    <div className="planDisplayWrapper">
+                        <Plan
+                            selectedProgram={selectedProgram}
+                            selectedPlan={selectedPlan}
+                        />
+                    </div>
+                    <div className="allOptions">
+                        <div className="SelectedPlanDescription">ADDITIONAL ACTIONS</div>
+                        <div className="sectionDescription">
+                            Create a schedule from template, from a local file, or to export your progress.
+                        </div>
+                        <div className="optionsButtonsWrapper">
+                            <ExportCSV
+                                csvMap={this.props.scheduleMap}
+                                fileName="EngineeringSchedule"
+                            />
+                            <ImportCSV 
+                                setHighLightCells={this.props.setHighLightCells}
+                                scheduleMap={this.props.scheduleMap}
+                                setScheduleMap={this.props.setScheduleMap}
+                                reformatTimetable={this.reformatTimetable}
+                                lectureTab={lectureTab}
+                                setLectureTab={this.props.setLectureTab}
+                                labTab={labTab}
+                                setLabTab={this.props.setLabTab}
+                                seminarTab={seminarTab}
+                                setSeminarTab={this.props.setSeminarTab}
+                                tabMap={this.props.tabMap}
+                                setTabMap={this.props.setTabMap}
+                                selectedTerm={selectedTerm}
+                            />
+                            <button className="exportButton">
+                                Create from Template
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <PlaceCourse
                     selectedProgram={selectedProgram}
                     selectedPlan={selectedPlan}
@@ -1689,22 +1740,7 @@ class Scheduler extends Component {
                             searchInfo={searchInfo}
                             addCourse={this.addCourse}
                         />
-                        <ExportCSV
-                            csvMap={this.props.scheduleMap}
-                            fileName="EngineeringSchedule"
-                        />
-                        <ImportCSV
-                            setHighLightCells={this.props.setHighLightCells}
-                            scheduleMap={this.props.scheduleMap}
-                            setScheduleMap={this.props.setScheduleMap}
-                            reformatTimetable={this.reformatTimetable}
-                            lectureTab={lectureTab}
-                            setLectureTab={this.props.setLectureTab}
-                            labTab={labTab}
-                            setLabTab={this.props.setLabTab}
-                            seminarTab={seminarTab}
-                            setSeminarTab={this.props.setSeminarTab}
-                        />
+
                     </div>
                     <div className='timeTableTable'>
                         <Timetable
@@ -1717,6 +1753,9 @@ class Scheduler extends Component {
                             setScheduleMap={this.props.setScheduleMap}
                             tabMap={this.props.tabMap}
                             setTabMap={this.props.setTabMap}
+                            lecInfo={lecInfo}
+                            labInfo={labInfo}
+                            semInfo={semInfo}
                             lectureTab={lectureTab}
                             labTab={labTab}
                             seminarTab={seminarTab}
@@ -1726,7 +1765,6 @@ class Scheduler extends Component {
                             semInfo={semInfo}
                         />
                     </div>
-
                 </div>
             </div>
         )
