@@ -1754,9 +1754,6 @@ class Scheduler extends Component {
                             labTab={labTab}
                             seminarTab={seminarTab}
                             structure={structure}
-                            lecInfo={lecInfo}
-                            labInfo={labInfo}
-                            semInfo={semInfo}
                         />
                     </div>
                 </div>
