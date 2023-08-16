@@ -3,8 +3,11 @@ import './Scheduler.css'
 import Searchbar from './Searchbar.js';
 import {ExportCSV} from './ExportCSV.js';
 import {ImportCSV} from './ImportCSV.js';
+import {TestReport} from './ExportPDF.js';
 import {useLocation} from "react-router-dom";
 import RESTController from "./controller/RESTController";
+import {pdf} from '@react-pdf/renderer';
+import {saveAs} from 'file-saver';
 import {Tooltip as ReactTooltip} from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css'
 
@@ -1585,6 +1588,19 @@ class Scheduler extends Component {
         return newHighlightedCells;
     }
 
+    /**
+     * 
+     * @returns 
+     */
+    generatePdfReport = async (scheduleMap) => {
+        const blob = await pdf((
+            <TestReport
+                scheduleMap={scheduleMap}
+            />
+        )).toBlob();
+        saveAs(blob, "Scheduler_Report.pdf");
+    }
+
     render() {
 
         const {
@@ -1639,8 +1655,22 @@ class Scheduler extends Component {
                                 setTabMap={this.props.setTabMap}
                                 selectedTerm={selectedTerm}
                             />
-                            <button className="exportButton">
-                                Create from Template
+                            {/* <PDFDownloadLink 
+                                document={
+                                    <TestReport 
+                                        scheduleMap={this.props.scheduleMap}
+                                    />
+                                } 
+                                filename="SchedulerReport.pdf" 
+                                className="exportButton"
+                            >
+                                {({ blob, url, loading, error }) => (loading ? 'Loading...' : 'Download Report')}
+                            </PDFDownloadLink> */}
+                            <button
+                                onClick={ async () => {await this.generatePdfReport(this.props.scheduleMap); }}
+                                className="exportButton"
+                            >
+                                Download Report
                             </button>
                         </div>
                     </div>
