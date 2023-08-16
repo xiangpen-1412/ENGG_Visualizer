@@ -571,7 +571,7 @@ const CourseGroupCheckbox = (props) => {
     if (selectedProgram === "Mechanical Engineering" && !props.selectedPlan.includes("Biomedical")) {
         return (
             <div >
-                <input 
+                <input
                     className='groupCheckbox'
                     onClick={props.handleCourseGroupOnClick}
                     type="checkbox"
@@ -1077,6 +1077,7 @@ class App extends Component {
                     termNumber = Object.keys(courses).length;
                 }
                 this.setState({structure: courses, termNumber: termNumber});
+                console.log(courses);
             });
 
             this.controller.getReqMap(data).then((reqMap) => {
@@ -1421,6 +1422,7 @@ class App extends Component {
                             setScheduleMap={this.setScheduleMap}
                             tabMap={tabMap}
                             setTabMap={this.setTabMap}
+                            structure={structure}
                         />
                     </div>
                 )}

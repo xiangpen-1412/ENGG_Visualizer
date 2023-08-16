@@ -8,6 +8,8 @@ import {useLocation} from "react-router-dom";
 import RESTController from "./controller/RESTController";
 import {pdf} from '@react-pdf/renderer';
 import {saveAs} from 'file-saver';
+import {Tooltip as ReactTooltip} from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css'
 
 const PageTitle = (props) => {
 
@@ -127,7 +129,7 @@ const Terms = (props) => {
             }
         }
     }, [props.selectedProgram, props.selectedPlan, props.selectedTerm]);
-    
+
     const terms = props.termList.map((term) => {
 
         const isSelected = props.selectedTerm === term;
@@ -137,10 +139,12 @@ const Terms = (props) => {
             <div
                 className={className}
                 onClick={() => {
-                    props.setSelectedTerm(term);
+                    if (term !== props.selectedTerm) {
+                        props.setSelectedTerm(term);
 
-                    const newHighLightCells = Array.from({length: 28}, () => Array.from({length: 5}, () => [null, '', null]));
-                    props.setHighLightCells(newHighLightCells);
+                        const newHighLightCells = Array.from({length: 28}, () => Array.from({length: 5}, () => [null, '', null]));
+                        props.setHighLightCells(newHighLightCells);
+                    }
                 }}
             >
                 {term}
@@ -245,7 +249,7 @@ const Lecs = (props) => {
 
                         var toRemove = props.tabMap.get(props.selectedTerm).lectureTab;
 
-                        const cleanedLectures = lectures.filter(function(lecture) {
+                        const cleanedLectures = lectures.filter(function (lecture) {
                             return !toRemove.includes(lecture);
                         })
 
@@ -260,9 +264,10 @@ const Lecs = (props) => {
         }
     }, [props.lecInfo]);
 
+
     let lectures;
     if (props.lectureTab !== null) {
-        lectures = props.lectureTab.map((lecture) => {
+        lectures = props.lectureTab.map((lecture, index) => {
 
             const lectureInfo = props.lecInfo.find(lectureInfo => lectureInfo.name === lecture);
 
@@ -271,18 +276,72 @@ const Lecs = (props) => {
                 option = lectureInfo.options;
             }
 
+            const courseDetails = [];
+
+            if (lectureInfo !== undefined) {
+                lectureInfo.options.map((option) => {
+                    const section = option.section;
+                    const place = option.place;
+                    const prof = option.instructor === "" ? "-" : option.instructor;
+
+                    const courseProfANDPlaceInfo = "Section " + section + " Prof: " + prof + " ," + "Location: " + place + '\n';
+                    courseDetails.push(courseProfANDPlaceInfo);
+                })
+            }
+
+            const extendedName = lectureInfo !== undefined ? lectureInfo.extendedName : "";
+
+            const courses = props.structure.find(courses => courses.term === props.selectedTerm);
+            const course = courses.courses.find(course => course.name.replace(/\([^)]+\)/g, '') === lecture);
+            const courseDesc = course !== undefined ? course.description : "";
+
+            const toolTipUniqueId = lectureInfo !== undefined ? lectureInfo.extendedName + index.toString() : "";
+
             return (
-                <div
-                    className='indivLecture'
-                    draggable={true}
-                    onDragStart={(event) => {
-                        props.handleDragStart(option, event, lecture)
-                    }}
-                    onDragEnd={(event) => {
-                        props.handleDragEnd(event);
-                    }}
-                >
-                    {lecture}
+                <div>
+                    <div
+                        className='indivLecture'
+                        draggable={true}
+                        onDragStart={(event) => {
+                            props.handleDragStart(option, event, lecture)
+                        }}
+                        onDragEnd={(event) => {
+                            props.handleDragEnd(event);
+                        }}
+                        data-tooltip-id={toolTipUniqueId}
+                        data-tooltip-content={courseDesc}
+                        courseDetails={courseDetails}
+                        extendedName={extendedName}
+                    >
+                        {lecture}
+                    </div>
+
+                    <ReactTooltip place="bottom" id={toolTipUniqueId} render={({content, activeAnchor}) => (
+                        <div className='popUpDescription'>
+                            <div className='popUpExtendedName'>
+                                <b>{activeAnchor?.getAttribute('extendedName')}</b>
+                            </div>
+                            <br/>
+                            <div>
+                                {content}
+                                <br/>
+                                <div className='popUpCourseDetails'>
+                                    <b>Course Details:</b>
+                                    <br/>
+                                    {activeAnchor?.getAttribute('courseDetails').split('\n').map((courseDetail) => {
+                                        courseDetail = courseDetail.replaceAll(",", "");
+                                        return (
+                                            <div>
+                                                {courseDetail}
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    />
+
                 </div>
             )
         })
@@ -338,7 +397,7 @@ const Labs = (props) => {
 
                         var toRemove = props.tabMap.get(props.selectedTerm).labTab;
 
-                        const cleanedLabs = labs.filter(function(lab) {
+                        const cleanedLabs = labs.filter(function (lab) {
                             return !toRemove.includes(lab);
                         })
                         labs = [...cleanedLabs];
@@ -354,7 +413,7 @@ const Labs = (props) => {
 
     let labs;
     if (props.labTab !== null) {
-        labs = props.labTab.map((lab) => {
+        labs = props.labTab.map((lab, index) => {
 
             const labInfo = props.labInfo.find(labInfo => labInfo.name === lab);
 
@@ -363,18 +422,69 @@ const Labs = (props) => {
                 option = labInfo.options;
             }
 
+            const courseDetails = [];
+
+            if (labInfo !== undefined) {
+                labInfo.options.map((option) => {
+                    const section = option.section;
+                    const place = option.place;
+                    const prof = option.instructor === "" ? "-" : option.instructor;
+
+                    const courseProfANDPlaceInfo = "Section " + section + " Prof: " + prof + " ," + "Location: " + place + '\n';
+                    courseDetails.push(courseProfANDPlaceInfo);
+                })
+            }
+
+            const courses = props.structure.find(courses => courses.term === props.selectedTerm);
+            const course = courses.courses.find(course => course.name.replace(/\([^)]+\)/g, '') === lab.replace(" Lab", ""));
+            const courseDesc = course !== undefined ? course.description : "";
+
+            const toolTipUniqueId = labInfo !== undefined ? labInfo.name.trim() + index.toString() : "";
+
             return (
-                <div
-                    className='indivLab'
-                    draggable={true}
-                    onDragStart={(event) => {
-                        props.handleDragStart(option, event, lab)
-                    }}
-                    onDragEnd={(event) => {
-                        props.handleDragEnd(event);
-                    }}
-                >
-                    {lab}
+                <div>
+                    <div
+                        className='indivLab'
+                        draggable={true}
+                        onDragStart={(event) => {
+                            props.handleDragStart(option, event, lab)
+                        }}
+                        onDragEnd={(event) => {
+                            props.handleDragEnd(event);
+                        }}
+                        data-tooltip-id={toolTipUniqueId}
+                        data-tooltip-content={courseDesc}
+                        courseDetails={courseDetails}
+                        extendedName={labInfo.name}
+                    >
+                        {lab}
+                    </div>
+
+                    <ReactTooltip place="bottom" id={toolTipUniqueId} render={({content, activeAnchor}) => (
+                        <div className='popUpDescription'>
+                            <div className='popUpExtendedName'>
+                                <b>{activeAnchor?.getAttribute('extendedName')}</b>
+                            </div>
+                            <br/>
+                            <div>
+                                {content}
+                                <br/>
+                                <div className='popUpCourseDetails'>
+                                    <b>Lab Details:</b>
+                                    <br/>
+                                    {activeAnchor?.getAttribute('courseDetails').split('\n').map((courseDetail) => {
+                                        courseDetail = courseDetail.replaceAll(",", "");
+                                        return (
+                                            <div>
+                                                {courseDetail}
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    />
                 </div>
             )
         })
@@ -417,7 +527,7 @@ const Seminars = (props) => {
     useEffect(() => {
         if (props.semInfo && props.semInfo.length > 0) {
             if (props.seminarTab === null || !props.seminarTab.some(sem => props.semInfo.map(info => info.name).includes(sem))) {
-                
+
                 // Get all seminar names contained in lecInfo
                 var seminars = props.semInfo.map((seminar) => {
                     return seminar.name;
@@ -429,13 +539,13 @@ const Seminars = (props) => {
 
                         var toRemove = props.tabMap.get(props.selectedTerm).seminarTab;
 
-                        const cleanedSeminars = seminars.filter(function(seminar) {
+                        const cleanedSeminars = seminars.filter(function (seminar) {
                             return !toRemove.includes(seminar);
                         })
                         seminars = [...cleanedSeminars];
                     }
                 }
-                
+
                 props.setSeminarTab(seminars);
             }
         } else {
@@ -445,7 +555,7 @@ const Seminars = (props) => {
 
     let seminars;
     if (props.seminarTab !== null) {
-        seminars = props.seminarTab.map((seminar) => {
+        seminars = props.seminarTab.map((seminar, index) => {
 
             const semInfo = props.semInfo.find(semInfo => semInfo.name === seminar);
 
@@ -454,18 +564,69 @@ const Seminars = (props) => {
                 option = semInfo.options;
             }
 
+            const courseDetails = [];
+
+            if (semInfo !== undefined) {
+                semInfo.options.map((option) => {
+                    const section = option.section;
+                    const place = option.place;
+                    const prof = option.instructor === "" ? "-" : option.instructor;
+
+                    const courseProfANDPlaceInfo = "Section " + section + " Prof: " + prof + " ," + "Location: " + place + '\n';
+                    courseDetails.push(courseProfANDPlaceInfo);
+                })
+            }
+
+            const courses = props.structure.find(courses => courses.term === props.selectedTerm);
+            const course = courses.courses.find(course => course.name.replace(/\([^)]+\)/g, '') === seminar.replace(" Sem", ""));
+            const courseDesc = course !== undefined ? course.description : "";
+
+            const toolTipUniqueId = semInfo !== undefined ? semInfo.name.trim() + index.toString() : "";
+
             return (
-                <div
-                    className='indivSeminar'
-                    draggable={true}
-                    onDragStart={(event) => {
-                        props.handleDragStart(option, event, seminar)
-                    }}
-                    onDragEnd={(event) => {
-                        props.handleDragEnd(event);
-                    }}
-                >
-                    {seminar}
+                <div>
+                    <div
+                        className='indivSeminar'
+                        draggable={true}
+                        onDragStart={(event) => {
+                            props.handleDragStart(option, event, seminar)
+                        }}
+                        onDragEnd={(event) => {
+                            props.handleDragEnd(event);
+                        }}
+                        data-tooltip-id={toolTipUniqueId}
+                        data-tooltip-content={courseDesc}
+                        courseDetails={courseDetails}
+                        extendedName={semInfo.name}
+                    >
+                        {seminar}
+                    </div>
+
+                    <ReactTooltip place="bottom" id={toolTipUniqueId} render={({content, activeAnchor}) => (
+                        <div className='popUpDescription'>
+                            <div className='popUpExtendedName'>
+                                <b>{activeAnchor?.getAttribute('extendedName')}</b>
+                            </div>
+                            <br/>
+                            <div>
+                                {content}
+                                <br/>
+                                <div className='popUpCourseDetails'>
+                                    <b>Lab Details:</b>
+                                    <br/>
+                                    {activeAnchor?.getAttribute('courseDetails').split('\n').map((courseDetail) => {
+                                        courseDetail = courseDetail.replaceAll(",", "");
+                                        return (
+                                            <div>
+                                                {courseDetail}
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    />
                 </div>
             )
         })
@@ -496,44 +657,6 @@ const Seminars = (props) => {
     )
 }
 
-const Search = (props) => {
-
-    const isDropDown = props.dropDownClick[3];
-
-    const onSignClick = () => {
-        props.setDropDownClick(3);
-    }
-
-    // Get list of all courses into a local var
-    const courses = props.searchInfo;
-    const placeHolder = 'Search...';
-
-
-    // Return component with all the discipline's plans
-    return (
-        <div>
-            <div className={`searchPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
-                <div className='searchPaletteTitle'>
-                    Add
-                </div>
-                <div className='searchPaletteDropDownButton' onClick={onSignClick}>
-                    <DropDownSign isDropDown={isDropDown}/>
-                </div>
-            </div>
-            {!isDropDown && (
-                <div className='searchBarCoursesInfo'>
-                    <Searchbar
-                        placeHolder={placeHolder}
-                        options={courses}
-                        addCourse={props.addCourse}
-                        isSearchable={true}
-                    />
-                </div>
-            )}
-        </div>
-    )
-}
-
 
 const CreateFromPreference = (props) => {
 
@@ -547,7 +670,7 @@ const CreateFromPreference = (props) => {
         <div>
             <div className={`createPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
                 <div className='createsPaletteTitle'>
-                    Random Generate
+                    AutoGenerate
                 </div>
                 <div className='createsPaletteDropDownButton' onClick={onSignClick}>
                     <DropDownSign isDropDown={isDropDown}/>
@@ -565,6 +688,18 @@ const PreferenceTab = (props) => {
     const [from, setFrom] = useState(timeSlots.at(0));
     const [to, setTo] = useState(timeSlots.at(timeSlots.length - 1));
     const [showDropDownList, setShowDropDownList] = useState([false, false]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState('');
+
+    const openModal = (content) => {
+        setIsModalOpen(true);
+        setModalContent(content);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setModalContent('');
+    };
 
     const handleDropDown = (index) => {
         const dropDownList = [...showDropDownList];
@@ -631,24 +766,35 @@ const PreferenceTab = (props) => {
         const endInMin = timeToMinutes("22:00");
         const toInMin = timeToMinutes(to);
 
-        const startRow = (fromInMin - startInMin)/30 - 1;
-        const endRow = newHighLightCells.length - (endInMin - toInMin)/30;
+        const startRow = (fromInMin - startInMin) / 30 - 1;
+        const endRow = newHighLightCells.length - (endInMin - toInMin) / 30;
 
         // TODO: Not being used, need to update in the future
         const profs = Array.from({length: props.lectureTab.length}, () => ['ALL']);
 
-        restController.getUpdatedTimetable({timetable: props.highLightCells, courseList : unDraggedTagList, profs: profs, term: props.term, startRow: startRow, endRow: endRow})
+        restController.getUpdatedTimetable({
+            timetable: props.highLightCells,
+            courseList: unDraggedTagList,
+            profs: profs,
+            term: props.term,
+            startRow: startRow,
+            endRow: endRow
+        })
             .then(updatedTimetable => {
-                const reformatTimetable = props.reformatTimetable(updatedTimetable);
-                props.setHighLightCells(reformatTimetable);
-                props.setLectureTab([]);
-                props.setLabTab([]);
-                props.setSeminarTab([]);
+                if (updatedTimetable.includes("Random Generate failed")) {
+                    openModal(updatedTimetable);
+                } else {
+                    const reformatTimetable = props.reformatTimetable(updatedTimetable);
+                    props.setHighLightCells(reformatTimetable);
+                    props.setLectureTab([]);
+                    props.setLabTab([]);
+                    props.setSeminarTab([]);
+                }
             });
     }
 
     return (
-        <div className='coursesInfoBottom'>
+        <div className='coursesInfo'>
             <div className='innerButtonDiv'>
                 <div className='preferredTime'>
                     <div className='preferredTimeTitle'>Choose A Time Period</div>
@@ -656,7 +802,9 @@ const PreferenceTab = (props) => {
                         From
                         <div className='fromTime'>
                             <div className='fromPart'
-                                 onClick={() => {handleDropDown(0)}}>
+                                 onClick={() => {
+                                     handleDropDown(0)
+                                 }}>
                                 {from}
                             </div>
                             {showDropDownList[0] && (<div className='timeDivWrapper'>{fromTimeDivs}</div>)}
@@ -666,7 +814,9 @@ const PreferenceTab = (props) => {
                         To
                         <div className='toTime'>
                             <div className='fromPart'
-                                 onClick={() => {handleDropDown(1)}}
+                                 onClick={() => {
+                                     handleDropDown(1)
+                                 }}
                             >
                                 {to}
                             </div>
@@ -682,11 +832,70 @@ const PreferenceTab = (props) => {
                     Generate
                 </div>
             </div>
+
+            <div>
+                <Modal isOpen={isModalOpen} onClose={closeModal} content={modalContent}/>
+            </div>
         </div>
     );
 }
 
-// Table for courses componet
+const Modal = ({
+                   isOpen, onClose, content
+               }) => {
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="modal-overlay">
+            <div className="modal">
+                <div className="modal-content">{content}</div>
+                <button className="modal-close-button" onClick={onClose}>
+                    &times;
+                </button>
+            </div>
+        </div>
+    );
+};
+
+const Search = (props) => {
+
+    const isDropDown = props.dropDownClick[3];
+
+    const onSignClick = () => {
+        props.setDropDownClick(3);
+    }
+
+    // Get list of all courses into a local var
+    const courses = props.searchInfo;
+    const placeHolder = 'Search...';
+
+
+    // Return component with all the discipline's plans
+    return (
+        <div>
+            <div className={`searchPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
+                <div className='searchPaletteTitle'>
+                    Add
+                </div>
+                <div className='searchPaletteDropDownButton' onClick={onSignClick}>
+                    <DropDownSign isDropDown={isDropDown}/>
+                </div>
+            </div>
+            {!isDropDown && (
+                <div className='searchBarCoursesInfo'>
+                    <Searchbar
+                        placeHolder={placeHolder}
+                        options={courses}
+                        addCourse={props.addCourse}
+                        isSearchable={true}
+                    />
+                </div>
+            )}
+        </div>
+    )
+}
+
 const Timetable = (props) => {
     const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
     const timeSlots = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30'];
@@ -694,16 +903,12 @@ const Timetable = (props) => {
 
     // Store the schedule for the current term in scheduleMap whenever it changes
     useEffect(() => {
-
-        // console.log(props.scheduleMap);
-
-        console.log(props.tabMap);
-
         const updatedMap = new Map(props.scheduleMap);
         updatedMap.set(props.selectedTerm, props.highLightCells);
         props.setScheduleMap(updatedMap);
 
     }, [props.highLightCells]);
+
 
     return (
         <table className='timeTable'>
@@ -754,30 +959,95 @@ const Timetable = (props) => {
                                     content = text;
                                 }
 
+                                // pop up description
+                                let descriptionContent = "";
+                                let sectionLocation = "";
+                                let sectionInstructor = "";
+                                const hasSection = section !== null && color !== '#888888';
+                                const toolTipUniqueId = section + "index" + dayIndex.toString();
+
+                                if (hasSection) {
+                                    let courseTitle = "";
+                                    const parts = section.split(" ");
+                                    parts.forEach((part, index) => {
+                                        if (index !== parts.length - 1) {
+                                            if (part.toLowerCase() !== "lab" && (part.toLowerCase() !== "sem")) {
+                                                courseTitle += part;
+                                                courseTitle += " ";
+                                            }
+                                        }
+                                    })
+
+                                    const courses = props.structure.find(courses => courses.term === props.selectedTerm);
+                                    const course = courses.courses.find(course => course.name.replace(/\([^)]+\)/g, '') === courseTitle.trim());
+                                    descriptionContent = course !== undefined ? course.description : "";
+
+                                    const courseSection = parts[parts.length - 1];
+
+                                    if (section.toLowerCase().includes("lab")) {
+                                        const lab = props.labInfo.find(lab => lab.name === courseTitle + "Lab");
+
+                                        if (lab !== undefined) {
+                                            const labSectionInfo = lab.options.find(labSection => labSection.section === courseSection);
+                                            if (labSectionInfo !== undefined) {
+                                                sectionLocation = labSectionInfo.place === "" ? "unknown" : labSectionInfo.place;
+                                                sectionInstructor = labSectionInfo.instructor === "" ? "unknown" : labSectionInfo.instructor;
+                                            }
+                                        }
+                                    } else if (section.toLowerCase().includes("sem")) {
+                                        const seminar = props.semInfo.find(seminar => seminar.name === courseTitle + "Sem");
+
+                                        if (seminar !== undefined) {
+                                            const seminarSectionInfo = seminar.options.find(seminarSection => seminarSection.section === courseSection);
+                                            if (seminarSectionInfo !== undefined) {
+                                                sectionLocation = seminarSectionInfo.place === "" ? "unknown" : seminarSectionInfo.place;
+                                                sectionInstructor = seminarSectionInfo.instructor === "" ? "unknown" : seminarSectionInfo.instructor;
+                                            }
+                                        }
+                                    } else {
+                                        const lecture = props.lecInfo.find(lecture => lecture.name === courseTitle.trim());
+
+                                        if (lecture !== undefined) {
+                                            const lectureSectionInfo = lecture.options.find(lectureSection => lectureSection.section === courseSection);
+                                            if (lectureSectionInfo !== undefined) {
+                                                sectionLocation = lectureSectionInfo.place === "" ? "unknown" : lectureSectionInfo.place;
+                                                sectionInstructor = lectureSectionInfo.instructor === "" ? "unknown" : lectureSectionInfo.instructor;
+                                            }
+                                        }
+                                    }
+                                }
+
                                 return (
                                     <td
                                         key={day}
                                         className={className}
                                     >
-                                        {color && (
-                                            <div
-                                                className={innerClassName}
-                                                style={{
-                                                    color: color,
-                                                    backgroundColor: color,
-                                                    backgroundImage: innerClassName.includes("Conflict") ? `url(/conflict.png)` : null,
-                                                    backgroundSize: '37px 37px',
-                                                    backgroundPosition: "center",
-                                                }}
-                                                onContextMenu={(event) => props.handleRightClick(event, section)}
-                                                onDragOver={props.handleDragOver}
-                                                onDrop={(event) => props.handleDrop(event, hourIndex, dayIndex, section)}
-                                            >
-                                                <div className='content'>
-                                                    {content}
+                                        <div className="insideCell">
+                                            {color && (
+                                                <div
+                                                    className={innerClassName}
+                                                    style={{
+                                                        color: color,
+                                                        backgroundColor: color,
+                                                        backgroundImage: innerClassName.includes("Conflict") ? `url(/conflict.png)` : null,
+                                                        backgroundSize: '37px 37px',
+                                                        backgroundPosition: "center",
+                                                    }}
+                                                    onContextMenu={(event) => props.handleRightClick(event, section)}
+                                                    onDragOver={props.handleDragOver}
+                                                    onDrop={(event) => props.handleDrop(event, hourIndex, dayIndex, section)}
+                                                    data-tooltip-id="cellsInTimeTable"
+                                                    data-tooltip-content={descriptionContent}
+                                                    extendedName={section}
+                                                    sectionLocation={sectionLocation}
+                                                    sectionInstructor={sectionInstructor}
+                                                >
+                                                    <div className='content'>
+                                                        {content}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        )}
+                                            )}
+                                        </div>
                                     </td>
                                 );
                             })}
@@ -785,15 +1055,39 @@ const Timetable = (props) => {
                     );
                 })}
                 </tbody>
+
+                <ReactTooltip place="bottom" id="cellsInTimeTable"
+                              render={({content, activeAnchor}) => (
+                                  <div className='popUpDescription'>
+                                      <div className='popUpExtendedName'>
+                                          <b>{activeAnchor?.getAttribute('extendedName')}</b>
+                                      </div>
+                                      <br/>
+                                      <div>
+                                          {content}
+                                          <br/>
+                                          <div className='popUpCourseDetails'>
+                                              <b>Course Details:</b>
+                                              <br/>
+                                              <b>Instructor: </b>
+                                              {activeAnchor?.getAttribute('sectionInstructor')}
+                                              <br></br>
+                                              <b>Location: </b>
+                                              {activeAnchor?.getAttribute('sectionLocation')}
+                                          </div>
+                                      </div>
+                                  </div>
+                              )}
+                />
             </div>
         </table>
-    );
-};
+    )
+}
 
 class Scheduler extends Component {
 
     addCourse = (courseName) => {
-        
+
         const termType = this.props.selectedTerm.split(" ")[0].toLowerCase();
         const restController = new RESTController();
 
@@ -801,12 +1095,12 @@ class Scheduler extends Component {
             courseName: courseName,
             term: termType,
         }
-        
+
         // Query backend for data about lec, lab, sem if exist for the searched course
         restController.getIndivLec(data).then((result) => {
 
             // console.log("result[0]: " + result[0]);
-            
+
             // Update respective info and tab data structures for lectures
             if (result !== [] && result[0] !== undefined && result[0] !== null) {
                 this.props.setLecInfo([
@@ -826,7 +1120,7 @@ class Scheduler extends Component {
             // console.log(result);
         });
         restController.getIndivLab(data).then((result) => {
-            
+
             // Update respective info and tab data structures for lab
             if (result !== [] && result[0] !== undefined && result[0] !== null) {
                 this.props.setLabInfo([
@@ -846,7 +1140,7 @@ class Scheduler extends Component {
             // console.log(result);
         });
         restController.getIndivSem(data).then((result) => {
-            
+
             // Update respective info and tab data structures for seminar
             if (result !== [] && result[0] !== undefined && result[0] !== null) {
                 this.props.setSemInfo([
@@ -855,7 +1149,7 @@ class Scheduler extends Component {
                 ])
 
                 // Ensure we're not assigning a null to LectureTab (throws error)
-                var updatedSemTab = (this.props.seminarTab !== null) ? [...this.props.seminarTab] : []; 
+                var updatedSemTab = (this.props.seminarTab !== null) ? [...this.props.seminarTab] : [];
 
                 this.props.setSeminarTab([
                     ...updatedSemTab,
@@ -1126,19 +1420,16 @@ class Scheduler extends Component {
                 labTab: [],
                 seminarTab: []
             }
-        }
-        else {
+        } else {
             tabs = this.props.tabMap.get(this.props.selectedTerm);
         }
 
         // Updated the specific tab in the specific record in the tabMap
         if (courseName.includes('Sem')) {
             tabs.seminarTab.push(courseName);
-        }
-        else if (courseName.includes('Lab')) {
+        } else if (courseName.includes('Lab')) {
             tabs.labTab.push(courseName);
-        }
-        else {
+        } else {
             tabs.lectureTab.push(courseName);
         }
         const updatedTabMap = new Map(this.props.tabMap);
@@ -1162,14 +1453,12 @@ class Scheduler extends Component {
                     return course !== courseName;
                 })
                 tabs["seminarTab"] = [...updatedTabs];
-            }
-            else if (courseName.includes('Lab')) {
+            } else if (courseName.includes('Lab')) {
                 updatedTabs = tabs.labTab.filter(function (course) {
                     return course !== courseName;
                 })
                 tabs["labTab"] = [...updatedTabs];
-            }
-            else {
+            } else {
                 updatedTabs = tabs.lectureTab.filter(function (course) {
                     return course !== courseName;
                 })
@@ -1238,7 +1527,7 @@ class Scheduler extends Component {
                         if (column[2] !== null) {
                             column[0] = '#275D38';
                         } else {
-                            newHighlightedCells[rowIndex][columnIndex] = [null, '',null];
+                            newHighlightedCells[rowIndex][columnIndex] = [null, '', null];
                         }
                     } else {
                         if (column[2] === section) {
@@ -1328,6 +1617,7 @@ class Scheduler extends Component {
             labTab,
             seminarTab,
             highLightCells,
+            structure,
         } = this.props;
 
         return (
@@ -1350,7 +1640,7 @@ class Scheduler extends Component {
                                 csvMap={this.props.scheduleMap}
                                 fileName="EngineeringSchedule"
                             />
-                            <ImportCSV 
+                            <ImportCSV
                                 setHighLightCells={this.props.setHighLightCells}
                                 scheduleMap={this.props.scheduleMap}
                                 setScheduleMap={this.props.setScheduleMap}
@@ -1422,6 +1712,7 @@ class Scheduler extends Component {
                             handleDragStart={this.handleDragStart}
                             handleDragEnd={this.handleDragEnd}
                             tabMap={this.props.tabMap}
+                            structure={structure}
                         />
                         <Labs
                             dropDownClick={dropDownClick}
@@ -1435,6 +1726,7 @@ class Scheduler extends Component {
                             handleDragStart={this.handleDragStart}
                             handleDragEnd={this.handleDragEnd}
                             tabMap={this.props.tabMap}
+                            structure={structure}
                         />
                         <Seminars
                             dropDownClick={dropDownClick}
@@ -1448,13 +1740,7 @@ class Scheduler extends Component {
                             handleDragStart={this.handleDragStart}
                             handleDragEnd={this.handleDragEnd}
                             tabMap={this.props.tabMap}
-                        />
-                        <Search
-                            dropDownClick={dropDownClick}
-                            setDropDownClick={this.props.setDropDownClick}
-                            selectedTerm={selectedTerm}
-                            searchInfo={searchInfo}
-                            addCourse={this.addCourse}
+                            structure={structure}
                         />
                         <CreateFromPreference
                             dropDownClick={dropDownClick}
@@ -1471,6 +1757,14 @@ class Scheduler extends Component {
                             term={this.props.selectedTerm}
                             reformatTimeTable={this.reformatTimetable}
                         />
+                        <Search
+                            dropDownClick={dropDownClick}
+                            setDropDownClick={this.props.setDropDownClick}
+                            selectedTerm={selectedTerm}
+                            searchInfo={searchInfo}
+                            addCourse={this.addCourse}
+                        />
+
                     </div>
                     <div className='timeTableTable'>
                         <Timetable
@@ -1489,6 +1783,7 @@ class Scheduler extends Component {
                             lectureTab={lectureTab}
                             labTab={labTab}
                             seminarTab={seminarTab}
+                            structure={structure}
                         />
                     </div>
                 </div>

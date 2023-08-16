@@ -86,8 +86,6 @@ class Home extends Component {
     render() {
         const {programList} = this.state;
 
-        
-
         return (
             <div className="frontPageWrapper">
 
@@ -97,11 +95,6 @@ class Home extends Component {
 
                 <div className="frontPageTextWrapper">
                     <h1>Engineering Task Manager</h1>
-                </div>
-
-
-                <div className="frontPageTextWrapper">
-                    <h2>2022 - 2023 </h2>
                 </div>
 
                 <br></br>

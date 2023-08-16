@@ -140,12 +140,18 @@ class RESTController extends Component {
                                 courseTitle = option.courseTitle;
                             }
 
+                            const place = option.place;
+                            const instructor = option.instructorName;
+
                             return {
                                 section: option.section,
                                 color: this.generateRandomColor(),
                                 times: duration,
+                                place: place,
+                                instructor: instructor,
                             }
                         });
+
 
                         lecs.push({
                             name: course,
@@ -189,11 +195,15 @@ class RESTController extends Component {
                         const options = labMap[course].map((option) => {
 
                             const duration = this.updateTime(option);
+                            const place = option.place;
+                            const instructor = option.instructorName;
 
                             return {
                                 section: option.section,
                                 color: this.generateRandomColor(),
-                                times: duration
+                                times: duration,
+                                place: place,
+                                instructor: instructor,
                             }
                         });
 
@@ -204,12 +214,9 @@ class RESTController extends Component {
                         });
                     }
                 }
-
-                console.log("lab succeed");
                 return labs;
             })
             .catch(error => {
-                console.log(newdata);
                 console.error('getLab: Error fetching data:', error);
             });
     }
@@ -239,11 +246,15 @@ class RESTController extends Component {
                         const options = semMap[course].map((option) => {
 
                             const duration = this.updateTime(option);
+                            const place = option.place;
+                            const instructor = option.instructorName;
 
                             return {
                                 section: option.section,
                                 color: this.generateRandomColor(),
-                                times: duration
+                                times: duration,
+                                place: place,
+                                instructor: instructor,
                             }
                         });
 
@@ -254,7 +265,6 @@ class RESTController extends Component {
                         });
                     }
                 }
-
                 return sems;
             })
             .catch(error => {
@@ -328,7 +338,7 @@ class RESTController extends Component {
     /**
      * Scheduler API
      * get lecture information for a given course
-     * 
+     *
      * data: courseName, term
      * */
     getIndivLec = (data) => {
@@ -338,7 +348,7 @@ class RESTController extends Component {
     /**
      * Scheduler API
      * get lab information for a given course
-     * 
+     *
      * data: courseName, term
      * */
     getIndivLab = (data) => {
@@ -348,7 +358,7 @@ class RESTController extends Component {
     /**
      * Scheduler API
      * get seminar information for a given course
-     * 
+     *
      * data: courseName, term
      * */
     getIndivSem = (data) => {

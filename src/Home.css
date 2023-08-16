@@ -1,8 +1,5 @@
 .indvProgram {
-    color: white;
-
-
-    width: 200px;
+    width: 250px;
     height: 70px;
     margin: 10px;
 
@@ -14,43 +11,31 @@
     padding-right: 10px;
 
     cursor: pointer;
-    border-radius: 10px;
     display: inline-block;
+
+    background-color: lightgray;
 }
 
-
-.row0 {
-    background-color: rgb(140, 101, 101);
+.indvProgram:hover {
+    background-color: #7B7B7B;
 }
-
-.row1 {
-    background-color: rgb(100, 81, 120);
-}
-
-.row2 {
-    background-color: rgb(106, 116, 65);
-}
-
-.row3 {
-    background-color: rgb(97, 130, 164);
-}
-
-.row4 {
-    background-color: goldenrod;
-}
-
 
 .wrapperTermProgram {
     display: flex;
     justify-content: center;
+    align-items: center;
     font-size: 19px;
-    font-family: -apple-system;
+    font-family: 'Roboto', sans-serif;
+    color: #275d38;
+    font-weight: 500;
 }
 
 .logoWrapper {
 
     display: flex;
     justify-content: center;
+
+    margin-bottom: 20px;
 }
 
 
@@ -63,4 +48,8 @@
 .frontPageTextWrapper {
     display: flex;
     justify-content: center;
+
+    font-family: 'Roboto', sans-serif;
+
+    margin-bottom: 20px;
 }
