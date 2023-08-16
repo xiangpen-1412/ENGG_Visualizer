@@ -987,7 +987,7 @@ const Timetable = (props) => {
                                         if (lab !== undefined) {
                                             const labSectionInfo = lab.options.find(labSection => labSection.section === courseSection);
                                             if (labSectionInfo !== undefined) {
-                                                sectionLocation = labSectionInfo.place;
+                                                sectionLocation = labSectionInfo.place === "" ? "unknown" : labSectionInfo.place;
                                                 sectionInstructor = labSectionInfo.instructor === "" ? "unknown" : labSectionInfo.instructor;
                                             }
                                         }
@@ -997,7 +997,7 @@ const Timetable = (props) => {
                                         if (seminar !== undefined) {
                                             const seminarSectionInfo = seminar.options.find(seminarSection => seminarSection.section === courseSection);
                                             if (seminarSectionInfo !== undefined) {
-                                                sectionLocation = seminarSectionInfo.place;
+                                                sectionLocation = seminarSectionInfo.place === "" ? "unknown" : seminarSectionInfo.place;
                                                 sectionInstructor = seminarSectionInfo.instructor === "" ? "unknown" : seminarSectionInfo.instructor;
                                             }
                                         }
@@ -1007,7 +1007,7 @@ const Timetable = (props) => {
                                         if (lecture !== undefined) {
                                             const lectureSectionInfo = lecture.options.find(lectureSection => lectureSection.section === courseSection);
                                             if (lectureSectionInfo !== undefined) {
-                                                sectionLocation = lectureSectionInfo.place;
+                                                sectionLocation = lectureSectionInfo.place === "" ? "unknown" : lectureSectionInfo.place;
                                                 sectionInstructor = lectureSectionInfo.instructor === "" ? "unknown" : lectureSectionInfo.instructor;
                                             }
                                         }
