@@ -246,7 +246,7 @@ const Lecs = (props) => {
 
                         var toRemove = props.tabMap.get(props.selectedTerm).lectureTab;
 
-                        const cleanedLectures = lectures.filter(function(lecture) {
+                        const cleanedLectures = lectures.filter(function (lecture) {
                             return !toRemove.includes(lecture);
                         })
 
@@ -394,7 +394,7 @@ const Labs = (props) => {
 
                         var toRemove = props.tabMap.get(props.selectedTerm).labTab;
 
-                        const cleanedLabs = labs.filter(function(lab) {
+                        const cleanedLabs = labs.filter(function (lab) {
                             return !toRemove.includes(lab);
                         })
                         labs = [...cleanedLabs];
@@ -524,7 +524,7 @@ const Seminars = (props) => {
     useEffect(() => {
         if (props.semInfo && props.semInfo.length > 0) {
             if (props.seminarTab === null || !props.seminarTab.some(sem => props.semInfo.map(info => info.name).includes(sem))) {
-                
+
                 // Get all seminar names contained in lecInfo
                 var seminars = props.semInfo.map((seminar) => {
                     return seminar.name;
@@ -536,13 +536,13 @@ const Seminars = (props) => {
 
                         var toRemove = props.tabMap.get(props.selectedTerm).seminarTab;
 
-                        const cleanedSeminars = seminars.filter(function(seminar) {
+                        const cleanedSeminars = seminars.filter(function (seminar) {
                             return !toRemove.includes(seminar);
                         })
                         seminars = [...cleanedSeminars];
                     }
                 }
-                
+
                 props.setSeminarTab(seminars);
             }
         } else {
@@ -1019,8 +1019,8 @@ const Timetable = (props) => {
                                         key={day}
                                         className={className}
                                     >
-                                        {color && (
-                                            <div>
+                                        <div className="insideCell">
+                                            {color && (
                                                 <div
                                                     className={innerClassName}
                                                     style={{
@@ -1033,7 +1033,7 @@ const Timetable = (props) => {
                                                     onContextMenu={(event) => props.handleRightClick(event, section)}
                                                     onDragOver={props.handleDragOver}
                                                     onDrop={(event) => props.handleDrop(event, hourIndex, dayIndex, section)}
-                                                    data-tooltip-id={toolTipUniqueId}
+                                                    data-tooltip-id="cellsInTimeTable"
                                                     data-tooltip-content={descriptionContent}
                                                     extendedName={section}
                                                     sectionLocation={sectionLocation}
@@ -1042,34 +1042,9 @@ const Timetable = (props) => {
                                                     <div className='content'>
                                                         {content}
                                                     </div>
-
                                                 </div>
-
-                                                <ReactTooltip place="bottom" id={toolTipUniqueId}
-                                                              render={({content, activeAnchor}) => (
-                                                                  <div className='popUpDescription'>
-                                                                      <div className='popUpExtendedName'>
-                                                                          <b>{activeAnchor?.getAttribute('extendedName')}</b>
-                                                                      </div>
-                                                                      <br/>
-                                                                      <div>
-                                                                          {content}
-                                                                          <br/>
-                                                                          <div className='popUpCourseDetails'>
-                                                                              <b>Course Details:</b>
-                                                                              <br/>
-                                                                              <b>Instructor: </b>
-                                                                              {activeAnchor?.getAttribute('sectionInstructor')}
-                                                                              <br></br>
-                                                                              <b>Location: </b>
-                                                                              {activeAnchor?.getAttribute('sectionLocation')}
-                                                                          </div>
-                                                                      </div>
-                                                                  </div>
-                                                              )}
-                                                />
-                                            </div>
-                                        )}
+                                            )}
+                                        </div>
                                     </td>
                                 );
                             })}
@@ -1077,10 +1052,34 @@ const Timetable = (props) => {
                     );
                 })}
                 </tbody>
+
+                <ReactTooltip place="bottom" id="cellsInTimeTable"
+                              render={({content, activeAnchor}) => (
+                                  <div className='popUpDescription'>
+                                      <div className='popUpExtendedName'>
+                                          <b>{activeAnchor?.getAttribute('extendedName')}</b>
+                                      </div>
+                                      <br/>
+                                      <div>
+                                          {content}
+                                          <br/>
+                                          <div className='popUpCourseDetails'>
+                                              <b>Course Details:</b>
+                                              <br/>
+                                              <b>Instructor: </b>
+                                              {activeAnchor?.getAttribute('sectionInstructor')}
+                                              <br></br>
+                                              <b>Location: </b>
+                                              {activeAnchor?.getAttribute('sectionLocation')}
+                                          </div>
+                                      </div>
+                                  </div>
+                              )}
+                />
             </div>
         </table>
-    );
-};
+    )
+}
 
 class Scheduler extends Component {
 
@@ -1418,19 +1417,16 @@ class Scheduler extends Component {
                 labTab: [],
                 seminarTab: []
             }
-        }
-        else {
+        } else {
             tabs = this.props.tabMap.get(this.props.selectedTerm);
         }
 
         // Updated the specific tab in the specific record in the tabMap
         if (courseName.includes('Sem')) {
             tabs.seminarTab.push(courseName);
-        }
-        else if (courseName.includes('Lab')) {
+        } else if (courseName.includes('Lab')) {
             tabs.labTab.push(courseName);
-        }
-        else {
+        } else {
             tabs.lectureTab.push(courseName);
         }
         const updatedTabMap = new Map(this.props.tabMap);
@@ -1454,14 +1450,12 @@ class Scheduler extends Component {
                     return course !== courseName;
                 })
                 tabs["seminarTab"] = [...updatedTabs];
-            }
-            else if (courseName.includes('Lab')) {
+            } else if (courseName.includes('Lab')) {
                 updatedTabs = tabs.labTab.filter(function (course) {
                     return course !== courseName;
                 })
                 tabs["labTab"] = [...updatedTabs];
-            }
-            else {
+            } else {
                 updatedTabs = tabs.lectureTab.filter(function (course) {
                     return course !== courseName;
                 })
@@ -1630,7 +1624,7 @@ class Scheduler extends Component {
                                 csvMap={this.props.scheduleMap}
                                 fileName="EngineeringSchedule"
                             />
-                            <ImportCSV 
+                            <ImportCSV
                                 setHighLightCells={this.props.setHighLightCells}
                                 scheduleMap={this.props.scheduleMap}
                                 setScheduleMap={this.props.setScheduleMap}

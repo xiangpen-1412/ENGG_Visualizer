@@ -234,10 +234,11 @@
 
 .popUpDescription {
     width: 450px;
-    height: auto;
-
+    min-height: 50px;
+    z-index: 9999;
     text-align: left;
     font-family: 'Roboto', sans-serif;
+    overflow: visible;
 }
 
 .popUpExtendedName {
@@ -396,6 +397,10 @@
 
 .topCell, .timeCell {
     border-top: 2px solid #CECECE;
+}
+
+td {
+    position: relative;
 }
 
 .timeCell, .headerTimeCell {
