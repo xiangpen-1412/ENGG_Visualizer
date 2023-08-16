@@ -147,11 +147,11 @@
     border-radius: 4px 4px 0 0;
 }
 
-.createPalette, .createPalette.dropdownOpen {
+.searchPalette, .searchPalette.dropdownOpen {
     border-bottom: 1px solid #7B7B7B;
 }
 
-.createPalette.dropdownOpen {
+.searchPalette.dropdownOpen {
     border-radius: 0 0 4px 4px;
 }
 
@@ -175,19 +175,10 @@
     background-color: #FFFFFF;
     border-left: 1px solid #7B7B7B;
     border-right: 1px solid #7B7B7B;
-    border-top: 1px solid #7B7B7B;
-
-    padding: 15px 12px 10px 15px;
-}
-
-.coursesInfoBottom {
-    background-color: #FFFFFF;
-    border-left: 1px solid #7B7B7B;
-    border-right: 1px solid #7B7B7B;
     border-bottom: 1px solid #7B7B7B;
     border-radius: 0 0 4px 4px;
 
-    padding: 15px 15px 10px 15px;
+    padding: 15px 10px 10px 15px;
 }
 
 .innerButtonDiv {
@@ -215,6 +206,27 @@
 
     cursor: pointer;
 
+}
+
+.popUpDescription {
+    width: 450px;
+    height: auto;
+
+    text-align: left;
+    font-family: 'Roboto', sans-serif;
+}
+
+.popUpExtendedName {
+    padding-bottom: 10px;
+    border-bottom: 2px solid whitesmoke;
+    margin-bottom: -10px;
+
+    font-size: 17px;
+}
+
+.popUpCourseDetails {
+    margin-top: 10px;
+    white-space: pre-line;
 }
 
 .empty {
@@ -425,4 +437,41 @@
     50% {
         transform: scale(1.0);
     }
+}
+
+/* Modal.css */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9999;
+}
+
+.modal {
+    position: relative; /* 设置relative，使得close按钮可以相对于这个modal定位 */
+    width: 15%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.modal-close-button {
+    position: absolute; /* 使得按钮脱离文档流并且可以被定位在modal的右上角 */
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.modal-content {
+    padding: 20px;
 }
