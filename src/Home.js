@@ -13,7 +13,7 @@ const Program = (props) => {
                 <div
                     key={xIndex}
                     programInfo={program}
-                    className = {"indvProgram" + " row" + yIndex}
+                    className = "indvProgram"
                     onClick={(event) =>
                         navigate("/App",
                             {
@@ -87,20 +87,31 @@ class Home extends Component {
         const {programList} = this.state;
 
         return (
-            <div className="frontPageWrapper">
+            <div>
+                <header className="header">
+                    <div className="header-content">
+                        <img alt="University of Alberta logo" src="uofalogo.png" className="image"/>
+                        <div className="site-title">
+                            Engineering Task Manager
+                        </div>
+                    </div>
+                </header>
+                <div className="frontPageWrapper">
 
-                <div className="logoWrapper">
-                    <img src="engineering.png"  className="logo" width="450" height="100"/>
-                </div>
+                    <div className="frontPageTextWrapper">
+                        <h1 className="homeTitle">Engineering Task Manager</h1>
+                    </div>
 
-                <div className="frontPageTextWrapper">
-                    <h1>Engineering Task Manager</h1>
-                </div>
 
-                <br></br>
+                    <div className='homeDescription'> 
+                        Select an Engineering discipline below.
+                    </div>
 
-                <div className='wrapperTermProgram'>
-                    <Program programList={programList} onClickProgram={this.onClickProgram}/>
+                    <br></br>
+
+                    <div className='wrapperTermProgram'>
+                        <Program programList={programList} onClickProgram={this.onClickProgram}/>
+                    </div>
                 </div>
             </div>
         )
