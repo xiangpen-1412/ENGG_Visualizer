@@ -57,7 +57,7 @@ const Plan = (props) => {
     return (
         <div>
             <div className="SelectedPlanDescription">SELECTED PLAN</div>
-            <div className="sectionDescription">Return to the visualizer to select different plans and course groups.
+            <div className="scheduleDescription">Return to the visualizer to select different plans and course groups.
             </div>
             <div className="planTube">
                 {planTube}
@@ -675,7 +675,7 @@ const CreateFromPreference = (props) => {
         <div>
             <div className={`createPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
                 <div className='createsPaletteTitle'>
-                    AutoGenerate
+                    Auto Generate
                 </div>
                 <div className='createsPaletteDropDownButton' onClick={onSignClick}>
                     <DropDownSign isDropDown={isDropDown}/>
@@ -1637,8 +1637,8 @@ class Scheduler extends Component {
                     </div>
                     <div className="allOptions">
                         <div className="SelectedPlanDescription">ADDITIONAL ACTIONS</div>
-                        <div className="sectionDescription">
-                            Create a schedule from template, from a local file, or to export your progress.
+                        <div className="scheduleDescription">
+                            Import or export to excel, or save a pdf report of your schedule.
                         </div>
                         <div className="optionsButtonsWrapper">
                             <ExportCSV

@@ -6,6 +6,12 @@
     font-weight: 350;
 }
 
+.scheduleDescription {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    margin: 0px 10px 20px 0px;
+}
+
 .optionsWrapper {
     display: flex;
     flex-direction: row;
@@ -52,7 +58,6 @@
     font-weight: 500;
 
     margin-left: 20px;
-    margin-bottom: 10px;
 }
 
 .courseGroupText {
@@ -61,6 +66,7 @@
     font-weight: 400;
 
     margin-left: 20px;
+    margin-top: 10px;
 }
 
 .exportButton {
@@ -142,7 +148,7 @@
     color: #275D38;
     font-size: 18px;
     font-family: 'Roboto', sans-serif;
-    font-weight: 600;
+    font-weight: 500;
 
     /*border-radius: 4px 4px 0 0;*/
 }
