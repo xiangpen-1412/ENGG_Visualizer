@@ -1,0 +1,239 @@
+import React from 'react'
+import { jsPDF } from 'jspdf';
+import './Scheduler.css'
+
+
+export const Results = (props) => {
+    const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    const timeSlots = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30'];
+
+    // placed here because jsPDF cannot render external styles, and we want to be able to export Results to pdf
+    const styles = {
+
+
+
+        results: {
+            width: '1480px',
+            marginLeft: '185px',
+            marginRight: '10%',
+        },
+        resultsTitle: {
+            margin: "25px 0px 40px 0px",
+            color: "rgb(39, 93, 56)",
+            fontSize: "53px",
+            fontFamily: 'Roboto, sans-serif',
+            fontWeight: 350
+        },
+        subHeader: {
+            color: "#275d38",
+            fontSize: '35px',
+            fontFamily: 'Roboto, sans-serif',
+            fontWeight: 500,
+            display: 'flex',
+            overflow: 'hidden',
+            marginBottom: '25px'
+        },
+        resultsDescription: {
+            fontFamily: 'Roboto, sans-serif',
+            fontWeight: 400,
+            marginBottom: '40px'
+        },
+        termWrapper: {
+            display: 'grid',
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: '0px',
+            marginBottom: '60px'
+        },
+        termHeader: {
+            fontSize: '17px',
+            fontFamily: 'Roboto, sans-serif',
+            fontWeight: 500,
+            marginLeft: '20px',
+            marginBottom: '15px',
+            verticalAlign: 'text-top'
+        },
+        termCourse: {
+            fontSize: '17px',
+            fontFamily: 'Roboto, sans-serif',
+            fontWeight: 400,
+            marginLeft: '20px',
+        },
+        termBox: {
+            fontSize: '17px',
+            fontFamily: 'Roboto, sans-serif',
+            fontWeight: 500,
+            width: '400px',
+            border: '1px solid #CED4DA',
+            borderRadius: '4px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            marginBottom: '20px',
+            paddingTop: '20px',
+            paddingBottom: '20px',
+        }
+    }
+    
+    
+    const createPdf = async () => {
+
+        const report = new jsPDF('portrait', 'mm', [1782, 1260]);
+        const data = await document.querySelector("#results");
+        report.html(data).then(() => {
+            report.save("engineering_report.pdf");
+        })
+    }
+    
+    
+    
+    
+    
+    
+    return (
+        <div classname='results' style={styles.results}>
+            <h1 className='resultsTitle' style={styles.resultsTitle}>
+                Results
+            </h1>
+            <h2 className='subHeader' style={styles.subHeader}>
+                DEGREE OUTLINE
+            </h2>
+            <div className="resultsDescription" style={styles.resultsDescription}>
+                Below shows the courses placed in each term of your degree.
+            </div>
+            
+            <div className='termsWrapper' style={styles.termWrapper}>
+                
+
+                {
+                    Array.from(props.tabMap).map(([key, value]) => {
+
+                        console.log(key);
+                        console.log(value);
+
+                        if (key !== '') {
+
+                            return(
+                                <div className='termBox' style={styles.termBox}>
+                                    <div className='termHeader' style={styles.termHeader}>
+                                        {key}
+                                    </div>
+                                    {
+                                        value['lectureTab'].map((course) => {
+
+                                            return (
+                                                <div className='termCourse' style={styles.termCourse}>
+                                                    {course}
+                                                </div>
+                                            );
+                                        })
+                                    }
+                                </div>
+                            );
+                        }
+                    })
+                }
+            </div>
+
+            <h2 className='subHeader' style={styles.subHeader}>
+                TERM SCHEDULES
+            </h2>
+            <div className="resultsDescription" style={styles.resultsDescription}>
+                Below are the schedules you have created for each term.
+            </div>
+            
+
+            <div id="report">
+            {
+                Array.from(props.scheduleMap).map(([key, value]) => {
+
+                    // console.log(key, index);
+
+                    if (key !== '') {
+
+                        return (
+                                <table className='timeTable'>
+                                    <div className="resultsDescription" style={styles.resultsDescription}>
+                                        {key}
+                                    </div>
+                                    <div className='tableWrapper'>
+                                        <thead>
+                                        <tr>
+                                            <th className='headerTimeCell'></th>
+                                            {weekDays.map(day => (
+                                                <td className="headerCell" key={day}>{day}</td>
+                                            ))}
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {timeSlots.map((timeSlot, hourIndex) => {
+
+                                            return (
+                                                <tr key={hourIndex.toString()}>
+                                                    {hourIndex % 2 === 0 && <td rowSpan="2" className="timeCell">{timeSlot}</td>}
+                                                    {weekDays.map((day, dayIndex) => {
+                                                        const color = value[hourIndex][dayIndex][0];
+                                                        const part = value[hourIndex][dayIndex][1];
+                                                        const section = value[hourIndex][dayIndex][2];
+                                                        const className = hourIndex % 2 === 0 ? 'topCell' : 'bottomCell';
+
+                                                        let innerClassName = "innerCell" + part;
+
+                                                        let content;
+                                                        let text = section;
+
+                                                        if (section !== null && color === '#275D38') {
+                                                            const sectionParts = section.split(' ');
+                                                            text = '';
+                                                            sectionParts.slice(0, sectionParts.length - 1).forEach((part) => {
+                                                                text += part;
+                                                                text += ' ';
+                                                            })
+
+                                                            text = text.trimEnd();
+                                                        }
+
+                                                        if (innerClassName === 'innerCellStart') {
+                                                            content = text;
+                                                        }
+
+                                                        return (
+                                                            <td
+                                                                key={day}
+                                                                className={className}
+                                                            >
+                                                                <div className="insideCell">
+                                                                    {color && (
+                                                                        <div
+                                                                            className={innerClassName}
+                                                                            style={{
+                                                                                color: color,
+                                                                                backgroundColor: color,
+                                                                                backgroundSize: '37px 37px',
+                                                                                backgroundPosition: "center",
+                                                                            }}
+                                                                            extendedName={section}
+                                                                        >
+                                                                            <div className='content'>
+                                                                                {content}
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </td>
+                                                        );
+                                                    })}
+                                                </tr>
+                                            );
+                                        })}
+                                        </tbody>
+                                    </div>
+                                </table>
+                            )
+
+                    }
+                })
+            }
+            </div>
+        </div>
+    );
+}
