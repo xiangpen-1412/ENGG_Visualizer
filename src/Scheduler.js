@@ -291,7 +291,9 @@ const Lecs = (props) => {
 
             const extendedName = lectureInfo !== undefined ? lectureInfo.extendedName : "";
 
+            console.log(props.structure);
             const courses = props.structure.find(courses => courses.term === props.selectedTerm);
+
             const course = courses.courses.find(course => course.name.replace(/\([^)]+\)/g, '') === lecture);
             const courseDesc = course !== undefined ? course.description : "";
 
