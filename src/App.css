@@ -47,7 +47,7 @@
 }
 
 .site-title {
-    color: goldenrod;
+    color: #275d38;
     font-size: 28px;
     font-family: 'Roboto', sans-serif;
     font-weight: 300;
@@ -597,7 +597,7 @@
 }
 
 .scheduler {
-    margin-left: 10%;
+    margin-left: 185px;
     margin-right: 10%;
 }
 

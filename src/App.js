@@ -3,6 +3,7 @@ import './App.css';
 import './index.css';
 import Dropdown from './Dropdown.js';
 import Structure from './Structure.js';
+import {Results} from './Results.js';
 import {useLocation, useNavigate} from 'react-router-dom';
 import RESTController from "./controller/RESTController";
 import Scheduler from "./Scheduler"
@@ -205,6 +206,12 @@ const SubHeader = (props) => {
         </div>
     )
 
+    const results = (
+        <div className='path'>
+            Results
+        </div>
+    )
+
     const about = (
         <div className='path'>
             About
@@ -229,6 +236,9 @@ const SubHeader = (props) => {
             path = [introDiv, homeButtonIcon, schedulerDiv];
             break;
         case 2:
+            path = [introDiv, homeButtonIcon, results];
+            break;
+        case 3:
             path = about;
             break;
         default:
@@ -746,7 +756,7 @@ class App extends Component {
                 ['Group 3', ["3A", "3B"]],
                 ['Group 4', ["4A", "4B"]]
             ]),
-            tabs: ['Visualizer', 'Scheduler', 'About'],
+            tabs: ['Visualizer', 'Scheduler', 'Results', 'About'],
             selectedAtt: "",
             groupColorSet: new Map(),
             selectedProgram: "",
@@ -1428,6 +1438,13 @@ class App extends Component {
                 )}
 
                 {this.state.tabIndex === 2 && (
+                    <Results
+                        scheduleMap={scheduleMap}
+                        tabMap={tabMap}
+                    />
+                )}
+
+                {this.state.tabIndex === 3 && (
                     <About/>
                 )}
 

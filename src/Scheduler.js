@@ -1,4 +1,4 @@
-import React, {Component, useEffect, useState} from "react";
+import React, {Component, useEffect, useState, useRef} from "react";
 import './Scheduler.css'
 import Searchbar from './Searchbar.js';
 import {ExportCSV} from './ExportCSV.js';
@@ -10,6 +10,7 @@ import {pdf} from '@react-pdf/renderer';
 import {saveAs} from 'file-saver';
 import {Tooltip as ReactTooltip} from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css'
+import JsPDF from 'jspdf';
 
 const PageTitle = (props) => {
 
@@ -57,7 +58,7 @@ const Plan = (props) => {
     return (
         <div>
             <div className="SelectedPlanDescription">SELECTED PLAN</div>
-            <div className="sectionDescription">Return to the visualizer to select different plans and course groups.
+            <div className="scheduleDescription">Return to the visualizer to select different plans and course groups.
             </div>
             <div className="planTube">
                 {planTube}
@@ -677,7 +678,7 @@ const CreateFromPreference = (props) => {
         <div>
             <div className={`createPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
                 <div className='createsPaletteTitle'>
-                    AutoGenerate
+                    Auto Generate
                 </div>
                 <div className='createsPaletteDropDownButton' onClick={onSignClick}>
                     <DropDownSign isDropDown={isDropDown}/>
@@ -1090,6 +1091,53 @@ const Timetable = (props) => {
         </table>
     )
 }
+
+
+
+
+// const GenerateReport = (props) => {
+//     const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+//     const timeSlots = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30'];
+
+//     const reportTemplateRef = useRef(null);
+
+
+//     const handleGeneratePdf = () => {
+
+//         const report = new JsPDF('portrait', 'mm', [1782, 1260]);
+
+//         // report.setFont('Roboto', 'normal');
+
+
+
+//         report.html(reportTemplateRef.current, {
+
+//             async callback(report) {
+//                 await report.save('schedule_report.pdf');
+//             },
+//         });
+            
+//         // document.querySelector(".timeTableTable")).then(() => {
+//         // report.save('report.pdf');
+//     }
+
+//     return (
+//         <div>
+//             <button
+//                 onClick={ this.handleGeneratePdf}
+//                 className="exportButton"
+//             >
+//                 Download Report 2
+//             </button>
+//             <div ref={reportTemplateRef}>
+//                 <ReportTemplate 
+//                     scheduleMap={props.scheduleMap}
+//                 />
+//             </div>
+//         </div>
+//     );
+// }
+
 
 class Scheduler extends Component {
 
@@ -1608,6 +1656,23 @@ class Scheduler extends Component {
         saveAs(blob, "Scheduler_Report.pdf");
     }
 
+
+    generatePdf = () => {
+
+        const report = new JsPDF('portrait', 'mm', [1782, 1260]);
+
+        // report.setFont('Roboto', 'normal');
+
+
+
+        report.html(
+            
+            document.querySelector(".timeTableTable")).then(() => {
+                report.save('report.pdf');
+            }
+        );
+    }
+
     render() {
 
         const {
@@ -1639,8 +1704,8 @@ class Scheduler extends Component {
                     </div>
                     <div className="allOptions">
                         <div className="SelectedPlanDescription">ADDITIONAL ACTIONS</div>
-                        <div className="sectionDescription">
-                            Create a schedule from template, from a local file, or to export your progress.
+                        <div className="scheduleDescription">
+                            Import or export to excel, or save a pdf report of your schedule.
                         </div>
                         <div className="optionsButtonsWrapper">
                             <ExportCSV
@@ -1679,6 +1744,13 @@ class Scheduler extends Component {
                             >
                                 Download Report
                             </button>
+                            {/* <button
+                                onClick={ this.generatePdf()}
+                                className="exportButton"
+                            >
+                                Download Report 2
+                            </button> */}
+                            {/* <GenerateReport /> */}
                         </div>
                     </div>
                 </div>
