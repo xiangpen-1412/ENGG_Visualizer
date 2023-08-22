@@ -26,7 +26,7 @@ class RESTController extends Component {
     getPlans = (data) => {
 
         return axios
-            .post(`${this.schedulerBaseURL}/getPlans`, data.programName, this.config)
+            .post(`${this.springbootUrl}${this.schedulerBaseURL}/getPlans`, data.programName, this.config)
             .then(response => {
                 const jsonMap = JSON.stringify(response.data.obj);
                 const progMap = JSON.parse(jsonMap);
