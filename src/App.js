@@ -1441,6 +1441,15 @@ class App extends Component {
                     <Results
                         scheduleMap={scheduleMap}
                         tabMap={tabMap}
+                        structure={structure}
+                        isToolTipOpen={this.state.isToolTipOpen}
+                        showToolTip={this.showToolTip}
+                        hideToolTip={this.hideToolTip}
+                        selectedPlan={selectedPlan}
+                        updateLineMap={this.updateLineMap}
+                        lineMap={lineMap}
+                        reqMap={reqMap}
+                        courseGroupOnClick={courseGroupOnClick}
                     />
                 )}
 
