@@ -163,7 +163,7 @@ class VisualizerReport extends Component {
      * */
     renderCourseDiv = (coursesList, index, courseItem, name) => {
 
-        const className = 'indivCourses';
+        const className = 'resultsCourses';
 
         let backgroundColor;
         if (typeof courseItem.color === 'string') {
@@ -207,7 +207,6 @@ class VisualizerReport extends Component {
                      key={index}
                      ref={(el) => this.divRefs[index] = el}
                      onClick={() => this.handleOnClick(coursesList, index, this.props.updateLineMap, this.props.lineMap, this.props.reqMap)}
-                     onContextMenu={(e) => this.handleRightClick(index, e)}
                      style={{background: backgroundColor}}
                 >
                     <div className="courseName" style={{height: '50%', width: '100%'}}>
@@ -336,11 +335,11 @@ class VisualizerReport extends Component {
 
 
             return (
-                <div className='term'>
-                    <div className='termTitle'>
+                <div className='resultsTerm'>
+                    <div className='resultsTermTitle'>
                         {termColumn.term}
                     </div>
-                    <div className='courseWrapper'>
+                    <div className='courseWrapper' style={{width: "80px"}}>
                         {courseDivs}
                     </div>
                 </div>

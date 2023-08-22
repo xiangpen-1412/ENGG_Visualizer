@@ -96,7 +96,7 @@ export const ExportCSV = ({csvMap, fileName}) => {
     return (
         <div>
             <button className="exportButton" onClick={(e) => exportMapCSV(csvMap,fileName)}>
-                Export to Excel
+                Export to File
             </button>
         </div>
     )
