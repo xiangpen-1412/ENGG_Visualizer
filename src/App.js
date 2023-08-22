@@ -1044,6 +1044,10 @@ class App extends Component {
         } else {
             this.setStructure(selectedProgram, selectedPlan);
         }
+
+        this.setState({scheduleMap: new Map()});
+        this.setState({tabMap: new Map()});
+        this.setState({highLightCells: Array.from({length: 28}, () => Array.from({length: 5}, () => [null, '', null]))});
     }
 
     setStructure = (selectedProgram, selectedPlan) => {

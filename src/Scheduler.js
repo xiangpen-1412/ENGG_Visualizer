@@ -98,9 +98,6 @@ const Terms = (props) => {
             })
         }
 
-        const clearedMap = new Map();
-        props.setScheduleMap(clearedMap);
-
     }, [props.selectedPlan]);
 
     // set the lecture, labs, and seminars information

@@ -118,8 +118,8 @@ export const Results = (props) => {
     
     const createPdf = async () => {
 
-        // Ratio 99 : 70
-        const report = new jsPDF('portrait', 'mm', [2376, 1680]);
+        // Ratio 11 x 8.5
+        const report = new jsPDF('portrait', 'mm', [2200, 1700]);
         const data = await document.querySelector("#results");
         report.html(data).then(() => {
             report.save("engineering_report.pdf");
