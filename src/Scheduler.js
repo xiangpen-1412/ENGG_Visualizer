@@ -97,6 +97,10 @@ const Terms = (props) => {
                 }
             })
         }
+
+        const clearedMap = new Map();
+        props.setScheduleMap(clearedMap);
+
     }, [props.selectedPlan]);
 
     // set the lecture, labs, and seminars information
@@ -290,12 +294,13 @@ const Lecs = (props) => {
                 })
             }
 
+
             const extendedName = lectureInfo !== undefined ? lectureInfo.extendedName : "";
 
-            console.log(props.structure);
             const courses = props.structure.find(courses => courses.term === props.selectedTerm);
 
-            const course = courses.courses.find(course => course.name.replace(/\([^)]+\)/g, '') === lecture);
+
+            const course = courses === undefined ? undefined : courses.courses.find(course => course.name.replace(/\([^)]+\)/g, '') === lecture);
             const courseDesc = course !== undefined ? course.description : "";
 
             const toolTipUniqueId = lectureInfo !== undefined ? lectureInfo.extendedName + index.toString() : "";
@@ -439,7 +444,10 @@ const Labs = (props) => {
             }
 
             const courses = props.structure.find(courses => courses.term === props.selectedTerm);
-            const course = courses.courses.find(course => course.name.replace(/\([^)]+\)/g, '') === lab.replace(" Lab", ""));
+
+
+
+            const course = courses === undefined ? undefined : courses.courses.find(course => course.name.replace(/\([^)]+\)/g, '') === lab.replace(" Lab", ""));
             const courseDesc = course !== undefined ? course.description : "";
 
             const toolTipUniqueId = labInfo !== undefined ? labInfo.name.trim() + index.toString() : "";
@@ -584,7 +592,9 @@ const Seminars = (props) => {
             }
 
             const courses = props.structure.find(courses => courses.term === props.selectedTerm);
-            const course = courses.courses.find(course => course.name.replace(/\([^)]+\)/g, '') === seminar.replace(" Sem", ""));
+
+
+            const course = courses === undefined ? undefined : courses.courses.find(course => course.name.replace(/\([^)]+\)/g, '') === seminar.replace(" Sem", ""));
             const courseDesc = course !== undefined ? course.description : "";
 
             const toolTipUniqueId = semInfo !== undefined ? semInfo.name.trim() + index.toString() : "";
@@ -986,8 +996,12 @@ const Timetable = (props) => {
                                         }
                                     })
 
+                                    console.log(props.structure);
                                     const courses = props.structure.find(courses => courses.term === props.selectedTerm);
-                                    const course = courses.courses.find(course => course.name.replace(/\([^)]+\)/g, '') === courseTitle.trim());
+                            
+
+
+                                    const course = courses === undefined ? undefined : courses.courses.find(course => course.name.replace(/\([^)]+\)/g, '') === courseTitle.trim());
                                     descriptionContent = course !== undefined ? course.description : "";
 
                                     const courseSection = parts[parts.length - 1];
@@ -1742,15 +1756,8 @@ class Scheduler extends Component {
                                 onClick={ async () => {await this.generatePdfReport(this.props.scheduleMap); }}
                                 className="exportButton"
                             >
-                                Download Report
+                                Download Schedules
                             </button>
-                            {/* <button
-                                onClick={ this.generatePdf()}
-                                className="exportButton"
-                            >
-                                Download Report 2
-                            </button> */}
-                            {/* <GenerateReport /> */}
                         </div>
                     </div>
                 </div>
