@@ -244,8 +244,59 @@ class VisualizerReport extends Component {
         const {structure, lineMap} = this.props;
 
         let cloneStructure = cloneDeep(structure);
+        let usedCourses = [];
+        let courseMap = new Map();
+        var newStructure = [];
 
-        const coursesList = [].concat(...cloneStructure.map(term => term.courses
+        // // Gather a list of courses that have been placed in schedules
+        // Array.from(this.props.tabMap).map(([key, value]) => {
+        //     value.lectureTab.map((course) => {
+        //         usedCourses.push(course);
+
+        //     })
+        // })
+
+        // Get a map of course names and their respective info
+        cloneStructure.map((term) => {
+            term.courses.map((course) => {
+                courseMap.set(course.name, course);
+            })
+        });
+
+        // Loop through the courses placed in schedules and add them to a new structure array
+        Array.from(this.props.tabMap).map(([term, value]) => {
+
+            if (term !== "") {
+                var courses = [];
+
+                value.lectureTab.map((course) => {
+                    if (courseMap.get(course)) {
+                        courses.push(courseMap.get(course));
+                    }
+                    else {
+                        courses.push({
+                            accreditionUnits: "Engineering Science: 50.4",
+                            attribute: [],
+                            category: [],
+                            corequisites: undefined,
+                            courseGroup: null,
+                            description: "",
+                            extendedName: course,
+                            name: course,
+                            orCase: null,
+                            prerequisites: undefined,
+                        })
+                    }
+                })
+
+                newStructure.push({term, courses});
+            }
+        })
+
+        console.log(newStructure);
+
+
+        const coursesList = [].concat(...newStructure.map(term => term.courses
             .map(course => {
                 course.name = course.name.replace(/\s*\([^)]*\)/g, '');
                 return course;
@@ -254,7 +305,7 @@ class VisualizerReport extends Component {
 
         let courseList = [];
 
-        const term = structure.map((termColumn, termIndex) => {
+        const term = newStructure.map((termColumn, termIndex) => {
             const courseDivs = termColumn.courses.map((courseItem, index) => {
 
                 let name = courseItem.name;

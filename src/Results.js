@@ -106,7 +106,7 @@ export const Results = (props) => {
     const createStructure = (structure) => {
 
 
-
+        console.log(Array.from(structure.values()));
 
 
 
@@ -200,10 +200,12 @@ export const Results = (props) => {
                 </div>
             </div>
             <div className='visualizerWrapper' style={styles.visualizerWrapper}>
-                <VisualizerReport structure={props.structure}
-                            updateLineMap={props.updateLineMap}
-                            lineMap={props.lineMap}
-                            reqMap={props.reqMap}
+                <VisualizerReport 
+                    structure={props.structure}
+                    updateLineMap={props.updateLineMap}
+                    lineMap={props.lineMap}
+                    reqMap={props.reqMap}
+                    tabMap={props.tabMap}
                 />
             </div>
 
