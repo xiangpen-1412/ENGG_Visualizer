@@ -9,7 +9,7 @@ import RESTController from "./controller/RESTController";
 import Scheduler from "./Scheduler"
 import './Scheduler.css'
 
-
+// Arrow icon ( > ) for the dropdown menus and breadcrumbs
 const Icon = () => {
     return (
         <svg height="20" width="20" viewBox="0 0 20 20">
@@ -19,20 +19,25 @@ const Icon = () => {
     );
 };
 
+// Green header at the top of the page
+// Hosts U of A logo, and three-dots menu on the right
 const Header = (props) => {
 
     const [showDropDown, setShowDropDown] = useState(false);
     const [showDescription, setShowDescription] = useState(false);
 
+    // Select whether to show dropdown menu from a click on the three-dots button
     const handleThreeDotsClick = () => {
         setShowDropDown(!showDropDown);
     }
 
+    // Toggle variables to display a popup with instructions on how to use Visualizer, and to hide three-dots dropdown
     const handleHelpButtonClick = () => {
         setShowDescription(!showDescription);
         setShowDropDown(false);
     }
 
+    // Unused: if export menu item clicked, hide dropdown
     const handleExportClick = () => {
         setShowDropDown(!showDropDown);
     }
@@ -75,6 +80,8 @@ const Header = (props) => {
     );
 };
 
+
+// Popup with instructions for how to use the Visualizer -- toggled by a "Help" button in the three-dots dropdown
 const Instructions = (props) => {
 
     return (
@@ -116,6 +123,8 @@ const Instructions = (props) => {
     );
 }
 
+
+// Html for the "About" tab. Displays contributers, bug reporting location, templates, and tutorials. Accessed by clicking the "About" tab in the top-of-page menu
 const About = () => {
 
     return (
@@ -131,10 +140,6 @@ const About = () => {
             <p>    The University of Alberta's Engineering Program Plan Visualizer was created under
                    the direction of university professors Dr. David Nobes and Dr. Steven Knudsen.</p>
             <br></br>
-
-
-
-
 
             <h2 className='SelectedPlanDescription'>
                 DEVELOPMENT
@@ -202,10 +207,22 @@ const About = () => {
     );
 }
 
+
+/* Component for the header upon which the tabs are displayed.
+*
+* Inputs:
+*
+*   tabs: an array containing a lot of the tab names to show in the header
+*   setTab(): a function to set the index of the current tab
+*   gettab(): gets the index of the currently-selected tab
+*   deleteLineMap(): removes the leaderlines from the Visualizer from the screen
+*/
 const TabHeader = (props) => {
 
+    // loop through the list of tab names
     const tabButtons = props.tabs.map((tab, index) => {
 
+        // Set the styling based on if the current tab is the selected tab
         const className = index === 0 ? 'tabButton1' : 'tabButton';
 
         return (
@@ -231,6 +248,14 @@ const TabHeader = (props) => {
     )
 }
 
+
+/* Sub-header to display the breadcrumbs for the currently-selected tab
+*  Format: House icon > Program Name > Tab
+*
+*  Inputs:
+*
+*   deleteLineMap(): removes the leaderlines from the Visualizer from the screen
+*/
 const SubHeader = (props) => {
 
     const location = useLocation();
@@ -241,6 +266,7 @@ const SubHeader = (props) => {
         navigate("/");
     };
 
+    // Define components for each of the possible path elements
     const introDiv = (
         <div className='path'>
             {selectedProgram}
@@ -273,6 +299,7 @@ const SubHeader = (props) => {
 
     let path;
 
+    // House icon specification
     const homeButtonIcon = (
         <svg className='homeButtonIcon' height="20" width="20" viewBox="0 0 20 20">
             <path
@@ -281,6 +308,7 @@ const SubHeader = (props) => {
             ></path>
         </svg>);
 
+    // Create the path based on the currently-selected tab's index
     switch (props.tabIndex) {
         case 0:
             path = [introDiv, homeButtonIcon, visualizerDiv];
@@ -299,6 +327,7 @@ const SubHeader = (props) => {
             break;
     }
 
+    // Return the full breadcrumbs sub header
     return (
         <div className='subHeader'>
             <img alt="Home Button" src="home_button.png" className="homeButton" onClick={handleBackButtonClick}/>
@@ -308,6 +337,8 @@ const SubHeader = (props) => {
     )
 }
 
+
+// Component for the Title of the Visualizer tab page
 const PageTitle = () => {
     const location = useLocation();
     const {selectedProgram} = location.state;
@@ -320,7 +351,30 @@ const PageTitle = () => {
 }
 
 
-//Plans has to be a simple component as it contains navigation
+/* Dropdown menu to allow user to select the plan (traditional, Co-op, etc) for their chosen Engineering discipline
+*
+*  Inputs:
+*
+*       tabClick:
+*       setStructure(): Sets the "structure" component, which contains information about every course in the selected plan. Format:
+*
+*               Array [
+                    Object {
+                        term: 'Fall Term 1', courses: [
+                            {
+                                name: "ECE 301",
+                                extendedName: "ECE 301 EA1",
+                                ...
+                                corequisites: null
+                            }
+                        ]
+                    },
+                    ...
+                ]
+*
+*       selectedPlan: The name of the currently-selected plan
+*       setSelectedProgramPlan(): Set the name of the currently-selected plan
+*/
 const Plans = (props) => {
 
     const location = useLocation();
@@ -328,15 +382,19 @@ const Plans = (props) => {
     const [planList, setPlanList] = useState([]);
     const [isFirst, setIsFirst] = useState(true);
 
+    // Controller to query the website's backend for data
     const controller = new RESTController();
 
-    // set the default plan
+    // Set a default plan (usually 'Traditional Plan') to begin with whenever the selected discipline changes
     useEffect(() => {
+
+        // Get list of all available plans for the selected program from the backend
         controller.getPlans({programName: selectedProgram}).then((plans) => {
             setPlanList(plans);
             if (isFirst && !props.tabClick) {
                 setIsFirst(false);
 
+                // Account for MecE's weird plan naming schemes, then set the structure state variable containing course info
                 if (selectedProgram === "Mechanical Engineering") {
                     props.setStructure(selectedProgram, plans[0].replace(/\{[^)]*\}/g, "").trimEnd().trimStart());
                 } else {
@@ -346,6 +404,7 @@ const Plans = (props) => {
         });
     }, [selectedProgram]);
 
+    // get list of plans for the selected Engineering discipline
     const plans = planList.map((plan, index) => {
 
         // Remove unwanted characters from start and end of MecE plans
@@ -361,8 +420,7 @@ const Plans = (props) => {
     // Remove duplicate plan names
     const uniquePlans = [...new Set(plans)];
 
-
-    // Return component with all the discipline's plans
+    // Return dropdown menu component with all the discipline's plans
     return (
         <div className="allPlans">
             <div className="SelectedPlanDescription">SELECT A PLAN</div>
@@ -384,13 +442,32 @@ const Plans = (props) => {
     )
 }
 
-const CourseGroup = (props) => {
 
-    /*
-    *  props.courseGroup: new Map([['Group 2', ["2A", "2B"]],
-    *                              ['Group 3', ["3A", "3B"]],
-    *                              ['Group 4', ["4A", "4B"]]]),
-    * */
+/* Component for the MecE discpline that displays a dropdown menu for each course group option of a selected plan
+*  User can select an alternate course group of each available type using these dropdowns
+*
+*  Inputs:
+*
+*       courseGroup: the keys of a plan's course groups, like ["group2", "group3", "group4"]
+*       planChanged: flag to alert the fact that a plan has changed. Set to false once enter here to prevent multiple calls
+*       setStructure(): Sets the "structure" component, which contains information about every course in the selected plan. Format:
+*
+*               Array [
+                    Object {
+                        term: 'Fall Term 1', courses: [
+                            {
+                                name: "ECE 301",
+                                extendedName: "ECE 301 EA1",
+                                ...
+                                corequisites: null
+                            }
+                        ]
+                    },
+                    ...
+                ]
+*       setSelectedCourseGroupButtons(): sets groups data in "selectedCourseGroupButtons". Here set to default "A" values
+*/
+const CourseGroup = (props) => {
 
     // get the keys of course group like ["group2", "group3", "group4"]
     const courseGroupKeys = [...props.courseGroup.keys()];
@@ -401,16 +478,17 @@ const CourseGroup = (props) => {
         props.setPlanChanged(false);
     }
 
-    // set the default course group of each plan in Mechanical Engineering
+    // Set a default set of course groups for a plan in Mechanical Engineering whenever the plan changes (If switch plan, set course groups to "A"'s by default)
     useEffect(() => {
 
-        // prevent duplicate render
+        // Construct weird MecE plan names who include {} to store course groups
         if (!props.selectedPlan.includes("{")) {
             let completePlanName = props.selectedPlan;
             completePlanName = completePlanName + " {";
 
             const nullMap = new Map();
 
+            // Loop through current course groups and append them to plan name inside of "{}"
             courseGroupKeys.forEach((key, index) => {
                 const defaultGroup = props.courseGroup.get(key)[0];
                 nullMap.set(key, defaultGroup);
@@ -424,12 +502,15 @@ const CourseGroup = (props) => {
             completePlanName.trim();
             completePlanName += "}";
 
+            // Set "structure" and "selectedCourseGroupButtons" based on the current plan
             setPlanName(completePlanName);
             props.setStructure(props.selectedProgram, completePlanName);
             props.setSelectedCourseGroupButtons(nullMap);
         }
     }, [props.planChanged])
 
+
+    // Component containing course group dropdown menus, loop through each available group for the plan and make a dropdown button for each
     const keyComponent = courseGroupKeys.map((key, index) => {
         const defaultGroup = props.courseGroup.get(key)[0];
         return (
@@ -441,18 +522,20 @@ const CourseGroup = (props) => {
                         options={props.courseGroup.get(key)}
                         onChange={(group) => {
 
-                            // delete the old leaderlines
+                            // delete the old leaderlines from Visualizer component
                             props.deleteLineMap();
 
+                            // Set the selected buttons when the values in a dropdown change
                             let newSelectedButtons = new Map(props.selectedCourseGroupButtons);
                             newSelectedButtons.set(key, group);
 
+                            // Edit plan name to contain course groups inside of "{}"
                             let groups = planName.substring(planName.indexOf("{") + 1, planName.indexOf("}"));
                             const groupNum = group[0];
                             const newGroups = groups.replace(groups.substring(groups.indexOf(groupNum), groups.indexOf(groupNum) + 2), group);
-
                             const newPlanName = planName.replace(groups, newGroups);
 
+                            // Set the new plan name and the structure component containing courses info for the selected plan and groups
                             setPlanName(newPlanName);
                             props.setStructure(props.selectedProgram, newPlanName);
                             props.setSelectedCourseGroupButtons(newSelectedButtons);
@@ -466,6 +549,7 @@ const CourseGroup = (props) => {
         );
     });
 
+    // Div containing Course Groups title, description, and dropdwon menus
     return (
         <div className="allGroups">
             <div className="SelectedPlanDescription">SELECT COURSE GROUPS</div>
@@ -477,6 +561,18 @@ const CourseGroup = (props) => {
     );
 };
 
+
+/* Contains the Grad Attribute buttons shown in the "Additional Options" section of the Visualizer tab
+*  Clicking on one highlights the Visualizer courses the color of the clicked button, showing what courses
+*  advance that grad attribute. 
+*
+*  Inputs:
+*
+*       gradAttributeList: list of grad attributes for the current plan
+*       setSelectedGradAtt(): set the currently-selected grad attribute. Here it is toggled on click
+*       setGradAttributeColor(): change the color of the current grad attribute button
+*       setSelectedCategory(): set currently-selected course category. Used here to hide all of the categories when a grad attribute is clicked
+*/
 const GradAttributes = (props) => {
     const cells = props.gradAttributeList.map((gradAttribute, index) => {
         return (
@@ -484,12 +580,15 @@ const GradAttributes = (props) => {
                 key={index}
                 className="indvGradAttribute"
                 onClick={(event) => {
+
+                    // Toggle whether this grad attribute button is slecte when it is clicked
                     if (gradAttribute === props.selectedGradAtt) {
                         props.setSelectedGradAtt(null);
                     } else {
                         props.setSelectedGradAtt(gradAttribute);
                     }
 
+                    // Deselect all course category buttons when a grad attribute is clicked, set grad attribute button's color
                     props.setSelectedCategory(null);
                     props.setGradAttributeColor(event, gradAttribute);
                 }}
@@ -500,6 +599,7 @@ const GradAttributes = (props) => {
         );
     });
 
+    // The div containing all of the grad attribute buttons, description, title
     return (
         <div>
             <div className="gradAttTitle">GRADUATE ATTRIBUTES</div>
@@ -513,11 +613,25 @@ const GradAttributes = (props) => {
     );
 };
 
+
+/* Contains the Course Categories buttons shown in the "Additional Options" section of the Visualizer tab
+*  Clicking on one highlights the Visualizer courses the color of the clicked button, showing what courses
+*  are a part of the category. Example: Math, Natural Sciences, etc...
+*
+*  Inputs:
+*
+*       categoryList: list of course ctaegories for the current plan
+*       setSelectedCategory(): set the currently-selected category. Here it is toggled on click
+*       setGradAttributeColor(): change the color of the current grad attribute button
+*       setSelectedGradAtt(): set currently-selected grad attribute. Used here to hide all of the grad attributes when a category is clicked
+*/
 const CourseCatagory = (props) => {
     const location = useLocation();
     const {selectedProgram} = location.state;
 
     const cells = props.categoryList.map((category, index) => {
+
+        // Limit the number of categories based on the discipline (likely to prevent an out-of-bounds index error, since disciplines have different catgory amounts)
         if (selectedProgram === "Computer Engineering") {
             if (index > 9) {
                 return null;
@@ -532,6 +646,7 @@ const CourseCatagory = (props) => {
             }
         }
 
+        // Set of course catgory buttons
         return (
             <div
                 key={index}
@@ -549,6 +664,7 @@ const CourseCatagory = (props) => {
         );
     });
 
+    // The div containing all of the category buttons, description, title
     return (
         <div>
             <div className="courseCategoryTitle">COURSE CATEGORIES</div>
@@ -563,7 +679,7 @@ const CourseCatagory = (props) => {
 };
 
 
-// Legend for graduate attributes
+// Legend for graduate attributes, shows color meanings for the grad attribute buttons. Colors based on number of GA units in a course
 const GALegend = (props) => {
 
     // Get the rows and colors of the legend
@@ -594,6 +710,8 @@ const GALegend = (props) => {
     )
 }
 
+
+// Div displaying the color and stroke of the arrows in the visualizer, and what they mean. Images stored in /static directory
 const RequisiteLegend = () => {
     return (
         <div className='requisiteLegend'>
@@ -612,6 +730,8 @@ const RequisiteLegend = () => {
     )
 }
 
+
+// Old button component for showing which courses in the Visualizer were of a group A or B. Now use a checkbox instead (see next component)
 const CourseGroupButton = (props) => {
     const location = useLocation();
     const {selectedProgram} = location.state;
@@ -627,10 +747,21 @@ const CourseGroupButton = (props) => {
     }
 }
 
+
+/* Checkbox component for showing which courses in the Visualizer were of a group A or B
+*  Highlights differences by showing a color and alphanumeric delineator (ex: "3A") below course name
+*
+*  Inputs:
+*
+*       selectedPlan: The name of the currently-selected plan
+*       handleCourseGroupOnClick(): function to toggle whether course groups are displayed on teh Visualizer  
+*       courseGroupOnClick: state variable
+*/
 const CourseGroupCheckbox = (props) => {
     const location = useLocation();
     const {selectedProgram} = location.state;
 
+    // Only return checkbox if program is MecE, no other engineering discipline has course groups
     if (selectedProgram === "Mechanical Engineering" && !props.selectedPlan.includes("Biomedical")) {
         return (
             <div >
@@ -652,6 +783,8 @@ const CourseGroupCheckbox = (props) => {
     }
 }
 
+
+// Footer contains U of A logo, copyright @, and a white line
 const Footer = () => {
 
     return (
@@ -670,6 +803,8 @@ const Footer = () => {
     );
 };
 
+
+// Unused loading component, would spin while components are loading on the website
 const Spinner = () => (
     <div className="spinner">
         <div className="double-bounce1"></div>
@@ -677,10 +812,13 @@ const Spinner = () => (
     </div>
 );
 
+
+// /App link address component, contains tabs with Visualizer, Scheduler, Results, and About
 class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            // List of graduate attribute names
             gradAttributeList: [
                 "Knowledge Base for Engineering",
                 "Problem Analysis",
@@ -696,6 +834,7 @@ class App extends Component {
                 "Life-long-learning"
             ],
 
+            // Names and colors of each course category
             categoryList: [
                 {
                     name: "Math",
@@ -783,6 +922,7 @@ class App extends Component {
                 },
             ],
 
+            // Colors for the legend for the grad attribute coloration
             gaLegendList: [
                 {
                     name: "Introduced",
@@ -802,6 +942,7 @@ class App extends Component {
                 },
             ],
 
+            // states for visualizer
             structure: [],
             reqMap: new Map(),
             courseGroup: new Map([
@@ -839,7 +980,10 @@ class App extends Component {
             labTab: [],
             seminarTab: [],
 
+            // Store the state of the current scheduler tab
             highLightCells: Array.from({length: 28}, () => Array.from({length: 5}, () => [null, '', null])),
+
+            // maps storing every scheduler term's highLightCells, and lists of placed lecture, labs, and seminars for each term
             scheduleMap: new Map(),
             tabMap: new Map(),
         };
