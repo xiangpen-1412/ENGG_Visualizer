@@ -1825,7 +1825,7 @@ class Scheduler extends Component {
                             tabMap={this.props.tabMap}
                             structure={structure}
                         />
-                        <CreateFromPreference
+                        {/* <CreateFromPreference
                             dropDownClick={dropDownClick}
                             setDropDownClick={this.props.setDropDownClick}
                             highLightCells={highLightCells}
@@ -1839,7 +1839,7 @@ class Scheduler extends Component {
                             reformatTimetable={this.reformatTimetable}
                             term={this.props.selectedTerm}
                             reformatTimeTable={this.reformatTimetable}
-                        />
+                        /> */}
                         <Search
                             dropDownClick={dropDownClick}
                             setDropDownClick={this.props.setDropDownClick}
