@@ -339,7 +339,7 @@ class VisualizerReport extends Component {
                     <div className='resultsTermTitle'>
                         {termColumn.term}
                     </div>
-                    <div className='courseWrapper' style={{width: "80px"}}>
+                    <div className='resultsCourseWrapper' >
                         {courseDivs}
                     </div>
                 </div>
@@ -348,7 +348,7 @@ class VisualizerReport extends Component {
 
         return (
             <div className='outerStructureWrapper'>
-                <div className="termWrapper"
+                <div className="resultsTermWrapper"
                     onScroll={() => this.handleScroll(lineMap)}
                 >
                     {term}

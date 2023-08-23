@@ -92,6 +92,16 @@ code {
     padding-bottom: 40px;
 }
 
+.resultsTermWrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: no-wrap;
+
+    padding-left: 185px;
+    padding-right: 15%;
+    padding-bottom: 40px;
+}
+
 .term {
     text-align: center;
     /* Spacing on all sides of outside of Term palette*/
@@ -116,24 +126,19 @@ code {
 
 .resultsTerm {
     text-align: center;
-    /* Spacing on all sides of outside of Term palette*/
     margin-right: 10px;
     display: inline-block;
     align-items: center;
     justify-content: center;
-    /* width: 156px; */
     min-height: 300px;
     height: auto;
     margin-top: 15px;
-
     max-width: 248px;
-
     border: 1px solid rgb(235, 235, 235);
-    /* padding: 16px; */
-
     border-radius: 4px;
-
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+    flex: 1 1 auto;
 }
 
 .termTitle {
@@ -152,7 +157,7 @@ code {
 
     background-color: #F7F7F7;
     padding: 15px;
-    overflow-wrap: break-word;
+    overflow-wrap: normal;
 }
 
 .courseWrapper {
@@ -166,6 +171,19 @@ code {
     height: auto;
 
     width: 183px;
+}
+
+.resultsCourseWrapper {
+    margin: 10px;
+
+    /* Spacing on all sides of inside of term palette*/
+    /* padding: 10px; */
+    display: inline-block;
+    /* width: 140px; */
+    min-height: 200px;
+    height: auto;
+
+    width: 80%;
 }
 
 .indivCourses {
@@ -194,7 +212,7 @@ code {
     background-color: rgb(206, 212, 218); /* Background color of each term div*/
     color: rgb(0, 0, 0); /* Text color of each term div*/
 
-    width: 80px;/* Width of eachterm div*/
+    min-width: 80px;/* Width of eachterm div*/
     height: 50px;
     font-size: 14px; /* Font of text inside term div*/
     border-radius: 1px; /* Make the term divs rounded corners*/
@@ -208,6 +226,8 @@ code {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+
+    flex: 1 1 auto;
 }
 
 .courseName {
