@@ -123,28 +123,81 @@ const About = () => {
             <h1 className='pageTitle'>
                 About
             </h1>
+
             <h2 className='SelectedPlanDescription'>
-                Development
+                DEVELOPMENT
             </h2>
-            <p>
-                The University of Alberta's Engineering Program Plan Visualizer was created under
-                the direction of university professors Dr. David Nobes and Dr. Steven Knudsen.
-                The code was written by Co-op students Xiangpeng Ji, Noah Batiuk and Fahrin Bushra.
-            </p>
+
+            <p>    The University of Alberta's Engineering Program Plan Visualizer was created under
+                   the direction of university professors Dr. David Nobes and Dr. Steven Knudsen.</p>
+            <br></br>
+
+
+
+
+
+            <h2 className='SelectedPlanDescription'>
+                DEVELOPMENT
+            </h2>
+
+<p>                The University of Alberta's Engineering Program Plan Visualizer was created under
+                   the direction of university professors Dr. David Nobes and Dr. Steven Knudsen.</p>
+            <br></br>
+
+
+            <div className='contributersWrapper'>
+                <div>
+                    <div>Visualizer 1.0</div>
+                    <div>Co-op Students Summer 2022:</div>
+                    <div className='contributers'>
+                        <div>Zachary Schmidt</div>
+                        <div>Moaz Abdelmonem</div>
+                        <div>Jason Kim</div>
+                    </div>
+                </div>
+                <br></br>
+                <div>
+                    <div>Visualizer 2.0</div>
+                    <div>Co-op Students Winter 2023:</div>
+                    <div className='contributers'>
+                        <div>Fahrin Bushra</div>
+                        <div>Xiangpeng Ji</div>
+                    </div>
+                </div>
+                <br></br>
+                <div>
+                    <div>Visualizer 2.1</div>
+                    <div>Co-op Students Summer 2023:</div>
+                    <div className='contributers'>
+                        <div>Noah Batiuk</div>
+                        <div>Xiangpeng Ji</div>
+                    </div>
+                </div>
+            </div>
+
             <p>
                 This tool is designed to help you navigate the structure of your chosen program plan.
             </p>
             <p>
-                We hope this tool aids your understanding of your chosen engineering program and supports
+                We hope this tool aids your understanding of your chosen Engineering program and supports
                 your academic planning process.
             </p>
             <h2 className='SelectedPlanDescription'>
-                Contact
+                CONTACT
             </h2>
             <p>
                 If you have any questions, inquiries or feature requests to do with the Visualizer,
                 please do not hesitate to contact us at dnobes@ualberta.ca.
             </p>
+            <br></br>
+{/* 
+            <h2 className='SelectedPlanDescription'>
+                TEMPLATES
+            </h2>
+            <p>
+                Below is a set of curated templates from Dr. Nobes for each of the Engineering Program Plans. 
+                Click on any button below to download the corresponding template.
+            </p> */}
         </div>
     );
 }

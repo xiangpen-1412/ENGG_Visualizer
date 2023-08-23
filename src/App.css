@@ -161,6 +161,41 @@
     font-weight: 400;
 }
 
+.contributersWrapper {
+    font-size: 17px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    width: 950px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    margin-bottom: 60px;
+    justify-content: space-between;
+}
+
+.contributers {
+    font-size: 17px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+
+    width: 254px;
+    /* height: 70px; */
+    padding: 15px;
+    border: 1px solid #CED4DA;
+    border-radius: 4px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    margin-bottom: 60px;
+    min-height: 63px;
+
+    margin-top: 10px;
+}
+
 .guideWrapper {
     width: 500px;
     min-height: 500px;
