@@ -25,7 +25,7 @@
 
 .searchbar-menu {
     position: absolute;
-    transform: translateY(4px);
+    transform: translateY(6px) translateX(-6px);
     width: 100%;
     border: 1px solid #ccc;
     border-radius: 5px;

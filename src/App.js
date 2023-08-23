@@ -56,12 +56,12 @@ const Header = (props) => {
                     >
                         Help
                     </div>
-                    <div
+                    {/* <div
                         className='headerDropDownItem'
                         onClick={handleExportClick}
                     >
                         Export
-                    </div>
+                    </div> */}
                 </div>
             )}
 

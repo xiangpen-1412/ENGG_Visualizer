@@ -27,7 +27,7 @@
 
 .dropdown-menu {
     position: absolute;
-    transform: translateY(4px);
+    transform: translateY(13px) translateX(-11px);
     width: 100%;
     border: 1px solid #ccc;
     border-radius: 5px;
