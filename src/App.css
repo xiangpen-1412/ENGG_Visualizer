@@ -171,7 +171,7 @@
     flex-direction: row;
     justify-content: center;
 
-    margin-bottom: 60px;
+    margin-bottom: 30px;
     justify-content: space-between;
 }
 
@@ -189,8 +189,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-
-    margin-bottom: 60px;
     min-height: 63px;
 
     margin-top: 10px;
@@ -237,7 +235,7 @@
 
 .about {
     font-family: 'Roboto', sans-serif;
-    margin-left: 10%;
+    margin-left: 185px;
     margin-right: 10%;
     margin-bottom: 50px;
 }

@@ -351,3 +351,10 @@ code {
 
     margin-top: -15px;
 }
+
+.templatesWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+    gap: 10px 10px;
+}

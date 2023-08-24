@@ -127,19 +127,110 @@ const Instructions = (props) => {
 // Html for the "About" tab. Displays contributers, bug reporting location, templates, and tutorials. Accessed by clicking the "About" tab in the top-of-page menu
 const About = () => {
 
+    // Found in google drive folder: https://drive.google.com/drive/folders/1nXRyBMU02b4Kl3sRt2PsKnl8cJxnk_T5?usp=drive_link
+    const templates = [
+        {
+            name: "Computer Engineering Traditional",
+            link: "https://docs.google.com/spreadsheets/d/1FsELVn6mI-w95wht6vERh_Ojr0tiboBL/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Computer Engineering Co-op",
+            link: "https://docs.google.com/spreadsheets/d/1TF8Lc_nK9sC6VXiUDxe9OOTm9FCPYW2g/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Computer Engineering Nano Traditional",
+            link: "https://docs.google.com/spreadsheets/d/1G9suZ_jtFgz_6cIXu5WO812RRTRbVxfX/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Computer Engineering Nano Co-op",
+            link: "https://docs.google.com/spreadsheets/d/1wE1qc5Hjg-p4ETjl_bRnjjJZfv8RocqP/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+                {
+            name: "Computer Engineering Spftware Co-op",
+            link: "https://docs.google.com/spreadsheets/d/1ny4rkE53x70PxbNKke_H6Ry1iOU-Z53n/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Mechanical Engineering Traditional",
+            link: "https://docs.google.com/spreadsheets/d/1piC0MMq9KQ-TwlR-CStVdqFgrFR7hbOz/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Mechanical Engineering Alternative",
+            link: "https://docs.google.com/spreadsheets/d/1NssgVZjUniXjStonvqek20Yu_SlZFvVK/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Mechanical Engineering Co-op 1",
+            link: "https://docs.google.com/spreadsheets/d/1otmOvTWKOLNBBnV_y2JUpgr0oWh8HW7p/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Mechanical Engineering Co-op 2",
+            link: "https://docs.google.com/spreadsheets/d/1fjgn3qM6h8GCKIgRnnPbArrIZAyofxsQ/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Mechanical Engineering Co-op 4",
+            link: "https://docs.google.com/spreadsheets/d/1qYOGznPkHhbs0MrkVjims6SIXA3dlHBm/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Electrical Engineering Traditional",
+            link: "https://docs.google.com/spreadsheets/d/1ZdcaXN_9BkfVPj6_T8iCCms683N9KfTI/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Electrical Engineering Co-op",
+            link: "https://docs.google.com/spreadsheets/d/12bbbl3iu5SmoAI9uZEQGGdhpxu-Xblia/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Electrical Engineering Nano Traditional",
+            link: "https://docs.google.com/spreadsheets/d/1a03NRACLZrF3B87lfHtNPcrcVt8Prv8B/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Electrical Engineering Nano Co-op",
+            link: "https://docs.google.com/spreadsheets/d/1J7rz3j0Ks8uFQwGh2MHDbP6OLmPsFCUc/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Civil Engineering Traditional",
+            link: "https://docs.google.com/spreadsheets/d/1G4T-_6_wd48t1JurtCIQJ52QXLKePRwT/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Civil Environmental Engineering Traditional",
+            link: "https://docs.google.com/spreadsheets/d/11Sr35H3jyCmtF6xhaMv7XOxL0LIcMkXr/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Civil Engineering Co-op",
+            link: "https://docs.google.com/spreadsheets/d/1Ben4SxP3VzU5UDnUigK0_30NibbkiLNf/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Civil Environmental Engineering Traditional",
+            link: "https://docs.google.com/spreadsheets/d/1UsNyb-Y5bmmwlD0LloDJr_iFRhbmBrh1/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Chemical Engineering Traditional",
+            link: "https://docs.google.com/spreadsheets/d/1CS7KQ7JYwhbwcwKBjmaMbQmNFralFgE2/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Engineering Physics Traditional",
+            link: "https://docs.google.com/spreadsheets/d/1AXUkkHHcei-DMVt3Z9BzJTl_KKWXycL6/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Materials Engineering Traditional",
+            link: "https://docs.google.com/spreadsheets/d/1ex5SdNfTG8BbK8LGUELkq3qkrkZrM36k/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Mining Engineering Traditional",
+            link: "https://docs.google.com/spreadsheets/d/1bgS5ViGYgPO-rPeE9_bwSfgfirV9spHQ/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+        {
+            name: "Petroleum Engineering Traditional",
+            link: "https://docs.google.com/spreadsheets/d/1P3C6k1h_ODFX7gcC19fIvMaoDx-CzRt2/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
+        },
+    ];
+
+
+    
+
     return (
         <div className='about'>
             <h1 className='pageTitle'>
                 About
             </h1>
-
-            <h2 className='SelectedPlanDescription'>
-                DEVELOPMENT
-            </h2>
-
-            <p>    The University of Alberta's Engineering Program Plan Visualizer was created under
-                   the direction of university professors Dr. David Nobes and Dr. Steven Knudsen.</p>
-            <br></br>
 
             <h2 className='SelectedPlanDescription'>
                 DEVELOPMENT
@@ -180,13 +271,12 @@ const About = () => {
                 </div>
             </div>
 
-            <p>
+            {/* <p>
                 This tool is designed to help you navigate the structure of your chosen program plan.
-            </p>
-            <p>
                 We hope this tool aids your understanding of your chosen Engineering program and supports
                 your academic planning process.
-            </p>
+            </p> */}
+            <br></br>
             <h2 className='SelectedPlanDescription'>
                 CONTACT
             </h2>
@@ -195,14 +285,28 @@ const About = () => {
                 please do not hesitate to contact us at dnobes@ualberta.ca.
             </p>
             <br></br>
-{/* 
+
             <h2 className='SelectedPlanDescription'>
                 TEMPLATES
             </h2>
             <p>
                 Below is a set of curated templates from Dr. Nobes for each of the Engineering Program Plans. 
                 Click on any button below to download the corresponding template.
-            </p> */}
+            </p>
+            <div className="templatesWrapper">
+                {templates.map((obj) => {
+
+                    return(
+                        <div 
+                            className='contributers' 
+                            style={{cursor: "pointer"}}
+                            onClick={(e) => {window.open(obj.link, "_blank");}}
+                        >
+                            {obj.name}
+                        </div>
+                    );
+                })}
+            </div>
         </div>
     );
 }

@@ -87,7 +87,7 @@ const Terms = (props) => {
     // set the term list and default selected term
     useEffect(() => {
 
-        if (program !== "Mechanical Engineering" || plan.includes("{")) {
+        if (program !== "Mechanical Engineering" || plan.includes("{") || plan.toLowerCase().includes("biomedical")) {
             restController.getTerms({programName: program, planName: props.selectedPlan}).then((terms) => {
                 props.setTermList(terms);
 
@@ -321,7 +321,7 @@ const Lecs = (props) => {
                         {lecture}
                     </div>
 
-                    <ReactTooltip place="bottom" id={toolTipUniqueId} render={({content, activeAnchor}) => (
+                    <ReactTooltip place="bottom" id={toolTipUniqueId} enterDelay={5000} render={({content, activeAnchor}) => (
                         <div className='popUpDescription'>
                             <div className='popUpExtendedName'>
                                 <b>{activeAnchor?.getAttribute('extendedName')}</b>
@@ -471,7 +471,7 @@ const Labs = (props) => {
                         {lab}
                     </div>
 
-                    <ReactTooltip place="bottom" id={toolTipUniqueId} render={({content, activeAnchor}) => (
+                    <ReactTooltip place="bottom" id={toolTipUniqueId} enterDelay={5000} render={({content, activeAnchor}) => (
                         <div className='popUpDescription'>
                             <div className='popUpExtendedName'>
                                 <b>{activeAnchor?.getAttribute('extendedName')}</b>
@@ -617,7 +617,7 @@ const Seminars = (props) => {
                         {seminar}
                     </div>
 
-                    <ReactTooltip place="bottom" id={toolTipUniqueId} render={({content, activeAnchor}) => (
+                    <ReactTooltip place="bottom" id={toolTipUniqueId} enterDelay={5000} render={({content, activeAnchor}) => (
                         <div className='popUpDescription'>
                             <div className='popUpExtendedName'>
                                 <b>{activeAnchor?.getAttribute('extendedName')}</b>
@@ -767,13 +767,17 @@ const PreferenceTab = (props) => {
             unDraggedTagList.push(lecture);
         })
 
-        props.labTab.forEach((lab) => {
-            unDraggedTagList.push(lab);
-        })
+        if (props.labTab) {
+            props.labTab.forEach((lab) => {
+                unDraggedTagList.push(lab);
+            })
+        }
 
-        props.seminarTab.forEach((seminar) => {
-            unDraggedTagList.push(seminar);
-        })
+        if (props.seminarTab) {
+            props.seminarTab.forEach((seminar) => {
+                unDraggedTagList.push(seminar);
+            })
+        }
 
         let newHighLightCells = [...props.highLightCells];
         const startInMin = timeToMinutes("8:00");
@@ -1075,7 +1079,7 @@ const Timetable = (props) => {
                 })}
                 </tbody>
 
-                <ReactTooltip place="bottom" id="cellsInTimeTable"
+                <ReactTooltip enterDelay={5000} place="bottom" id="cellsInTimeTable"
                               render={({content, activeAnchor}) => (
                                   <div className='popUpDescription'>
                                       <div className='popUpExtendedName'>
