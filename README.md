@@ -102,6 +102,8 @@ home screen, App.js for everything afterwards. Most js files have a correspondin
 Visualizer, Scheduler, Results, and About are each a tab in the /App page, and are hidden or shown one at a time. 
 
 
+![image](https://github.com/xiangpen-1412/ENGG_Visualizer/assets/51248438/ca0d3b3b-0622-43b3-95e9-9b45f74e51d4)
+
 
 Structure.js   App.js                      Scheduler.js
 ┌────────────┐ ┌─────────────────────────┐ ┌────────────────┐
