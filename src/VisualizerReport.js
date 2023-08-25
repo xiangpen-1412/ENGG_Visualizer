@@ -292,7 +292,6 @@ class VisualizerReport extends Component {
             }
         })
 
-        console.log(newStructure);
 
 
         const coursesList = [].concat(...newStructure.map(term => term.courses

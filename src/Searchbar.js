@@ -15,6 +15,9 @@ const Icon = () => {
     );
 };
 
+// Dropdown searchbar to allow user to search, filter, and select an option
+//
+// Once sleected, course is added to the lec, lab, sem panels on the sheduler via addCourse()
 const Searchbar = ({placeHolder, options, index, isSearchable, addCourse}) => {
     const [showMenu, setShowMenu] = useState(false);
     const [selectedValue, setSelectedValue] = useState(null);
@@ -22,6 +25,7 @@ const Searchbar = ({placeHolder, options, index, isSearchable, addCourse}) => {
     const [searchValue, setSearchValue] = useState("");
     const searchRef = useRef();
 
+    // Begin with an empty display value, user can add leatters to filter search
     useEffect(() => {
         setSearchValue("");
         if (showMenu && searchRef.current) {
@@ -29,15 +33,18 @@ const Searchbar = ({placeHolder, options, index, isSearchable, addCourse}) => {
         }
     }, [showMenu]);
 
+    // Unused apparently
     useEffect(() => {
 
 
     }, [options]);
 
+    // Set the search value
     const onSearch = (e) => {
         setSearchValue(e.target.value);
     };
 
+    // Get the dropdown options, filter based on letters typed
     const getOptions = () => {
         if (!searchValue) {
             return options;
@@ -45,6 +52,7 @@ const Searchbar = ({placeHolder, options, index, isSearchable, addCourse}) => {
         return options.filter((option) => option.toLowerCase().indexOf(searchValue.toLowerCase()) >= 0);
     };
 
+    // Listen for clicks
     useEffect(() => {
         const handler = (e) => {
             if (inputRef.current && !inputRef.current.contains(e.target)) {
@@ -58,23 +66,22 @@ const Searchbar = ({placeHolder, options, index, isSearchable, addCourse}) => {
         };
     });
 
+    // Toggle if menu is shown
     const handleInputClick = (event) => {
         setShowMenu(!showMenu);
     };
 
-
+    // Set value when item is clicked, add the course to panels
     const onItemClick = (option) => {
         setSelectedValue(option);
         addCourse(option);
     };
 
-
+    // Check if an option is the selected option
     const isSelected = (option) => {
-
         if (!selectedValue) {
             return false;
         }
-
         return selectedValue === option;
     }
 

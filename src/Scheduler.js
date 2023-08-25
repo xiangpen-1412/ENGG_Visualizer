@@ -12,6 +12,7 @@ import {Tooltip as ReactTooltip} from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css'
 import JsPDF from 'jspdf';
 
+// title of page, set to "Scheduler"
 const PageTitle = (props) => {
 
     return (
@@ -21,6 +22,7 @@ const PageTitle = (props) => {
     )
 }
 
+// Div that displays the current plan and group selections from the previous Visualizer page to the user
 const Plan = (props) => {
 
     const location = useLocation();
@@ -28,6 +30,7 @@ const Plan = (props) => {
 
     const plan = props.selectedPlan;
 
+    // Plan name component
     const planName = (
         <div className="planText">
             {props.selectedPlan.replace(/\{[^)]*\}/g, "").trimEnd().trimStart()}
@@ -36,6 +39,7 @@ const Plan = (props) => {
 
     let courseGroup;
 
+    // Account for MecE's {} names that store the group information
     if (plan.includes("{")) {
         const start = plan.indexOf("{") + 1;
         const end = plan.indexOf("}");
@@ -49,12 +53,14 @@ const Plan = (props) => {
 
     let planTube;
 
+    // Show course groups if currently a MecE plan
     if (selectedProgram === "Mechanical Engineering" && !plan.includes("Co-op Plan 3")) {
         planTube = [planName, courseGroup];
     } else {
         planTube = [planName];
     }
 
+    // return a box showing the plan selections
     return (
         <div>
             <div className="SelectedPlanDescription">SELECTED PLAN</div>
@@ -67,6 +73,7 @@ const Plan = (props) => {
     )
 }
 
+// Header for the Schedule table section with instructions
 const PlaceCourse = () => {
 
     return (
@@ -79,6 +86,7 @@ const PlaceCourse = () => {
     )
 }
 
+// Set of tabs above the schedule where students can pick which term to edit
 const Terms = (props) => {
     const restController = new RESTController();
     const program = props.selectedProgram;
@@ -132,6 +140,7 @@ const Terms = (props) => {
         }
     }, [props.selectedProgram, props.selectedPlan, props.selectedTerm]);
 
+    // Return tab divs for each of the terms in the plan
     const terms = props.termList.map((term) => {
 
         const isSelected = props.selectedTerm === term;
@@ -154,6 +163,7 @@ const Terms = (props) => {
         );
     })
 
+    // Return the full set of tabs in a div
     return (
         <div className='termTube'>
             {terms}
@@ -167,7 +177,7 @@ const Terms = (props) => {
     )
 }
 
-// Button to add additional terms to Scheduler
+// Button to add additional terms to Scheduler, in the hape of a (+)
 const NewTerm = (props) => {
 
     const [termNumber, setTermNumber] = useState(9);
@@ -191,9 +201,9 @@ const NewTerm = (props) => {
         setTermNumber((prevNumber) => prevNumber + 1);
         setTermIndex((prevIndex) => (prevIndex + 1) % 3);
 
-
         props.setSelectedTerm(term);
 
+        // Clear the scheduler table to show the new empty term table
         const newHighLightCells = Array.from({length: 28}, () => Array.from({length: 5}, () => [null, '', null]));
         props.setHighLightCells(newHighLightCells);
     }
@@ -208,6 +218,9 @@ const NewTerm = (props) => {
     )
 }
 
+// Plus or minus sign shown on each left-hand side tab of the scheduler component
+//
+// Toggle symbol when clicked
 const DropDownSign = (props) => {
 
     const addSign = (
@@ -225,10 +238,12 @@ const DropDownSign = (props) => {
     }
 }
 
+// Left-hand tab for the lectures. Read each of the lecture names from lecInfo and store them in lectureTab. Display these in the tab.
 const Lecs = (props) => {
 
     const isDropDown = props.dropDownClick[0];
 
+    // Set whether dropdwon is open
     const onSignClick = () => {
         props.setDropDownClick(0);
     }
@@ -259,6 +274,7 @@ const Lecs = (props) => {
                     }
                 }
 
+                // Set unplaced lectures into the lectureTab component
                 props.setLectureTab(lectures);
             }
         } else {
@@ -267,12 +283,15 @@ const Lecs = (props) => {
     }, [props.lecInfo]);
 
 
+    // Loop through lectures, return component box for each
     let lectures;
     if (props.lectureTab !== null) {
         lectures = props.lectureTab.map((lecture, index) => {
 
+            // Get info for the course
             const lectureInfo = props.lecInfo.find(lectureInfo => lectureInfo.name === lecture);
 
+            // Get options regarding what time slots/sections are available for the lecture
             let option;
             if (lectureInfo !== undefined) {
                 option = lectureInfo.options;
@@ -280,6 +299,7 @@ const Lecs = (props) => {
 
             const courseDetails = [];
 
+            // Get relevant details (section, location, professor) for each lecture
             if (lectureInfo !== undefined) {
                 lectureInfo.options.map((option) => {
                     const section = option.section;
@@ -291,17 +311,14 @@ const Lecs = (props) => {
                 })
             }
 
-
+            // Create description for the tooltip popup that appears when you hover over the course
             const extendedName = lectureInfo !== undefined ? lectureInfo.extendedName : "";
-
             const courses = props.structure.find(courses => courses.term === props.selectedTerm);
-
-
             const course = courses === undefined ? undefined : courses.courses.find(course => course.name.replace(/\([^)]+\)/g, '') === lecture);
             const courseDesc = course !== undefined ? course.description : "";
-
             const toolTipUniqueId = lectureInfo !== undefined ? lectureInfo.extendedName + index.toString() : "";
 
+            // Return a single lecture box with the course name inside. Also return a tooltip with the course info.
             return (
                 <div>
                     <div
@@ -358,6 +375,7 @@ const Lecs = (props) => {
         )
     }
 
+    // Return a div for the lecture tab with each of the lecture box divs inside
     return (
         <div>
             <div className='coursePalette'>
@@ -377,6 +395,7 @@ const Lecs = (props) => {
     )
 }
 
+// Left-hand tab for the labs. Read each of the lecture names from labInfo and store them in labTab. Display these in the tab.
 const Labs = (props) => {
 
     const isDropDown = props.dropDownClick[2];
@@ -416,12 +435,15 @@ const Labs = (props) => {
         }
     }, [props.labInfo]);
 
+    // Loop through labs, return component box for each
     let labs;
     if (props.labTab !== null) {
         labs = props.labTab.map((lab, index) => {
 
+            // Get info for the course
             const labInfo = props.labInfo.find(labInfo => labInfo.name === lab);
 
+            // Get options regarding what time slots/sections are available for the lab
             let option;
             if (labInfo !== undefined) {
                 option = labInfo.options;
@@ -429,6 +451,7 @@ const Labs = (props) => {
 
             const courseDetails = [];
 
+            // Get relevant details (section, location, professor) for each lab
             if (labInfo !== undefined) {
                 labInfo.options.map((option) => {
                     const section = option.section;
@@ -440,18 +463,14 @@ const Labs = (props) => {
                 })
             }
 
+            // Create description for the tooltip popup that appears when you hover over the course
             const courses = props.structure.find(courses => courses.term === props.selectedTerm);
-
-
-
             const course = courses === undefined ? undefined : courses.courses.find(course => course.name.replace(/\([^)]+\)/g, '') === lab.replace(" Lab", ""));
             const courseDesc = course !== undefined ? course.description : "";
-
             const toolTipUniqueId = labInfo !== undefined ? labInfo.name.trim() + index.toString() : "";
-
             const extendedName = labInfo=== undefined ? "" : labInfo.name;
 
-
+            // Return a single lab box with the course name inside. Also return a tooltip with the course info.
             return (
                 <div>
                     <div
@@ -507,6 +526,7 @@ const Labs = (props) => {
         )
     }
 
+    // Return a div for the lab tab with each of the lab box divs inside
     return (
         <div>
             <div className='labsPalette'>
@@ -526,6 +546,7 @@ const Labs = (props) => {
     )
 }
 
+// Left-hand tab for the seminars. Read each of the lecture names from semInfo and store them in seminarTab. Display these in the tab.
 const Seminars = (props) => {
 
     const isDropDown = props.dropDownClick[1];
@@ -564,12 +585,15 @@ const Seminars = (props) => {
         }
     }, [props.semInfo]);
 
+    // Loop through seminars, return component box for each
     let seminars;
     if (props.seminarTab !== null) {
         seminars = props.seminarTab.map((seminar, index) => {
 
+            // Get info for the course
             const semInfo = props.semInfo.find(semInfo => semInfo.name === seminar);
 
+            // Get options regarding what time slots/sections are available for the seminar
             let option;
             if (semInfo !== undefined) {
                 option = semInfo.options;
@@ -577,6 +601,7 @@ const Seminars = (props) => {
 
             const courseDetails = [];
 
+            // Get relevant details (section, location, professor) for each seminar
             if (semInfo !== undefined) {
                 semInfo.options.map((option) => {
                     const section = option.section;
@@ -588,16 +613,14 @@ const Seminars = (props) => {
                 })
             }
 
+            // Create description for the tooltip popup that appears when you hover over the course
             const courses = props.structure.find(courses => courses.term === props.selectedTerm);
-
-
             const course = courses === undefined ? undefined : courses.courses.find(course => course.name.replace(/\([^)]+\)/g, '') === seminar.replace(" Sem", ""));
             const courseDesc = course !== undefined ? course.description : "";
-
             const toolTipUniqueId = semInfo !== undefined ? semInfo.name.trim() + index.toString() : "";
-
             const extendedName = semInfo === undefined ? "" : semInfo.name;
 
+            // Return a single seminar box with the course name inside. Also return a tooltip with the course info.
             return (
                 <div>
                     <div
@@ -653,6 +676,7 @@ const Seminars = (props) => {
         )
     }
 
+    // Return a div for the seminar tab with each of the seminar box divs inside
     return (
         <div>
             <div className={`seminarsPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
@@ -672,7 +696,11 @@ const Seminars = (props) => {
     )
 }
 
-
+/**
+ * Dropdwon for the unfinished Auto Generate feature (see next component)
+ * Can re-add by uncommenting the CreateFromPreference component in the render() function at bottom of file
+ * 
+ */
 const CreateFromPreference = (props) => {
 
     const isDropDown = props.dropDownClick[4];
@@ -698,6 +726,16 @@ const CreateFromPreference = (props) => {
     )
 }
 
+/**
+ * Unfinished feature, designed to auto-generate a schedule for a particular term
+ * Loops through each course in the lec, lab, and sem side panels and places them on the schedule table
+ * Built as an extra tab on the scheduler left-hand side. Button to generate, dropdwons to pick preferred start time/end time for each day
+ * 
+ * Known issues: It doesn't always find a valid schedule, even if one exists. Sometimes need to add a course or two before works. 
+ * 
+ * @param {*} props 
+ * @returns 
+ */
 const PreferenceTab = (props) => {
     const timeSlots = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00'];
     const [from, setFrom] = useState(timeSlots.at(0));
@@ -758,7 +796,7 @@ const PreferenceTab = (props) => {
     ));
 
     /**
-     * send http request to get updated timetable
+     * send http request to  the backend to get updated timetable
      * */
     const handleGenerateButtonOnclick = () => {
         const restController = new RESTController();
@@ -779,6 +817,7 @@ const PreferenceTab = (props) => {
             })
         }
 
+        // create new version of current ob-table schedule
         let newHighLightCells = [...props.highLightCells];
         const startInMin = timeToMinutes("8:00");
         const fromInMin = timeToMinutes(from);
@@ -791,6 +830,7 @@ const PreferenceTab = (props) => {
         // TODO: Not being used, need to update in the future
         const profs = Array.from({length: props.lectureTab.length}, () => ['ALL']);
 
+        // Use restController to query backend for data
         restController.getUpdatedTimetable({
             timetable: props.highLightCells,
             courseList: unDraggedTagList,
@@ -859,6 +899,7 @@ const PreferenceTab = (props) => {
     );
 }
 
+// Component for the above Auto Generate component. Used to let user pick times I think.
 const Modal = ({
                    isOpen, onClose, content
                }) => {
@@ -877,6 +918,13 @@ const Modal = ({
     );
 };
 
+/**
+ * Allows the user to add a new course to their lecture, lab, and seminar panels. Passes in a list of courses and info to the Searchbar component.
+ * Handles dropdown behaviour for this section, and hosts the Searchbar.
+ * 
+ * @param {*} props 
+ * @returns 
+ */
 const Search = (props) => {
 
     const isDropDown = props.dropDownClick[3];
@@ -890,7 +938,7 @@ const Search = (props) => {
     const placeHolder = 'Search...';
 
 
-    // Return component with all the discipline's plans
+    // Return dropdwon searchbar component with all the discipline's plans' courses
     return (
         <div>
             <div className={`searchPalette ${isDropDown ? 'dropdownOpen' : ''}`}>
@@ -915,6 +963,21 @@ const Search = (props) => {
     )
 }
 
+/**
+ * Actual table component. Displays values in the highLightCells state function, a nested array in the form:
+ * 
+ *  [
+ *      [[color, type of cell, course name], [color, type, name], ...]
+ *      ...
+ *      [[color, type of cell, course name],...]
+ *          ^          ^             
+ *          |          |             
+ *         hex      Start, '', or End    --> determines styling/where to put course name
+ *  ]
+ * 
+ * @param {*} props 
+ * @returns 
+ */
 const Timetable = (props) => {
     const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
     const timeSlots = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30'];
@@ -947,16 +1010,18 @@ const Timetable = (props) => {
                         <tr key={hourIndex.toString()}>
                             {hourIndex % 2 === 0 && <td rowSpan="2" className="timeCell">{timeSlot}</td>}
                             {weekDays.map((day, dayIndex) => {
+
+                                // Get individual details from the specific highLightCells cell
                                 const color = props.highLightCells[hourIndex][dayIndex][0];
                                 const part = props.highLightCells[hourIndex][dayIndex][1];
                                 const section = props.highLightCells[hourIndex][dayIndex][2];
                                 const className = hourIndex % 2 === 0 ? 'topCell' : 'bottomCell';
 
                                 let innerClassName = "innerCell" + part;
-
                                 let content;
                                 let text = section;
 
+                                // Reconstruct course name to not include the section letter/number
                                 if (section !== null && color === '#275D38') {
                                     const sectionParts = section.split(' ');
                                     text = '';
@@ -964,7 +1029,6 @@ const Timetable = (props) => {
                                         text += part;
                                         text += ' ';
                                     })
-
                                     text = text.trimEnd();
                                 }
 
@@ -974,6 +1038,7 @@ const Timetable = (props) => {
                                     innerClassName += 'Conflict';
                                 }
 
+                                // Show text of course name if this is the "Start" (first) cell for the course
                                 if (innerClassName === 'innerCellStart') {
                                     content = text;
                                 }
@@ -985,6 +1050,7 @@ const Timetable = (props) => {
                                 const hasSection = section !== null && color !== '#888888';
                                 const toolTipUniqueId = section + "index" + dayIndex.toString();
 
+                                // Handle tooltip info generation
                                 if (hasSection) {
                                     let courseTitle = "";
                                     const parts = section.split(" ");
@@ -997,16 +1063,13 @@ const Timetable = (props) => {
                                         }
                                     })
 
-                                    console.log(props.structure);
+                                    // Adjust info for display on the the tooltips that show when you hover over the course on the schedule
                                     const courses = props.structure.find(courses => courses.term === props.selectedTerm);
-                            
-
-
                                     const course = courses === undefined ? undefined : courses.courses.find(course => course.name.replace(/\([^)]+\)/g, '') === courseTitle.trim());
                                     descriptionContent = course !== undefined ? course.description : "";
-
                                     const courseSection = parts[parts.length - 1];
 
+                                    // Get information for the tooltips that show when you hover over the course on the schedule
                                     if (section.toLowerCase().includes("lab")) {
                                         const lab = props.labInfo.find(lab => lab.name === courseTitle + "Lab");
 
@@ -1040,6 +1103,7 @@ const Timetable = (props) => {
                                     }
                                 }
 
+                                // Return a cell for the timetable if there is a course placed in that spot
                                 return (
                                     <td
                                         key={day}
@@ -1108,59 +1172,22 @@ const Timetable = (props) => {
 }
 
 
-
-
-// const GenerateReport = (props) => {
-//     const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-//     const timeSlots = ['8:00', '8:30', '9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30'];
-
-//     const reportTemplateRef = useRef(null);
-
-
-//     const handleGeneratePdf = () => {
-
-//         const report = new JsPDF('portrait', 'mm', [1782, 1260]);
-
-//         // report.setFont('Roboto', 'normal');
-
-
-
-//         report.html(reportTemplateRef.current, {
-
-//             async callback(report) {
-//                 await report.save('schedule_report.pdf');
-//             },
-//         });
-            
-//         // document.querySelector(".timeTableTable")).then(() => {
-//         // report.save('report.pdf');
-//     }
-
-//     return (
-//         <div>
-//             <button
-//                 onClick={ this.handleGeneratePdf}
-//                 className="exportButton"
-//             >
-//                 Download Report 2
-//             </button>
-//             <div ref={reportTemplateRef}>
-//                 <ReportTemplate 
-//                     scheduleMap={props.scheduleMap}
-//                 />
-//             </div>
-//         </div>
-//     );
-// }
-
-
+/**
+ * The Scheduler tab. Displays the selected plan, options for the import or export of data, and then a timetable component.
+ * The timetable has tabs for different terms, and in each term you can drag courses onto the timetable from the left hand
+ * panels. 
+ * 
+ */
 class Scheduler extends Component {
 
+    // When a user selects a course on the "Add" searchbar, we query the backend for the course's data, and add it to the respective tab panels
     addCourse = (courseName) => {
 
+        // Get if the term is Fall, Winter, or Summer
         const termType = this.props.selectedTerm.split(" ")[0].toLowerCase();
         const restController = new RESTController();
 
+        // Put the data in the right format for the REST controller
         const data = {
             courseName: courseName,
             term: termType,
@@ -1168,8 +1195,6 @@ class Scheduler extends Component {
 
         // Query backend for data about lec, lab, sem if exist for the searched course
         restController.getIndivLec(data).then((result) => {
-
-            // console.log("result[0]: " + result[0]);
 
             // Update respective info and tab data structures for lectures
             if (result !== [] && result[0] !== undefined && result[0] !== null) {
@@ -1186,8 +1211,6 @@ class Scheduler extends Component {
                     result[0].name
                 ])
             }
-
-            // console.log(result);
         });
         restController.getIndivLab(data).then((result) => {
 
@@ -1206,8 +1229,6 @@ class Scheduler extends Component {
                     result[0].name
                 ])
             }
-
-            // console.log(result);
         });
         restController.getIndivSem(data).then((result) => {
 
@@ -1226,11 +1247,10 @@ class Scheduler extends Component {
                     result[0].name
                 ])
             }
-
-            // console.log(result);
         });
     }
 
+    // Get the column index based on the name of the day of the week
     dateProcess = (date) => {
 
         // column number
@@ -1280,7 +1300,7 @@ class Scheduler extends Component {
         return type === 'start' ? (hourInInt - 8) * 2 : (hourInInt - 8) * 2 - 1;
     }
 
-    // put back function
+    // When the user right-clicks on a course, return it to the respective tab panel
     handleRightClick = (event, section) => {
         event.preventDefault();
 
@@ -1351,29 +1371,31 @@ class Scheduler extends Component {
     handleDragStart = (options, event, courseInfo) => {
         event.dataTransfer.setData('text', JSON.stringify(courseInfo));
 
+        // Create new map for the timetable cells
         const newHighlightedCells = this.props.highLightCells.map(row => [...row]);
-
         const restController = new RESTController();
-
         const duplicateSectionSet = new Set();
         const conflictSections = new Set();
 
+        // Loop through course time options
         options.map((option) => {
             const durations = option.times;
             const section = courseInfo + " " + option.section;
             const color = restController.generateRandomColor();
 
+            // Loop through durations
             durations.map((duration) => {
                 const date = duration.split('_')[0];
                 const time = duration.split('_')[1];
 
+                // Get details about the start and end locations of the course on the timetable
                 const startTime = time.split('-')[0].length === 4 ? '0' + time.split('-')[0] : time.split('-')[0];
                 const endTime = time.split('-')[1].length === 4 ? '0' + time.split('-')[1] : time.split('-')[1];
-
                 const colNum = this.dateProcess(date);
                 const startRowNumber = this.timeProcess(startTime, 'start');
                 const endRowNumber = this.timeProcess(endTime, 'end');
 
+                // Determine if cell is the start, middle, or end of the course on the timetable
                 for (let i = startRowNumber; i <= endRowNumber; i++) {
 
                     if (newHighlightedCells[i][colNum][0] !== '#275D38') {
@@ -1392,6 +1414,7 @@ class Scheduler extends Component {
             })
         })
 
+        // Remove duplicate sections I think
         duplicateSectionSet.forEach((section) => {
             newHighlightedCells.forEach((row, rowIndex) => {
                 row.forEach((column, columnIndex) => {
@@ -1404,6 +1427,7 @@ class Scheduler extends Component {
             })
         })
 
+        // Handle conflict regions, where a dragged course overlaps an already placed one
         conflictSections.forEach((section) => {
             newHighlightedCells.forEach((row, rowIndex) => {
                 row.forEach((column, columnIndex) => {
@@ -1444,16 +1468,19 @@ class Scheduler extends Component {
             })
         })
 
-        // console.log(newHighlightedCells);
-
+        // Set the new timetable
         this.props.setHighLightCells(newHighlightedCells);
     }
 
+
+    // Once a user has dragged a course onto the timetable and let go, place that course on the timetable
     handleDragEnd = (event) => {
         event.preventDefault();
 
+        // Get a new version of the storage system for the timetable cells
         let newHighlightedCells = this.props.highLightCells.map(row => row.map(cell => [...cell]));
 
+        // Loop through and set the cells for the timetable with the course placed
         newHighlightedCells.forEach((row, rowIndex) => {
             row.forEach((cell, cellIndex) => {
                 if (cell[0] !== '#275D38') {
@@ -1470,6 +1497,7 @@ class Scheduler extends Component {
             })
         })
 
+        // Set the Start or End values in each cell
         const newTimeTable = this.reformatTimetable(newHighlightedCells);
         this.props.setHighLightCells(newTimeTable);
     }
@@ -1514,9 +1542,6 @@ class Scheduler extends Component {
             var tabs = this.props.tabMap.get(this.props.selectedTerm);
             var updatedTabs = [];
 
-            console.log(tabs);
-            console.log(courseName);
-
             // Updated the specific tab in the specific record in the tabMap
             if (courseName.includes('Sem')) {
                 updatedTabs = tabs.seminarTab.filter(function (course) {
@@ -1534,8 +1559,6 @@ class Scheduler extends Component {
                 })
                 tabs["lectureTab"] = [...updatedTabs];
             }
-
-            console.log(tabs);
 
             const updatedTabMap = new Map(this.props.tabMap);
             updatedTabMap.set(this.props.selectedTerm, tabs);
@@ -1564,6 +1587,7 @@ class Scheduler extends Component {
                 })
             });
 
+            // Set the start and end fields in the cells
             const newTimeTable = this.reformatTimetable(newHighlightedCells);
             this.props.setHighLightCells(newTimeTable);
             return;
@@ -1590,6 +1614,7 @@ class Scheduler extends Component {
 
         let newHighlightedCells = this.props.highLightCells.map(row => row.map(cell => [...cell]));
 
+        // Handle conflict section removal
         newHighlightedCells.forEach((row, rowIndex) => {
             row.forEach((column, columnIndex) => {
                 if (column[0] !== '#275D38') {
@@ -1612,17 +1637,19 @@ class Scheduler extends Component {
             })
         });
 
+        // Set the start and end fields in the cells
         const newTimeTable = this.reformatTimetable(newHighlightedCells);
         this.props.setHighLightCells(newTimeTable);
     }
 
+    // See if a cell in the timetable is empty
     checkCell = (hourIndex, dayIndex) => {
         const color = this.props.highLightCells[hourIndex][dayIndex][0];
         return color !== null && color !== '#275D38' && color !== '#888888';
     }
 
     /**
-     * reformat the timetable
+     * reformat the timetable to add proper start and end delimeters to cells at the start and end of courses
      * */
     reformatTimetable = (highLightCells) => {
         let newHighlightedCells = highLightCells.map(row => row.map(cell => [...cell]));
@@ -1631,15 +1658,21 @@ class Scheduler extends Component {
             row.forEach((column, columnIndex) => {
                 const color = newHighlightedCells[rowIndex][columnIndex][0];
                 const section = newHighlightedCells[rowIndex][columnIndex][2];
+
+                // If in first row, will always be a 'Start'
                 if (rowIndex === 0) {
                     if (color === '#275D38' && section !== null) {
                         newHighlightedCells[rowIndex][columnIndex][1] = 'Start';
                     }
-                } else if (rowIndex === newHighlightedCells.length - 1) {
+                } 
+                // Always an 'End' if in the final row
+                else if (rowIndex === newHighlightedCells.length - 1) {
                     if (color === '#275D38' && section !== null) {
                         newHighlightedCells[rowIndex][columnIndex][1] = 'End';
                     }
-                } else {
+                } 
+                // More complicated if in the middle, check nearby cell. If none above, 'Start', none below, 'End'
+                else {
                     if (color === '#275D38') {
                         newHighlightedCells[rowIndex][columnIndex][1] = '';
 
@@ -1659,6 +1692,8 @@ class Scheduler extends Component {
     }
 
     /**
+     * Create a no-style pdf report containing the information from scheduleMap
+     * Report template located in ExportPDF.js
      * 
      * @returns 
      */
@@ -1669,23 +1704,6 @@ class Scheduler extends Component {
             />
         )).toBlob();
         saveAs(blob, "Scheduler_Report.pdf");
-    }
-
-
-    generatePdf = () => {
-
-        const report = new JsPDF('portrait', 'mm', [1782, 1260]);
-
-        // report.setFont('Roboto', 'normal');
-
-
-
-        report.html(
-            
-            document.querySelector(".timeTableTable")).then(() => {
-                report.save('report.pdf');
-            }
-        );
     }
 
     render() {

@@ -1,9 +1,8 @@
 import React from 'react'
-import {useState} from "react"
-import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import './Scheduler.css'
 
+// Accept an xlsx file from user, import data into scheduler
 export const ImportCSV = ({setHighLightCells, scheduleMap, setScheduleMap, reformatTimetable, lectureTab, setLectureTab, labTab, setLabTab, seminarTab, setSeminarTab, tabMap, selectedTerm, setTabMap}) => {
 
     const hiddenFileInput = React.useRef();
@@ -48,18 +47,8 @@ export const ImportCSV = ({setHighLightCells, scheduleMap, setScheduleMap, refor
         // Add formatting data to the middle section of the cells and set the timeTable to the scheduler
         const reformattedTimetable = reformatTimetable(emptyTable);
 
-        console.log(sheetName);
-        console.log(reformattedTimetable);
-
         // Update the scheduleMap with the new term record
         updatedMap.set(sheetName, reformattedTimetable);
-
-        // Clear duplicates from the lec, lab, sem tabs
-        // var courseArray = Array.from(courseSet);
-        // checkTabs(courseArray);
-
-        // Update the tabs for current term
-
 
         const lecArray = Array.from(lecSet);
         const labArray = Array.from(labSet);
@@ -77,10 +66,11 @@ export const ImportCSV = ({setHighLightCells, scheduleMap, setScheduleMap, refor
             seminarTab: semArray
         }
 
+        // Update stored set of courses placed in each term
         updatedTabMap.set(sheetName, termTabs);
     }
 
-
+    // Component to get file upload
     const fileSelectedHandler = event => {
         const reader = new FileReader();
 
@@ -91,8 +81,8 @@ export const ImportCSV = ({setHighLightCells, scheduleMap, setScheduleMap, refor
             const updatedMap = new Map(scheduleMap);
             const updatedTabMap = new Map();
 
+            // Loop through sheets
             workbook.SheetNames.map((sheetName) => {
-
                 const sheet = workbook.Sheets[sheetName];
                 const data = XLSX.utils.sheet_to_json(sheet, {header:1});
     
@@ -110,10 +100,6 @@ export const ImportCSV = ({setHighLightCells, scheduleMap, setScheduleMap, refor
     const handleClick = event => {
         hiddenFileInput.current.click();
     };
-
-
-
-
 
     // Remove each course in the imported table from the corresponding side panel
     const setTabs = (duplicateEntries) => {
@@ -143,10 +129,6 @@ export const ImportCSV = ({setHighLightCells, scheduleMap, setScheduleMap, refor
         setLabTab(updatedLabTab);
         setLectureTab(updatedLecTab);
     }
-
-
-
-
 
     return (
         <div >

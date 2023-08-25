@@ -10,9 +10,6 @@ export const Results = (props) => {
 
     // placed here because jsPDF cannot render external styles, and we want to be able to export Results to pdf
     const styles = {
-
-
-
         results: {
             
         },
@@ -103,19 +100,8 @@ export const Results = (props) => {
         }
     }
 
-    const createStructure = (structure) => {
-
-
-        console.log(Array.from(structure.values()));
-
-
-
-
-
-        return structure;
-    }
     
-    
+    // Download a pdf of the below html (#results) to the user's computer
     const createPdf = async () => {
 
         // Ratio 11 x 8.5
@@ -126,11 +112,8 @@ export const Results = (props) => {
         })
     }
     
-    
-    
-    
-    
-    
+
+    // Set of boxes showing courses in each semester, miniature visualizer to show selections, and then a copy of each schedule
     return (
         <div id='results' className='results' style={styles.results}>
             <h1 className='resultsTitle' style={styles.resultsTitle}>
@@ -162,8 +145,6 @@ export const Results = (props) => {
                 {
                     Array.from(props.tabMap).map(([key, value]) => {
 
-                        console.log(key);
-                        console.log(value);
 
                         if (key !== '') {
 

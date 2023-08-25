@@ -4,6 +4,7 @@ import React, {useEffect, useRef, useState} from "react";
 
 import "./Dropdown.css";
 
+// Arrow icon for use at the right of dropdowns
 const Icon = () => {
     return (
         <svg height="20" width="20" viewBox="0 0 20 20">
@@ -15,11 +16,13 @@ const Icon = () => {
     );
 };
 
+// Dropdown menu for selecting from a set of options. Pass in options, and function run when one is selected
 const Dropdown = ({placeHolder, options, onChange, width, plan, type, planChanged, index}) => {
     const [showMenu, setShowMenu] = useState(false);
     const [selectedValue, setSelectedValue] = useState(null);
     const inputRef = useRef();
 
+    // Add a listener for a click on menu
     useEffect(() => {
         const handler = (e) => {
             if (inputRef.current && !inputRef.current.contains(e.target)) {
@@ -33,10 +36,12 @@ const Dropdown = ({placeHolder, options, onChange, width, plan, type, planChange
         };
     });
 
+    // Toggle whether dropdown menu is shown
     const handleInputClick = (event) => {
         setShowMenu(!showMenu);
     };
 
+    // Assemble and format the list of options?
     const getDisplay = () => {
 
         if (type === 'plan') {
@@ -63,11 +68,13 @@ const Dropdown = ({placeHolder, options, onChange, width, plan, type, planChange
         }
     };
 
+    // Store the user-clicked value from the dropdown
     const onItemClick = (option) => {
         setSelectedValue(option);
         onChange(option);
     };
 
+    // Check if an option is the currently-selected option
     const isSelected = (option) => {
 
         if (!selectedValue) {

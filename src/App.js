@@ -1123,6 +1123,7 @@ class App extends Component {
         });
     }
 
+    // Show or hide the "Additional Options" menu on the Visualizer
     toggleOptionsHidden = () => {
         this.setState(prevState => ({
             showOptions: !prevState.showOptions
@@ -1332,6 +1333,7 @@ class App extends Component {
         }
     }
 
+    // Set which program is selected
     setSelectedProgramPlan = (selectedProgram, selectedPlan) => {
 
         this.deleteLineMap();
@@ -1350,7 +1352,24 @@ class App extends Component {
         this.setState({tabMap: new Map()});
         this.setState({highLightCells: Array.from({length: 28}, () => Array.from({length: 5}, () => [null, '', null]))});
     }
+    
 
+    /** Sets the "structure" component, which contains information about every course in the selected plan. Format:
+    *
+    *   Array [
+            Object {
+                term: 'Fall Term 1', courses: [
+                    {
+                        name: "ECE 301",
+                        extendedName: "ECE 301 EA1",
+                        ...
+                        corequisites: null
+                    }
+                ]
+            },
+            ...
+        ]
+    */
     setStructure = (selectedProgram, selectedPlan) => {
 
         this.deleteCourseCategory();
@@ -1392,7 +1411,6 @@ class App extends Component {
                     termNumber = Object.keys(courses).length;
                 }
                 this.setState({structure: courses, termNumber: termNumber});
-                console.log(courses);
             });
 
             this.controller.getReqMap(data).then((reqMap) => {
@@ -1437,10 +1455,12 @@ class App extends Component {
 
     }
 
+    // Change the map of prerec and coreq leader lines that will be displayed on the Visualizer
     updateLineMap = (update) => {
         this.setState({lineMap: update})
     }
 
+    // Clear the map of prerec and coreq leader lines that will be displayed on the Visualizer
     deleteLineMap = () => {
         for (let [key] of this.state.lineMap) {
             this.state.lineMap.get(key).map((line) => {
@@ -1457,10 +1477,10 @@ class App extends Component {
         this.setState({planChanged: isChanged});
     }
 
+    // Checks if a rerender has occured, if so redraw the leader lines
     componentDidUpdate(lineMap) {
         this.redrawLeaderlines(lineMap);
     }
-
 
     // setState method for the scheduler
     setDropDownClick = (index) => {
@@ -1473,14 +1493,17 @@ class App extends Component {
         this.setState({dropDownClick: newDropDownClick});
     }
 
+    // Sets list of terms for a degree plan
     setTermList = (termList) => {
         this.setState({termList: termList});
     }
 
+    // Set which term is selected
     setSelectedTerm = (term) => {
         this.setState({selectedTerm: term});
     }
 
+    // Arrays storing info for lectures, sems and labs. Loads in only for current term
     setLecInfo = (lecInfo) => {
         this.setState({lecInfo: lecInfo});
     }
@@ -1497,6 +1520,7 @@ class App extends Component {
         this.setState({searchInfo: searchInfo});
     }
 
+    // Arrays that store the courses that should be shown in the tab menus of the Scheduler
     setLectureTab = (lectureTab) => {
         this.setState({lectureTab: lectureTab});
     }
@@ -1509,18 +1533,20 @@ class App extends Component {
         this.setState({seminarTab: seminarTab});
     }
 
+    // A nested array storing what will be displayed on the table of the Scheduler
     setHighLightCells = (newCells) => {
         this.setState({highLightCells: newCells});
     }
 
+    // An array of highLightCell objects, stores schedule for each term
     setScheduleMap = (newSchedule) => {
         this.setState({scheduleMap: newSchedule});
     }
 
+    // An array of maps storing what lectures, labs and sems are placed in each term
     setTabMap = (newTabs) => {
         this.setState({tabMap: newTabs});
     }
-
 
     render() {
         const {
