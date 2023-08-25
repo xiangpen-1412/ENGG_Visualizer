@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## GitHub Repo
+
+All of the contained files are also available at [Project Repo](https://github.com/xiangpen-1412/ENGG_Visualizer)
+
 ## Available Scripts
 
 In the project directory, you can run:
