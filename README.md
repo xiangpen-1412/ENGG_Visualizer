@@ -68,3 +68,63 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+
+
+# Future Development
+
+Effective August 25, 2023, Version 2 of the Visualizer is complete. It is hosted and can be accessed at: 
+
+http://129.128.215.39/
+
+
+There are a number of outstanding features that could be implemented as an effort of future advancement, as follows:
+
+- Connecting the data directly to beartracks
+- Connecting the Scheduler to students' schedules
+- Improving styling of the "Export Results to PDF" feature so that page breaks do not divide elements
+- Some lectures are tied to specific lab sections, these should be connected on the website somehow
+- If the tab is switched to 'Scheduler' from 'Visualizer' too quickly on load, an error is thrown
+- Tutorials should be added to the 'About' tab to show how the website works
+
+
+### Code Structure
+
+Below is an ascii diagram of the project code. To make changes to any part, find the related component and start there.
+App.js is the hub, with other components either located inside, or in seperate files. Home.js defines the items for the
+home screen, App.js for everything afterwards. Most js files have a corresponding .css file defining their styling. 
+
+Visualizer, Scheduler, Results, and About are each a tab in the /App page, and are hidden or shown one at a time. 
+
+
+
+Structure.js   App.js                      Scheduler.js
+┌────────────┐ ┌─────────────────────────┐ ┌────────────────┐
+│            │ │                         │ │                │
+│            │ │ Visualizer              │ │           ◄────┼────── Searchbar.js
+│            │ │ ┌─────────────────────┐ │ │                │   
+│            │ │ │                     │ │ │           ◄────┼────── ImportCSV.js
+└──────┬─────┘ │ │                     │ │ │                │       ExportCSV.js
+       └───────┼─┼─────►               │ │ └────────┬───────┘       ExportPDF.js
+Dropdown.js ───┼─┼─────►               │ │          │
+               │ └─────────────────────┘ │          │
+               │                         │          │
+               │            ◄────────────┼──────────┘
+               │                         │ Results.js
+               │                         │ ┌────────────────┐
+               │                         │ │                │
+               │                         │ │           ◄────┼────── VisualizerResults.js
+               │                         │ │                │
+               │                         │ └────────┬───────┘
+               │                         │          │
+               │            ◄────────────┼──────────┘
+               │                         │
+               │ About                   │
+               │ ┌─────────────────────┐ │
+               │ │                     │ │
+               │ │                     │ │
+               │ └─────────────────────┘ │
+               └─────────────────────────┘
+
+

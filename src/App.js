@@ -146,7 +146,7 @@ const About = () => {
             link: "https://docs.google.com/spreadsheets/d/1wE1qc5Hjg-p4ETjl_bRnjjJZfv8RocqP/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
         },
                 {
-            name: "Computer Engineering Spftware Co-op",
+            name: "Computer Engineering Software Co-op",
             link: "https://docs.google.com/spreadsheets/d/1ny4rkE53x70PxbNKke_H6Ry1iOU-Z53n/edit?usp=drive_link&ouid=111119834973935338596&rtpof=true&sd=true"
         },
         {
