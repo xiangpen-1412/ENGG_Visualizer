@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## GitHub Repo
 
-All of the contained files are also available at [Project Repo](https://github.com/xiangpen-1412/ENGG_Visualizer)
+All of the contained files are also available at [Project Repo](https://github.com/xiangpen-1412/ENGG_Visualizer).
 
 ## Available Scripts
 
